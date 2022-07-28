@@ -11,7 +11,7 @@ import SwiftUI
 struct SimpleARPGApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            GameView(store: .init(initialState: .init(), reducer: gameReducer, environment: .live))
         }
     }
 }
