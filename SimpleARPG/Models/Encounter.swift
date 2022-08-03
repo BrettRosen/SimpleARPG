@@ -10,14 +10,11 @@ import SwiftUI
 
 struct Encounter: Equatable {
 
-    static func generate(level: Int) -> Encounter {
-        var rarity: Rarity
-        switch Int.random(in: 0...100) {
-        case 0...5: rarity = .rare
-        case 6...26: rarity = .magic
-        default: rarity = .normal
-        }
-
+    static func generate(
+        level: Int,
+        rarity: Encounter.Rarity,
+        incRarity: Double
+    ) -> Encounter {
         guard let monsterBase = (Monster.Base.allCases
             .filter { $0.levelRange ~= level }
             .randomElement())
@@ -43,7 +40,10 @@ struct Encounter: Equatable {
             name: monsterBase.name,
             level: level,
             stats: [:],
-            inventory: inventory
+            inventory: inventory,
+            equipment: [
+                Equipment.generateEquipment(level: level, slot: .weapon, incRarity: incRarity),
+            ]
         )
 
         return .init(monster: monster, rarity: rarity)
@@ -57,6 +57,20 @@ struct Encounter: Equatable {
             case .normal: return .white
             case .magic: return .blue
             case .rare: return .yellow
+            }
+        }
+
+        static func rarity(for incRarity: Double = 0) -> Self {
+            var rareUpperBound: Double = 3 * (1 + incRarity)
+            var magicUpperBound: Double = 20 * (1 + incRarity)
+            let randomNumber = Double(Int.random(in: 1...100))
+            switch randomNumber {
+            case 1.0...rareUpperBound:
+                return .rare
+            case (rareUpperBound + 1.0)...magicUpperBound:
+                return .magic
+            default:
+                return .normal
             }
         }
     }

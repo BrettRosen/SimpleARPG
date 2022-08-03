@@ -16,7 +16,7 @@ struct EncounterModifierPreview: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
             HStack {
-                Text("\(encounter.monster.icon) " + encounter.monster.name)
+                Text("\(encounter.monster.icon.asset) " + encounter.monster.name)
                     .font(.appCallout).bold()
                     .foregroundColor(encounter.rarity.color)
                 Image(systemName: "chevron.down")

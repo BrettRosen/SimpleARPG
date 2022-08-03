@@ -56,16 +56,29 @@ struct GameView: View {
                             Spacer()
 
                             HStack(alignment: .bottom) {
-                                PlayerView(store: store)
+                                PlayerView(player: viewStore.player)
                                 Spacer()
-                                MonsterView(store: store)
+                                if let monster = viewStore.encounter?.monster {
+                                    VStack {
+                                        Text(monster.name)
+                                            .font(.appFootnote)
+                                            .foregroundColor(.black)
+                                        ResourceBar(current: monster.currentLife, total: monster.maxLife, frontColor: .uiGreen, backColor: .uiRed, icon: "", showTotal: false, width: 80, height: 20)
+                                        PlayerView(player: monster)
+                                            .scaleEffect(x: -1)
+                                    }
+                                }
                             }
                             .padding(.horizontal, 24)
                         }
 
-                        VStack {
-                            if viewStore.player.isDead {
-                                YouDiedView(didTapRevive: { viewStore.send(.reviveTapped) })
+                        if let encounter = viewStore.encounter {
+                            VStack {
+                                if viewStore.player.isDead {
+                                    YouDiedView(didTapRevive: { viewStore.send(.reviveTapped) })
+                                } else if encounter.monster.isDead {
+                                    YouWonView(didTapExit: { })
+                                }
                             }
                         }
                     }
@@ -89,7 +102,7 @@ struct GameView: View {
                                             .frame(width: 1, height: 200)
                                             .overlay(Color.uiBorder)
                                         VStack(spacing: 8) {
-                                            Text("\(encounter.monster.icon)")
+                                            Text("\(encounter.monster.icon.asset)")
                                                 .font(.appSubheadline)
                                                 .foregroundColor(.white)
                                             InventoryGrid(
@@ -97,10 +110,14 @@ struct GameView: View {
                                                 slotBackgroundColor: { _ in .uiButton },
                                                 contextMenu: nil,
                                                 dropDelegate: nil,
-                                                inventorySlotTapped: nil,
+                                                inventorySlotTapped: { slot in
+                                                    if encounter.monster.isDead {
+                                                        viewStore.send(.attemptLoot(slot))
+                                                    }
+                                                },
                                                 onDrag: nil
                                             )
-                                            .opacity(0.5)
+                                            .opacity(encounter.monster.isDead ? 1 : 0.5)
                                             Spacer()
                                         }
                                     }

@@ -31,7 +31,7 @@ enum Item: Equatable {
         switch self {
         case let .food(food): return food.icon
         case let .equipment(equipment): return equipment.icon
-        case let .encounter(encounter): return encounter.monster.icon
+        case let .encounter(encounter): return encounter.monster.icon.asset
         case .coins: return "🪙"
         }
     }
@@ -46,11 +46,13 @@ enum Item: Equatable {
 }
 
 extension Item {
-    static let shark: Item = .food(.shrimp)
-    static let rustedHatchetMock: Item = .equipment(.init(base: .weapon(.oneHandedAxe(.rustedHatchet)), rarity: .rare, stats: [
+    static let shrimp: Item = .food(.shrimp)
+    static let stoneAxeMock: Item = .equipment(.init(base: .weapon(.oneHandedAxe(.stoneAxe)), rarity: .rare, stats: [
         Stat.Key.strength: 10,
         Stat.Key.dexterity: 8
     ]))
 
-    static let encounter: Item = .encounter(Encounter.generate(level: 5))
+    static let crudeBowMock: Item = .equipment(.init(base: .weapon(.bow(.crudeBow)), rarity: .magic, stats: [
+        Stat.Key.dexterity: 16
+    ]))
 }

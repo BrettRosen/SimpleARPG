@@ -31,6 +31,7 @@ protocol EquipmentBaseIdentifiable: Equatable {
 }
 
 protocol WeaponBaseIdentifiable: Equatable {
+    var damageType: DamageType { get }
     var handidness: Handidness { get }
     var damage: ClosedRange<Double> { get }
     var ticksPerAttack: Int { get }
@@ -41,6 +42,7 @@ enum EquipmentBase: Equatable {
     static var allBases: [EquipmentBase] = [
         .weapon(.oneHandedAxe(.rustedHatchet)),
         .weapon(.oneHandedAxe(.stoneAxe)),
+        .weapon(.bow(.crudeBow)),
     ]
 
     case weapon(WeaponBase)
@@ -85,43 +87,26 @@ enum EquipmentBase: Equatable {
 
 enum WeaponBase: Equatable {
     static let all: [WeaponBase] = [
-        .oneHandedAxe(.init())
+        .oneHandedAxe(.rustedHatchet),
+        .oneHandedAxe(.stoneAxe),
+        .bow(.crudeBow)
     ]
 
     case oneHandedAxe(OneHandedAxe)
+    case bow(Bow)
 
     var identifiableWeaponBase: any WeaponBaseIdentifiable {
         switch self {
         case let .oneHandedAxe(axe): return axe
+        case let .bow(bow): return bow
         }
     }
     var identifiableEquipmentBase: any EquipmentBaseIdentifiable {
         switch self {
         case let .oneHandedAxe(axe): return axe
+        case let .bow(bow): return bow
         }
     }
-}
-
-struct OneHandedAxe: Equatable, WeaponBaseIdentifiable, EquipmentBaseIdentifiable {
-    var presentationDetails: EquipmentPresentationDetails = .init()
-    var icon: String = "🪓"
-    var name: String = ""
-    var slot: EquipmentSlot = .weapon
-    var handidness: Handidness = .oneHand
-    var levelRequirement: Int = 0
-    var strengthRequirement: Double = 0
-    var dexterityRequirement: Double = 0
-    var intelligenceRequirement: Double = 0
-    var damage: ClosedRange<Double> = 0.0...0.0
-    var ticksPerAttack: Int = 4
-    var critChance: Double = 0
-
-    static let rustedHatchet: Self = .init(presentationDetails: .init(xScale: -1, degreeRotation: 0, offSet: .init(width: 20, height: 0)), name: "Rusted Hatchet", levelRequirement: 1, strengthRequirement: 12, dexterityRequirement: 6, damage: 6.0...11.0, critChance: 0.05)
-    static let stoneAxe: Self = .init(presentationDetails: .init(xScale: -1, degreeRotation: 0, offSet: .init(width: 20, height: 0)), name: "Stone Axe", handidness: .twoHand, levelRequirement: 1, strengthRequirement: 17, dexterityRequirement: 8, damage: 12.0...20.0, ticksPerAttack: 5, critChance: 0.05)
-
-    static let allBases = [
-        OneHandedAxe.rustedHatchet,
-    ]
 }
 
 struct Equipment: Equatable, InventoryDisplayable {
@@ -137,6 +122,20 @@ struct Equipment: Equatable, InventoryDisplayable {
             case .rare: return .yellow
             }
         }
+
+        static func rarity(for incRarity: Double = 0) -> Self {
+            var rareUpperBound: Double = 3 * (1 + incRarity)
+            var magicUpperBound: Double = 20 * (1 + incRarity)
+            let randomNumber = Double(Int.random(in: 1...100))
+            switch randomNumber {
+            case 1.0...rareUpperBound:
+                return .rare
+            case (rareUpperBound + 1.0)...magicUpperBound:
+                return .magic
+            default:
+                return .normal
+            }
+        }
     }
 
     var base: EquipmentBase
@@ -145,6 +144,23 @@ struct Equipment: Equatable, InventoryDisplayable {
 
     var icon: String { base.icon }
     var name: String { base.name }
+
+    static func generateEquipment(
+        level: Int,
+        slot: EquipmentSlot,
+        incRarity: Double
+    ) -> Equipment {
+        guard let base = EquipmentBase.allBases
+            .filter({ $0.levelRequirement <= level && $0.slot == slot })
+            .shuffled().first else {
+            fatalError()
+        }
+        return .init(
+            base: base,
+            rarity: Equipment.Rarity.rarity(for: incRarity),
+            stats: [:]
+        )
+    }
 }
 
 enum EquipmentSlot {
@@ -179,11 +195,11 @@ func generateDropFor(
 ) -> Item? {
     var drops = encounter.monster.lootTable.drops
 
-    let incItemRarity = 1 + encounter.itemRarity + player.stats[.incItemRarity]!
-    let incItemQuantity = 1 + encounter.itemQuantity + player.stats[.incItemQuantity]!
+    let incItemRarity = encounter.itemRarity + player.stats[.incItemRarity]!
+    let incItemQuantity = encounter.itemQuantity + player.stats[.incItemQuantity]!
 
     for (index, _) in drops.enumerated() {
-        drops[index].weight *= Int(incItemRarity)
+        drops[index].weight *= (1 + Int(incItemRarity))
     }
 
     let randomNumberMax = drops.map(\.weight).reduce(0, +)
@@ -205,10 +221,18 @@ func generateDropFor(
     case .food:
         return .food(Food.generate(level: player.level))
     case .encounter:
-        return .encounter(Encounter.generate(level: player.level))
+        return .encounter(Encounter.generate(
+            level: player.level,
+            rarity: Encounter.Rarity.rarity(for: incItemRarity),
+            incRarity: incItemRarity
+        ))
     case .nothing:
         return nil
     case .none:
         return nil
     }
 }
+
+
+
+

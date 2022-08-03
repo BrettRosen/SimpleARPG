@@ -18,12 +18,16 @@ func getLevelFromExperience(_ exp: Double) -> Int {
 protocol PlayerIdentifiable {
     // Used for the CombatClient
     var playerId: Int { get }
+    var icon: PlayerIcon { get set }
     var maxLife: Double { get }
     var currentLife: Double { get set }
+    var weapon: WeaponBase? { get }
+    var allEquipment: [Equipment] { get set }
     var inventory: [InventorySlot] { get set }
     var damagePerAttack: Damage { get }
-
     var combatLockDetails: CombatLockDetails { get set }
+    var isAttacking: Bool { get }
+    var isEating: Bool { get }
 }
 
 struct CombatLockDetails: Equatable {
@@ -39,6 +43,26 @@ enum PlayerAnimation: Equatable {
     case none
 }
 
+struct PlayerIcon: Equatable {
+    var asset: String
+    /// 1 or -1 depending on Player or Monster
+    var xScale: CGFloat
+}
+
+func baseStats() -> [Stat.Key: Double] {
+    var stats: [Stat.Key: Double] = [:]
+    for stat in Stat.baseDefensiveStats {
+        stats[stat.key] = stat.value
+    }
+    for stat in Stat.baseOffensiveStats {
+        stats[stat.key] = stat.value
+    }
+    for stat in Stat.baseMiscStats {
+        stats[stat.key] = stat.value
+    }
+    return stats
+}
+
 struct Player: Equatable, PlayerIdentifiable {
     var playerId: Int = UUID().hashValue
 
@@ -47,25 +71,13 @@ struct Player: Equatable, PlayerIdentifiable {
     /// Used for initializing base stats. All other stat increases from
     /// Equipment, Leveling, Debuffs, etc. will happen at the reducer level
     init() {
-        var stats: [Stat.Key: Double] = [:]
-        for stat in Stat.baseDefensiveStats {
-            stats[stat.key] = stat.value
-        }
-        for stat in Stat.baseOffensiveStats {  
-            stats[stat.key] = stat.value
-        }
-        for stat in Stat.baseMiscStats {
-            stats[stat.key] = stat.value
-        }
-        self.stats = stats
+        self.stats = baseStats()
         self.currentLife = 0
         self.currentLife = maxLife
     }
 
     var level: Int = 1
-    var icon: String {
-        isDead ? "💀" : "😡"
-    }
+    var icon: PlayerIcon = .init(asset: "😡", xScale: 1)
     var totalExperience: Double = 0
     var currentLevelExperience: Double = 0
     var expForNextLevel: Double {
@@ -88,16 +100,19 @@ struct Player: Equatable, PlayerIdentifiable {
         return false
     }
 
+    var allEquipment = [Equipment]()
     var inventory: [InventorySlot] = [
-        .init(item: .shark), .init(item: .rustedHatchetMock), .init(item: .rustedHatchetMock), .init(),
-        .init(item: .shark), .init(item: .shark), .init(item: .shark), .init(item: .shark),
+        .init(item: .shrimp), .init(item: .stoneAxeMock), .init(item: .crudeBowMock), .init(),
+        .init(item: .shrimp), .init(item: .shrimp), .init(item: .shrimp), .init(item: .shrimp),
         .init(), .init(), .init(), .init(),
         .init(), .init(), .init(), .init(),
         .init(), .init(), .init(), .init(),
         .init(), .init(), .init(), .init(),
     ]
 
-    var allEquipment = [Equipment]()
+    var firstOpenInventorySlotIndex: Int? {
+        inventory.firstIndex(where: { $0.item == nil })
+    }
 
     var weapon: WeaponBase? {
         let equipment = allEquipment.first(where: {
@@ -126,7 +141,7 @@ struct Player: Equatable, PlayerIdentifiable {
     }
 
     var damagePerAttack: Damage {
-        guard let weapon = weapon else { return .init(type: .physical, rawAmount: 0) }
+        guard let weapon = weapon else { return .init(type: .melee, rawAmount: 0) }
         let baseDamageRange = weapon.identifiableWeaponBase.damage
         let flatDamage = stats[.flatPhysical]!
         let percentIncreaseFromStrength = 1 + ((stats[.strength]! / 10) * 0.02)
@@ -135,6 +150,6 @@ struct Player: Equatable, PlayerIdentifiable {
         if Double.random(in: 0...1.0) <= critChance {
             baseDamage *= 2
         }
-        return Damage(type: .physical, rawAmount: baseDamage)
+        return Damage(type: weapon.identifiableWeaponBase.damageType, rawAmount: baseDamage)
     }
 }

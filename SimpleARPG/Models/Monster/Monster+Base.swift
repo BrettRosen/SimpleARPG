@@ -29,13 +29,13 @@ extension Monster {
             }
         }
 
-        var icon: String {
+        var icon: PlayerIcon {
             switch self {
-            case .rat: return "🐀"
-            case .spider: return "🕷"
-            case .rabbit: return "🐇"
-            case .chicken: return "🐓"
-            case .duck: return "🦆"
+            case .rat: return .init(asset: "🐀", xScale: -1)
+            case .spider: return .init(asset: "🕷", xScale: -1)
+            case .rabbit: return .init(asset: "🐇", xScale: -1)
+            case .chicken: return .init(asset: "🐓", xScale: -1)
+            case .duck: return .init(asset: "🦆", xScale: -1)
             }
         }
     }

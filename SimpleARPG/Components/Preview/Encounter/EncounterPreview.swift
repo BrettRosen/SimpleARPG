@@ -26,7 +26,7 @@ struct EncounterPreview: View {
                     .padding(.bottom, 8)
             }
 
-            Text(encounter.monster.icon)
+            Text(encounter.monster.icon.asset)
                 .padding(12)
                 .background(encounter.rarity.color.gradient.shadow(.inner(color: .black.opacity(1), radius: 2, x: 0, y: 2)), in: Circle())
                 .padding(.bottom, 8)
@@ -84,11 +84,5 @@ struct EncounterPreview: View {
                 isExpanded.toggle()
             }
         }
-    }
-}
-
-struct EncounterPreview_Previews: PreviewProvider {
-    static var previews: some View {
-        EncounterPreview(encounter: .init(monster: .init(icon: "👹", name: "Gobbo", level: 1, stats: [:], inventory: [])))
     }
 }

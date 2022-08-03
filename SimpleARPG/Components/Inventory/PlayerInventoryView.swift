@@ -98,6 +98,16 @@ let inventoryReducer: Reducer<InventoryState, InventoryAction, InventoryEnvironm
             // If we already have an item of that type equipped...
             if let existingEquipment = state.player.allEquipment.first(where: { $0.base.slot == equipment.base.slot }) {
 
+                state.player.allEquipment.removeAll(where: { $0.base.slot == existingEquipment.base.slot })
+                state.player.allEquipment.append(equipment)
+                state.player.inventory[index].item = .equipment(existingEquipment)
+
+                for stat in existingEquipment.stats {
+                    state.player.stats[stat.key]! -= stat.value
+                }
+                for stat in equipment.stats {
+                    state.player.stats[stat.key]! += stat.value
+                }
             } else {
                 state.player.allEquipment.append(equipment)
                 state.player.inventory[index].item = nil
@@ -148,9 +158,6 @@ struct PlayerInventoryView: View {
     var body: some View {
         WithViewStore(store) { viewStore in
             VStack(spacing: 8) {
-                Text(viewStore.player.icon)
-                    .font(.appSubheadline)
-                    .foregroundColor(.white)
                 InventoryGrid(
                     inventory: viewStore.player.inventory,
                     slotBackgroundColor: { slot in

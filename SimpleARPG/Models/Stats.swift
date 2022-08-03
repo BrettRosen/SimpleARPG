@@ -29,7 +29,7 @@ enum Stat: Equatable, Codable {
         /// Base stats assume level 1 initially
         static var baseStats: [Stat.Defensive] = [
             .armour(10),
-            .flatMaxLife(10),
+            .flatMaxLife(50),
             .percentMaxLife(0)
         ]
 

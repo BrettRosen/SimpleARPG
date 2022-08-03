@@ -7,10 +7,17 @@
 
 import Foundation
 
+enum ElementalType: Equatable {
+    case fire, cold, lightning
+}
+
+enum DamageType: Equatable {
+    case melee
+    case ranged
+    case magic(ElementalType)
+}
+
 struct Damage {
-    enum DamageType {
-        case physical, fire, cold, lightning
-    }
     var type: DamageType
     var rawAmount: Double
 }

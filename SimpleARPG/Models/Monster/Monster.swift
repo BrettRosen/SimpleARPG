@@ -28,7 +28,7 @@ struct Monster: Equatable, PlayerIdentifiable {
 
     static let baseDropChance = 0.16
 
-    let icon: String
+    var icon: PlayerIcon
     let name: String
     let level: Int
     var stats: [Stat.Key: Double]
@@ -39,14 +39,26 @@ struct Monster: Equatable, PlayerIdentifiable {
         .init(item: .nothing, weight: 64)
     ])
 
-    init(icon: String, name: String, level: Int, stats: [Stat.Key : Double], inventory: [InventorySlot]) {
+    init(
+        icon: PlayerIcon,
+        name: String,
+        level: Int,
+        stats: [Stat.Key : Double],
+        inventory: [InventorySlot],
+        equipment: [Equipment]
+    ) {
         self.icon = icon
         self.name = name
         self.level = level
-        self.stats = stats
         self.inventory = inventory
+        self.allEquipment = equipment
 
-        self.stats[.flatMaxLife] = Double(level) * 100
+        self.stats = baseStats()
+
+        for stat in stats {
+            self.stats[stat.key]! = stat.value
+        }
+
         self.currentLife = 0
         self.currentLife = maxLife
     }
@@ -73,27 +85,43 @@ struct Monster: Equatable, PlayerIdentifiable {
         return false
     }
 
+    var allEquipment = [Equipment]()
     var inventory: [InventorySlot]
+
+    var weapon: WeaponBase? {
+        let equipment = allEquipment.first(where: {
+            if case .weapon(_) = $0.base { return true }
+            return false
+        })
+        guard case let .weapon(weapon) = equipment?.base else { return nil }
+        return weapon
+    }
 
     var baseDamage: Double { Monster.baseDamage(level: level) }
 
     static func baseDamage(level: Int) -> Double {
-        0.0015 * pow(Double(level), 3) + 0.2 * Double(level) + 6
+        0.0015 * pow(Double(level), 1.2) + 0.2 * Double(level) + 6
     }
 
     var canAttack: Bool {
         !isDead && combatLockDetails.animation == .none
     }
 
-    // TODO: This needs to be based off the monster's Weapon
     var ticksPerAttack: Int {
-        4
+        guard let weapon = weapon else { return .max }
+        return weapon.identifiableWeaponBase.ticksPerAttack
     }
 
     var damagePerAttack: Damage {
+        guard let weapon = weapon else { return .init(type: .melee, rawAmount: 0) }
+        let baseDamageRange = weapon.identifiableWeaponBase.damage
         let flatDamage = stats[.flatPhysical] ?? 0
-        let percentIncreaseFromStrength = 1 + ((stats[.strength] ?? 0 / 10) * 0.02)
-        let baseDamage = (baseDamage + flatDamage) * percentIncreaseFromStrength
-        return .init(type: .physical, rawAmount: baseDamage)
+        let percentIncreaseFromStrength = 1 + ((stats[.strength]! / 10) * 0.02)
+        let critChance = weapon.identifiableWeaponBase.critChance
+        var baseDamage = (Double.random(in: baseDamageRange) + flatDamage + Monster.baseDamage(level: level)) * percentIncreaseFromStrength
+        if Double.random(in: 0...1.0) <= critChance {
+            baseDamage *= 2
+        }
+        return Damage(type: weapon.identifiableWeaponBase.damageType, rawAmount: baseDamage)
     }
 }

@@ -42,12 +42,14 @@
 		1F5CA85B2877A734002D92CF /* HapticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5CA85A2877A734002D92CF /* HapticsManager.swift */; };
 		1F5CA85D2877C6FA002D92CF /* ResourceBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5CA85C2877C6FA002D92CF /* ResourceBar.swift */; };
 		1F71638328987F560012B04C /* Monster+Base.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F71638228987F560012B04C /* Monster+Base.swift */; };
+		1F767D742899F8EC0016E6B8 /* OneHandedAxe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F767D732899F8EC0016E6B8 /* OneHandedAxe.swift */; };
+		1F767D762899F9010016E6B8 /* Bow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F767D752899F9010016E6B8 /* Bow.swift */; };
+		1F767D78289A2B5C0016E6B8 /* YouWonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F767D77289A2B5C0016E6B8 /* YouWonView.swift */; };
 		1FAC93F628865C6C00ED7F38 /* CombatClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FAC93F528865C6C00ED7F38 /* CombatClient.swift */; };
 		1FAC93F828865CA800ED7F38 /* Damage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FAC93F728865CA800ED7F38 /* Damage.swift */; };
 		1FAC93FA2887743800ED7F38 /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FAC93F92887743800ED7F38 /* Haptics.swift */; };
 		1FD17CE72891B8C900E0BEB0 /* TabRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD17CE62891B8C900E0BEB0 /* TabRowView.swift */; };
 		1FD17CE92891BBF500E0BEB0 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD17CE82891BBF500E0BEB0 /* PlayerView.swift */; };
-		1FD17CEB2891BC7A00E0BEB0 /* MonsterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD17CEA2891BC7A00E0BEB0 /* MonsterView.swift */; };
 		1FD17CED2891BD7900E0BEB0 /* YouDiedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD17CEC2891BD7900E0BEB0 /* YouDiedView.swift */; };
 		1FD17CEF2891BEAC00E0BEB0 /* ResourceBarStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD17CEE2891BEAC00E0BEB0 /* ResourceBarStack.swift */; };
 		1FD17CF1289228DD00E0BEB0 /* GameUsecase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD17CF0289228DD00E0BEB0 /* GameUsecase.swift */; };
@@ -110,12 +112,14 @@
 		1F5CA85A2877A734002D92CF /* HapticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticsManager.swift; sourceTree = "<group>"; };
 		1F5CA85C2877C6FA002D92CF /* ResourceBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceBar.swift; sourceTree = "<group>"; };
 		1F71638228987F560012B04C /* Monster+Base.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Monster+Base.swift"; sourceTree = "<group>"; };
+		1F767D732899F8EC0016E6B8 /* OneHandedAxe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneHandedAxe.swift; sourceTree = "<group>"; };
+		1F767D752899F9010016E6B8 /* Bow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bow.swift; sourceTree = "<group>"; };
+		1F767D77289A2B5C0016E6B8 /* YouWonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouWonView.swift; sourceTree = "<group>"; };
 		1FAC93F528865C6C00ED7F38 /* CombatClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombatClient.swift; sourceTree = "<group>"; };
 		1FAC93F728865CA800ED7F38 /* Damage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Damage.swift; sourceTree = "<group>"; };
 		1FAC93F92887743800ED7F38 /* Haptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
 		1FD17CE62891B8C900E0BEB0 /* TabRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabRowView.swift; sourceTree = "<group>"; };
 		1FD17CE82891BBF500E0BEB0 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
-		1FD17CEA2891BC7A00E0BEB0 /* MonsterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonsterView.swift; sourceTree = "<group>"; };
 		1FD17CEC2891BD7900E0BEB0 /* YouDiedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouDiedView.swift; sourceTree = "<group>"; };
 		1FD17CEE2891BEAC00E0BEB0 /* ResourceBarStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceBarStack.swift; sourceTree = "<group>"; };
 		1FD17CF0289228DD00E0BEB0 /* GameUsecase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameUsecase.swift; sourceTree = "<group>"; };
@@ -267,7 +271,7 @@
 		1F5CA848287663D8002D92CF /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				1F5CA849287663ED002D92CF /* Equipment.swift */,
+				1F767D722899F8DC0016E6B8 /* Equipment */,
 				1F5CA84D28766449002D92CF /* Food.swift */,
 				1F5CA84B2876643A002D92CF /* Item.swift */,
 				1F5CA84F28766473002D92CF /* Player.swift */,
@@ -298,6 +302,16 @@
 			path = Monster;
 			sourceTree = "<group>";
 		};
+		1F767D722899F8DC0016E6B8 /* Equipment */ = {
+			isa = PBXGroup;
+			children = (
+				1F5CA849287663ED002D92CF /* Equipment.swift */,
+				1F767D732899F8EC0016E6B8 /* OneHandedAxe.swift */,
+				1F767D752899F9010016E6B8 /* Bow.swift */,
+			);
+			path = Equipment;
+			sourceTree = "<group>";
+		};
 		1FD17CE52891B8BE00E0BEB0 /* GameView */ = {
 			isa = PBXGroup;
 			children = (
@@ -306,8 +320,8 @@
 				1FD17CE62891B8C900E0BEB0 /* TabRowView.swift */,
 				1F5CA841287651C6002D92CF /* TabView.swift */,
 				1FD17CE82891BBF500E0BEB0 /* PlayerView.swift */,
-				1FD17CEA2891BC7A00E0BEB0 /* MonsterView.swift */,
 				1FD17CEC2891BD7900E0BEB0 /* YouDiedView.swift */,
+				1F767D77289A2B5C0016E6B8 /* YouWonView.swift */,
 				1FD17CEE2891BEAC00E0BEB0 /* ResourceBarStack.swift */,
 			);
 			path = GameView;
@@ -463,12 +477,13 @@
 				1F2D5BCA2889B4690061F4D3 /* EncounterPreview.swift in Sources */,
 				1FD17CE72891B8C900E0BEB0 /* TabRowView.swift in Sources */,
 				1F403A7F2882672000CC3130 /* EncounterConfirm.swift in Sources */,
+				1F767D742899F8EC0016E6B8 /* OneHandedAxe.swift in Sources */,
 				1F345E84287F5BA700A4E452 /* StatsView.swift in Sources */,
 				1F5CA8522876648B002D92CF /* InventorySlot.swift in Sources */,
 				1F5CA84A287663ED002D92CF /* Equipment.swift in Sources */,
 				1F5CA854287665B8002D92CF /* EquipmentView.swift in Sources */,
+				1F767D762899F9010016E6B8 /* Bow.swift in Sources */,
 				1F5CA84528765FD8002D92CF /* Colors.swift in Sources */,
-				1FD17CEB2891BC7A00E0BEB0 /* MonsterView.swift in Sources */,
 				1F200F24289482D0004442A1 /* InventoryGrid.swift in Sources */,
 				1FAC93F828865CA800ED7F38 /* Damage.swift in Sources */,
 				1F5CA84C2876643A002D92CF /* Item.swift in Sources */,
@@ -478,6 +493,7 @@
 				1F5CA84E28766449002D92CF /* Food.swift in Sources */,
 				1F5CA842287651C6002D92CF /* TabView.swift in Sources */,
 				1F35B6FE287E81F50038D3DA /* EncounterModifierPreview.swift in Sources */,
+				1F767D78289A2B5C0016E6B8 /* YouWonView.swift in Sources */,
 				1FAC93F628865C6C00ED7F38 /* CombatClient.swift in Sources */,
 				1FAC93FA2887743800ED7F38 /* Haptics.swift in Sources */,
 				1F5CA85D2877C6FA002D92CF /* ResourceBar.swift in Sources */,
@@ -573,6 +589,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -625,6 +643,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;

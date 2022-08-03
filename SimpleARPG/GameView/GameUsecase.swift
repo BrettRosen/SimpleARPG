@@ -76,6 +76,7 @@ enum GameAction: Equatable {
     case statsViewAction(StatsViewAction)
 
     case bestMoveForActivePlayerResult(Result<GameModelMove?, CombatClient.Error>)
+    case attemptLoot(InventorySlot)
 
     // MARK: Debug
     case increasePlayerExp
@@ -267,12 +268,22 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
             state.encounter?.monster.combatLockDetails.actionLocked = false
         case let .unequip(equipment):
             // If there's a slot that has no item...
-            if let index = state.player.inventory.firstIndex(where: { $0.item == nil }) {
+            if let index = state.player.firstOpenInventorySlotIndex {
                 state.player.inventory[index].item = .equipment(equipment)
                 state.player.allEquipment.removeAll(where: { $0.base.slot == equipment.base.slot })
                 for stat in equipment.stats {
                     state.player.stats[stat.key]! -= stat.value
                 }
+            }
+        case let .attemptLoot(slot):
+            // If the slot has an item and the player has an open inventory slot...
+            if let encounter = state.encounter,
+                let item = slot.item,
+                let playerInvIndex = state.player.firstOpenInventorySlotIndex,
+                let monsterInvIndex = state.encounter!.monster.inventory.firstIndex(where: { $0 == slot }) {
+
+                state.encounter!.monster.inventory[monsterInvIndex].item = nil
+                state.player.inventory[playerInvIndex].item = item
             }
         case .reviveTapped:
             state.encounter = nil
@@ -291,8 +302,8 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
             .updateCombatClientActivePlayerResult:
             break
         case .addRandomEncounter:
-            let encounter = Encounter.generate(level: state.player.level)
-            guard let firstEmptyIndex = state.player.inventory.firstIndex(where: { $0.item == nil })
+            let encounter = Encounter.generate(level: state.player.level, rarity: Encounter.Rarity.rarity(), incRarity: 0)
+            guard let firstEmptyIndex = state.player.firstOpenInventorySlotIndex
             else { return .none }
 
             state.player.inventory[firstEmptyIndex].item = .encounter(encounter)

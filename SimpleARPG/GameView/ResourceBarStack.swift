@@ -24,7 +24,9 @@ struct ResourceBarStack: View {
             Divider().background(Color.black)
             ResourceBar(current: viewStore.player.currentLife, total: viewStore.player.maxLife, frontColor: .uiGreen, backColor: .uiRed, icon: "heart.fill", width: screen.width, height: 20)
             Divider().background(Color.black)
-            ResourceBar(current: 100, total: 100, frontColor: .uiPurple, icon: "sparkle", width: screen.width, height: 20)
+            ResourceBar(current: 100, total: 100, frontColor: .blue, icon: "drop.fill", width: screen.width, height: 15)
+            Divider().background(Color.black)
+            ResourceBar(current: 100, total: 100, frontColor: .uiPurple, icon: "sparkle", width: screen.width, height: 15)
             Divider().background(Color.black)
         }
     }
