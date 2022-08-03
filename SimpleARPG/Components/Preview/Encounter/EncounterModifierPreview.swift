@@ -51,9 +51,3 @@ struct EncounterModifierPreview: View {
         }
     }
 }
-
-struct EncounterModifierPreview_Previews: PreviewProvider {
-    static var previews: some View {
-        EncounterModifierPreview(encounter: .init(monster: .init(icon: "👹", name: "Goblin", level: 1, stats: [:])))
-    }
-}

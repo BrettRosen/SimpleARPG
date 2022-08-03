@@ -203,9 +203,9 @@ func generateDropFor(
         }
         return .equipment(.init(base: base, rarity: .normal, stats: [:]))
     case .food:
-        return .food(.shark)
+        return .food(Food.generate(level: player.level))
     case .encounter:
-        return .encounter(.init(monster: .init(icon: "👹", name: "Test Encounter Drop", level: 1, stats: [:])))
+        return .encounter(Encounter.generate(level: player.level))
     case .nothing:
         return nil
     case .none:

@@ -10,6 +10,7 @@
 		1F1DE18A287CEFD700D4FD9D /* cryos-font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1F1DE189287CEFD700D4FD9D /* cryos-font.ttf */; };
 		1F1DE18D287CF0F200D4FD9D /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F1DE18C287CF0F200D4FD9D /* Fonts.swift */; };
 		1F1DE18F287DBC2100D4FD9D /* Encounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F1DE18E287DBC2100D4FD9D /* Encounter.swift */; };
+		1F200F24289482D0004442A1 /* InventoryGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F200F23289482D0004442A1 /* InventoryGrid.swift */; };
 		1F2D5BC6288902E00061F4D3 /* TreeDiagram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2D5BC5288902E00061F4D3 /* TreeDiagram.swift */; };
 		1F2D5BC82889037E0061F4D3 /* Extensions+CGPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2D5BC72889037E0061F4D3 /* Extensions+CGPoint.swift */; };
 		1F2D5BCA2889B4690061F4D3 /* EncounterPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2D5BC92889B4690061F4D3 /* EncounterPreview.swift */; };
@@ -29,7 +30,7 @@
 		1F5CA83D28760DB2002D92CF /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 1F5CA83C28760DB2002D92CF /* ComposableArchitecture */; };
 		1F5CA842287651C6002D92CF /* TabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5CA841287651C6002D92CF /* TabView.swift */; };
 		1F5CA84528765FD8002D92CF /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5CA84428765FD8002D92CF /* Colors.swift */; };
-		1F5CA847287663BB002D92CF /* InventoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5CA846287663BB002D92CF /* InventoryView.swift */; };
+		1F5CA847287663BB002D92CF /* PlayerInventoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5CA846287663BB002D92CF /* PlayerInventoryView.swift */; };
 		1F5CA84A287663ED002D92CF /* Equipment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5CA849287663ED002D92CF /* Equipment.swift */; };
 		1F5CA84C2876643A002D92CF /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5CA84B2876643A002D92CF /* Item.swift */; };
 		1F5CA84E28766449002D92CF /* Food.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5CA84D28766449002D92CF /* Food.swift */; };
@@ -40,6 +41,7 @@
 		1F5CA859287688A7002D92CF /* ItemPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5CA858287688A7002D92CF /* ItemPreview.swift */; };
 		1F5CA85B2877A734002D92CF /* HapticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5CA85A2877A734002D92CF /* HapticsManager.swift */; };
 		1F5CA85D2877C6FA002D92CF /* ResourceBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5CA85C2877C6FA002D92CF /* ResourceBar.swift */; };
+		1F71638328987F560012B04C /* Monster+Base.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F71638228987F560012B04C /* Monster+Base.swift */; };
 		1FAC93F628865C6C00ED7F38 /* CombatClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FAC93F528865C6C00ED7F38 /* CombatClient.swift */; };
 		1FAC93F828865CA800ED7F38 /* Damage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FAC93F728865CA800ED7F38 /* Damage.swift */; };
 		1FAC93FA2887743800ED7F38 /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FAC93F92887743800ED7F38 /* Haptics.swift */; };
@@ -73,6 +75,7 @@
 		1F1DE18B287CEFEA00D4FD9D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		1F1DE18C287CF0F200D4FD9D /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		1F1DE18E287DBC2100D4FD9D /* Encounter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encounter.swift; sourceTree = "<group>"; };
+		1F200F23289482D0004442A1 /* InventoryGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryGrid.swift; sourceTree = "<group>"; };
 		1F2D5BC5288902E00061F4D3 /* TreeDiagram.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeDiagram.swift; sourceTree = "<group>"; };
 		1F2D5BC72889037E0061F4D3 /* Extensions+CGPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extensions+CGPoint.swift"; sourceTree = "<group>"; };
 		1F2D5BC92889B4690061F4D3 /* EncounterPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterPreview.swift; sourceTree = "<group>"; };
@@ -95,7 +98,7 @@
 		1F5CA82E28760D88002D92CF /* SimpleARPGUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleARPGUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		1F5CA841287651C6002D92CF /* TabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabView.swift; sourceTree = "<group>"; };
 		1F5CA84428765FD8002D92CF /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
-		1F5CA846287663BB002D92CF /* InventoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryView.swift; sourceTree = "<group>"; };
+		1F5CA846287663BB002D92CF /* PlayerInventoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerInventoryView.swift; sourceTree = "<group>"; };
 		1F5CA849287663ED002D92CF /* Equipment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Equipment.swift; sourceTree = "<group>"; };
 		1F5CA84B2876643A002D92CF /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		1F5CA84D28766449002D92CF /* Food.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Food.swift; sourceTree = "<group>"; };
@@ -106,6 +109,7 @@
 		1F5CA858287688A7002D92CF /* ItemPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemPreview.swift; sourceTree = "<group>"; };
 		1F5CA85A2877A734002D92CF /* HapticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticsManager.swift; sourceTree = "<group>"; };
 		1F5CA85C2877C6FA002D92CF /* ResourceBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceBar.swift; sourceTree = "<group>"; };
+		1F71638228987F560012B04C /* Monster+Base.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Monster+Base.swift"; sourceTree = "<group>"; };
 		1FAC93F528865C6C00ED7F38 /* CombatClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombatClient.swift; sourceTree = "<group>"; };
 		1FAC93F728865CA800ED7F38 /* Damage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Damage.swift; sourceTree = "<group>"; };
 		1FAC93F92887743800ED7F38 /* Haptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
@@ -143,6 +147,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1F200F2228946A4A004442A1 /* Inventory */ = {
+			isa = PBXGroup;
+			children = (
+				1F5CA846287663BB002D92CF /* PlayerInventoryView.swift */,
+				1F200F23289482D0004442A1 /* InventoryGrid.swift */,
+			);
+			path = Inventory;
+			sourceTree = "<group>";
+		};
 		1F2D5BCB2889B4710061F4D3 /* Encounter */ = {
 			isa = PBXGroup;
 			children = (
@@ -231,7 +244,7 @@
 				1F2D5BC5288902E00061F4D3 /* TreeDiagram.swift */,
 				1F5CA85C2877C6FA002D92CF /* ResourceBar.swift */,
 				1F5CA853287665B8002D92CF /* EquipmentView.swift */,
-				1F5CA846287663BB002D92CF /* InventoryView.swift */,
+				1F200F2228946A4A004442A1 /* Inventory */,
 				1F345E83287F5BA700A4E452 /* StatsView.swift */,
 				1F35B6FA287E48830038D3DA /* Preview */,
 			);
@@ -260,7 +273,7 @@
 				1F5CA84F28766473002D92CF /* Player.swift */,
 				1F5CA8512876648B002D92CF /* InventorySlot.swift */,
 				1F1DE18E287DBC2100D4FD9D /* Encounter.swift */,
-				1F35B6F6287E3B350038D3DA /* Monster.swift */,
+				1F71638128987F430012B04C /* Monster */,
 				1F345E85287F5D2100A4E452 /* Stats.swift */,
 				1FAC93F728865CA800ED7F38 /* Damage.swift */,
 			);
@@ -274,6 +287,15 @@
 				1F2D5BC72889037E0061F4D3 /* Extensions+CGPoint.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		1F71638128987F430012B04C /* Monster */ = {
+			isa = PBXGroup;
+			children = (
+				1F35B6F6287E3B350038D3DA /* Monster.swift */,
+				1F71638228987F560012B04C /* Monster+Base.swift */,
+			);
+			path = Monster;
 			sourceTree = "<group>";
 		};
 		1FD17CE52891B8BE00E0BEB0 /* GameView */ = {
@@ -433,7 +455,8 @@
 				1FD17CE92891BBF500E0BEB0 /* PlayerView.swift in Sources */,
 				1F345E86287F5D2100A4E452 /* Stats.swift in Sources */,
 				1F5CA81328760D87002D92CF /* GameView.swift in Sources */,
-				1F5CA847287663BB002D92CF /* InventoryView.swift in Sources */,
+				1F5CA847287663BB002D92CF /* PlayerInventoryView.swift in Sources */,
+				1F71638328987F560012B04C /* Monster+Base.swift in Sources */,
 				1FD17CED2891BD7900E0BEB0 /* YouDiedView.swift in Sources */,
 				1F5CA85B2877A734002D92CF /* HapticsManager.swift in Sources */,
 				1F1DE18F287DBC2100D4FD9D /* Encounter.swift in Sources */,
@@ -446,6 +469,7 @@
 				1F5CA854287665B8002D92CF /* EquipmentView.swift in Sources */,
 				1F5CA84528765FD8002D92CF /* Colors.swift in Sources */,
 				1FD17CEB2891BC7A00E0BEB0 /* MonsterView.swift in Sources */,
+				1F200F24289482D0004442A1 /* InventoryGrid.swift in Sources */,
 				1FAC93F828865CA800ED7F38 /* Damage.swift in Sources */,
 				1F5CA84C2876643A002D92CF /* Item.swift in Sources */,
 				1F35B6F9287E467A0038D3DA /* EquipmentPreview.swift in Sources */,
@@ -629,7 +653,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 12.4;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.brettrosen.SimpleARPG;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -662,7 +686,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 12.4;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.brettrosen.SimpleARPG;
 				PRODUCT_NAME = "$(TARGET_NAME)";

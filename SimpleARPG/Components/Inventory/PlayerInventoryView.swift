@@ -106,6 +106,8 @@ let inventoryReducer: Reducer<InventoryState, InventoryAction, InventoryEnvironm
                     state.player.stats[stat.key]! += stat.value
                 }
             }
+        case .coins:
+            break
         }
 
         state.player.combatLockDetails.actionLocked = true
@@ -127,10 +129,8 @@ let inventoryReducer: Reducer<InventoryState, InventoryAction, InventoryEnvironm
 }
 
 
-struct InventoryView: View {
+struct PlayerInventoryView: View {
     let store: Store<InventoryState, InventoryAction>
-
-    private let columns = Array(repeating: GridItem(.flexible(), spacing: 8), count: 5)
 
     func backgroundColor(for slot: InventorySlot, viewStore: ViewStore<InventoryState, InventoryAction>) -> Color {
         guard let item = slot.item else { return .uiButton }
@@ -147,81 +147,42 @@ struct InventoryView: View {
 
     var body: some View {
         WithViewStore(store) { viewStore in
-            ScrollView(showsIndicators: false) {
-                LazyVGrid(columns: columns, spacing: 8) {
-                    ForEach(viewStore.player.inventory) { slot in
-
-                        Button(action: {
-                            viewStore.send(.inventorySlotTapped(slot), animation: .spring())
-                        }) {
-                            RoundedRectangle(cornerRadius: 4)
-                                .strokeBorder(slot.item?.rarityColor?.opacity(0.6) ?? Color.uiBorder, lineWidth: 2)
-                                .background(RoundedRectangle(cornerRadius: 4).fill(backgroundColor(for: slot, viewStore: viewStore).shadow(ShadowStyle.inner(color: .black, radius: 2, x: 0, y: 0))))
-                                .frame(height: screen.height / 2.5 / 9)
-                                .overlay {
-                                    Text(slot.item?.icon ?? "")
-                                        .font(.title)
-                                        .shadow(color: .black.opacity(0.3), radius: 3, x: 0, y: 3)
-                                }
-                        }
-                        .onDrag {
-                            viewStore.send(.setCurrentDraggingSlot(slot))
-                            return NSItemProvider(contentsOf: URL(string: "\(slot.id)")!)!
-                        } preview: {
-                            if let item = slot.item {
-                                VStack {
-                                    Text(item.name).font(.appFootnote).foregroundColor(.white)
-                                    Text(item.icon).font(.largeTitle)
-                                }
+            VStack(spacing: 8) {
+                Text(viewStore.player.icon)
+                    .font(.appSubheadline)
+                    .foregroundColor(.white)
+                InventoryGrid(
+                    inventory: viewStore.player.inventory,
+                    slotBackgroundColor: { slot in
+                        backgroundColor(for: slot, viewStore: viewStore)
+                    },
+                    contextMenu: { slot in
+                        guard let item = slot.item else { return AnyView(EmptyView()) }
+                        return AnyView(VStack {
+                            Text("\(item.icon) \(item.name)")
+                            Button {
+                                viewStore.send(.presentItemPreview(item), animation: .default)
+                            } label: {
+                                Label("Inspect", systemImage: "magnifyingglass")
                             }
-                        }
-                        .onDrop(of: [.url], delegate: DropViewDelegate(store: store, slot: slot))
-                        .contextMenu {
-                            if let item = slot.item {
 
-                                Text("\(item.icon) \(item.name)")
-
-                                Button {
-                                    viewStore.send(.presentItemPreview(item), animation: .default)
-                                } label: {
-                                    Label("Inspect", systemImage: "magnifyingglass")
-                                }
-
-                                Button {
-                                    viewStore.send(.destroyItem(in: slot), animation: .default)
-                                } label: {
-                                    Label("Destroy", systemImage: "trash")
-                                }
+                            Button {
+                                viewStore.send(.destroyItem(in: slot), animation: .default)
+                            } label: {
+                                Label("Destroy", systemImage: "trash")
                             }
-                        }
+                        })
+                    },
+                    dropDelegate: { slot in
+                        DropViewDelegate(store: store, slot: slot)
+                    },
+                    inventorySlotTapped: { slot in
+                        viewStore.send(.inventorySlotTapped(slot), animation: .spring())
+                    },
+                    onDrag: { slot in
+                        viewStore.send(.setCurrentDraggingSlot(slot))
                     }
-                }
-
-                HStack {
-                    ForEach(0..<5) { _ in
-                        RoundedRectangle(cornerRadius: 4)
-                            .strokeBorder(Color.uiBorder, lineWidth: 1)
-                            .background(RoundedRectangle(cornerRadius: 4).fill(Color.uiButton))
-                            .frame(height: screen.height / 2.5 / 9)
-                            .overlay {
-                                Image(systemName: "lock.fill")
-                                    .font(.footnote)
-                                    .foregroundColor(.black)
-                            }
-                            .opacity(0.5)
-                    }
-                }
-
-                Button(action: {
-
-                }) {
-                    Label("Unlock more slots", systemImage: "lock.fill")
-                        .font(.appFootnote)
-                        .foregroundColor(.white)
-                        .padding(8)
-                        .background(Color.uiRed, in: Capsule())
-                }
-                .padding(.top, 4)
+                )
             }
         }
     }

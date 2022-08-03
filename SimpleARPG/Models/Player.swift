@@ -21,7 +21,7 @@ protocol PlayerIdentifiable {
     var maxLife: Double { get }
     var currentLife: Double { get set }
     var inventory: [InventorySlot] { get set }
-    var damagePerAttack: Double { get }
+    var damagePerAttack: Damage { get }
 
     var combatLockDetails: CombatLockDetails { get set }
 }
@@ -89,12 +89,12 @@ struct Player: Equatable, PlayerIdentifiable {
     }
 
     var inventory: [InventorySlot] = [
-        .init(item: .shark), .init(item: .rustedHatchetMock), .init(item: .rustedHatchetMock), .init(item: .encounter), .init(),
-        .init(item: .shark), .init(item: .shark), .init(item: .shark), .init(item: .shark), .init(),
-        .init(), .init(), .init(), .init(), .init(),
-        .init(), .init(), .init(), .init(), .init(),
-        .init(), .init(), .init(), .init(), .init(),
-        .init(), .init(), .init(), .init(), .init(),
+        .init(item: .shark), .init(item: .rustedHatchetMock), .init(item: .rustedHatchetMock), .init(),
+        .init(item: .shark), .init(item: .shark), .init(item: .shark), .init(item: .shark),
+        .init(), .init(), .init(), .init(),
+        .init(), .init(), .init(), .init(),
+        .init(), .init(), .init(), .init(),
+        .init(), .init(), .init(), .init(),
     ]
 
     var allEquipment = [Equipment]()
@@ -125,8 +125,8 @@ struct Player: Equatable, PlayerIdentifiable {
             && stats[.intelligence]! >= equipment.base.intelligenceRequirement
     }
 
-    var damagePerAttack: Double {
-        guard let weapon = weapon else { return 0 }
+    var damagePerAttack: Damage {
+        guard let weapon = weapon else { return .init(type: .physical, rawAmount: 0) }
         let baseDamageRange = weapon.identifiableWeaponBase.damage
         let flatDamage = stats[.flatPhysical]!
         let percentIncreaseFromStrength = 1 + ((stats[.strength]! / 10) * 0.02)
@@ -135,6 +135,6 @@ struct Player: Equatable, PlayerIdentifiable {
         if Double.random(in: 0...1.0) <= critChance {
             baseDamage *= 2
         }
-        return baseDamage
+        return Damage(type: .physical, rawAmount: baseDamage)
     }
 }

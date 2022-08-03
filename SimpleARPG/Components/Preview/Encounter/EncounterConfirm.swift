@@ -15,34 +15,12 @@ struct EncounterConfirm: View {
     var body: some View {
         WithViewStore(store) { viewStore in
             VStack(spacing: 8) {
+
                 Text("Encountering...")
-                    .font(.appFootnote)
-                    .foregroundColor(.white.opacity(0.75))
+                    .font(.appCallout)
+                    .foregroundColor(.white)
 
-                Divider().frame(width: 80, height: 2)
-                    .background(Color.white.opacity(0.2))
-
-                VStack(spacing: 0) {
-                    Text(encounter.monster.name.capitalized)
-                        .font(.appCallout)
-                        .foregroundColor(encounter.rarity.color)
-                        .padding(.bottom, 8)
-                    Text("Level \(encounter.monster.level)")
-                        .font(.appCaption)
-                        .foregroundColor(.white)
-                        .padding(.bottom, 8)
-                }
-
-                Text(encounter.monster.icon)
-                    .padding(12)
-                    .background(encounter.rarity.color.gradient.shadow(.inner(color: .black.opacity(1), radius: 2, x: 0, y: 2)), in: Circle())
-
-                Divider().frame(width: 80, height: 2)
-                    .background(Color.white.opacity(0.2))
-
-                Text("⚠️ Combat will begin shortly after confirming")
-                    .font(.appCaption)
-                    .foregroundColor(.white.opacity(0.75))
+                EncounterPreview(encounter: encounter, transparentBackground: true)
 
                 HStack {
                     Button(action: {
@@ -65,15 +43,7 @@ struct EncounterConfirm: View {
                 .font(.appCallout)
             }
             .padding()
-            .background(Rectangle().fill(Color.uiBackground))
-            .cornerRadius(4)
-            .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 10)
+            .background(RoundedRectangle(cornerRadius: 4).fill(Color.uiBackground))
         }
-    }
-}
-
-struct EncounterConfirm_Previews: PreviewProvider {
-    static var previews: some View {
-        EncounterConfirm(store: .init(initialState: .init(), reducer: gameReducer, environment: .live), encounter: .init(monster: .init(icon: "👹", name: "Test man", level: 1, stats: [:])))
     }
 }

@@ -6,6 +6,8 @@
 //
 
 import Foundation
+
+#if canImport(UIKit)
 import UIKit
 
 class Haptics {
@@ -14,3 +16,4 @@ class Haptics {
         generator.notificationOccurred(.error)
     }
 }
+#endif

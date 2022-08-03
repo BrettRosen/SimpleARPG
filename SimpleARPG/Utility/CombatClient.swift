@@ -47,7 +47,9 @@ class CombatClient {
 
     func bestMoveForActivePlayer() -> Effect<GameModelMove?, CombatClient.Error> {
         Effect.future { callback in
-            callback(.success(self.strategist.bestMoveForActivePlayer() as? GameModelMove))
+            DispatchQueue.main.async { [unowned self] in
+                callback(.success(self.strategist.bestMoveForActivePlayer() as? GameModelMove))
+            }
         }
     }
 }
@@ -119,8 +121,7 @@ class GameModel: NSObject, GKGameModel {
         }
 
         var moves = [GameModelMove]()
-        let damage = Damage(type: .physical, rawAmount: playerIdentifiable.damagePerAttack)
-        let attackMove = GameModelMove.init(move: .attack(damage: damage), playerId: player.playerId)
+        let attackMove = GameModelMove.init(move: .attack(damage: playerIdentifiable.damagePerAttack), playerId: player.playerId)
 
         // If the player has food and eating food would put them at or below their max health,
         // then register eating as a valid move...
@@ -185,21 +186,13 @@ class GameModel: NSObject, GKGameModel {
             score += 10
         }
 
-        if player.damagePerAttack >= opponent.currentLife {
+        if player.damagePerAttack.rawAmount >= opponent.currentLife {
             score += 30
         }
 
         score += player.currentLife/player.maxLife * 10
 
         return Int(score)
-    }
-
-    func playerDamageCurrentMonster(damage: Damage) {
-        gameState.encounter!.monster.currentLife -= damage.rawAmount
-    }
-
-    func currentMonsterDamagePlayer(damage: Damage) {
-        gameState.player.currentLife -= damage.rawAmount
     }
 
     func isPlayer(playerId: Int) -> Bool {
@@ -214,10 +207,16 @@ class GameModel: NSObject, GKGameModel {
         if let gameModelUpdate = gameModelUpdate as? GameModelMove, let player = activePlayer {
 
             switch gameModelUpdate.move {
-            case let .attack(damage):
+            case let .attack(damagePacket):
                 isPlayer(playerId: player.playerId)
-                    ? playerDamageCurrentMonster(damage: damage)
-                    : currentMonsterDamagePlayer(damage: damage)
+                    ? damage(
+                        player: &gameState.encounter!.monster,
+                        damage: damagePacket
+                    )
+                    : damage(
+                        player: &gameState.player,
+                        damage: damagePacket
+                    )
             case let .heal(food, slot):
                 isPlayer(playerId: player.playerId)
                     ? heal(player: &gameState.player, food: food, slot: slot)

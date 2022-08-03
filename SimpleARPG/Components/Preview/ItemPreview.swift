@@ -13,7 +13,7 @@ struct ItemPreview: View {
     var item: Item
     var body: some View {
         switch item {
-        case let .food(food):
+        case .food, .coins:
             EmptyView()
         case let .equipment(equipment):
             EquipmentPreview(equipment: equipment)

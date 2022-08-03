@@ -33,6 +33,13 @@ func heal<P: PlayerIdentifiable>(
     }
 }
 
+func damage<S: PlayerIdentifiable>(
+    player: inout S,
+    damage: Damage
+) {
+    player.currentLife = max(0, player.currentLife - damage.rawAmount)
+}
+
 // --
 
 struct GameState: Equatable {
@@ -72,6 +79,7 @@ enum GameAction: Equatable {
 
     // MARK: Debug
     case increasePlayerExp
+    case addRandomEncounter
 
     // MARK: Noops
     case resetCombatClientModelResult(Result<Success, CombatClient.Error>)
@@ -163,6 +171,7 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
             guard let encounter = state.encounter else { return .none }
             var effects: [Effect<GameAction, Never>] = [
                 env.combatClient.bestMoveForActivePlayer()
+                    .receive(on: env.mainQueue)
                     .catchToEffect()
                     .map(GameAction.bestMoveForActivePlayerResult)
                     .animation(.default),
@@ -177,10 +186,12 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
                !encounter.monster.isDead,
                encounter.tickCount % state.player.ticksPerAttack == 0 {
 
-                let damage = state.player.damagePerAttack
-                state.encounter?.monster.currentLife -= damage
+                print("Player attacking")
+                damage(
+                    player: &state.encounter!.monster,
+                    damage: state.player.damagePerAttack
+                )
                 state.player.combatLockDetails.animation = .attacking
-
                 effects.append(clearAnimation(for: .player, delay: 0.2, cancelId: state.player.combatLockDetails.animationEffectCancelId))
             }
 
@@ -189,12 +200,22 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
                !state.player.isDead,
                encounter.tickCount % encounter.monster.ticksPerAttack == 0 {
 
-                let damage = encounter.monster.damagePerAttack
-                state.player.currentLife = max(0, state.player.currentLife - damage)
-                state.encounter?.monster.combatLockDetails.animation = .attacking
-                Haptics.error()
+                #if os(iOS)
+                    Haptics.error()
+                #endif
 
+                damage(
+                    player: &state.player,
+                    damage: encounter.monster.damagePerAttack
+                )
+                state.encounter!.monster.combatLockDetails.animation = .attacking
                 effects.append(clearAnimation(for: .monster, delay: 0.2, cancelId: encounter.monster.combatLockDetails.animationEffectCancelId))
+            }
+
+            if state.player.isDead {
+                state.player.allEquipment = []
+            } else if encounter.monster.isDead {
+
             }
 
             return Effect.merge(effects)
@@ -269,6 +290,12 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
             .updateCombatClientGameStateResult,
             .updateCombatClientActivePlayerResult:
             break
+        case .addRandomEncounter:
+            let encounter = Encounter.generate(level: state.player.level)
+            guard let firstEmptyIndex = state.player.inventory.firstIndex(where: { $0.item == nil })
+            else { return .none }
+
+            state.player.inventory[firstEmptyIndex].item = .encounter(encounter)
         case .increasePlayerExp:
             state.player.currentLevelExperience += 100
             state.player.totalExperience += 100

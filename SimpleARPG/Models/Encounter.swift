@@ -9,6 +9,46 @@ import Foundation
 import SwiftUI
 
 struct Encounter: Equatable {
+
+    static func generate(level: Int) -> Encounter {
+        var rarity: Rarity
+        switch Int.random(in: 0...100) {
+        case 0...5: rarity = .rare
+        case 6...26: rarity = .magic
+        default: rarity = .normal
+        }
+
+        guard let monsterBase = (Monster.Base.allCases
+            .filter { $0.levelRange ~= level }
+            .randomElement())
+        else { fatalError() }
+
+        var inventory: [InventorySlot] = []
+        let inventorySize = 28
+
+        // Monsters should have a minimum amount of certain items, the remaining slots will be randomized...
+        let foodSlotCount = Int.random(in: 5...10)
+        let coinSlotCount = 1
+
+        let coins = pow(Double(Int.random(in: 10...100) * level), 1.2)
+        inventory.append(.init(item: .coins(Int(coins))))
+
+        for _ in 0..<foodSlotCount {
+            let food = Food.generate(level: level)
+            inventory.append(.init(item: .food(food)))
+        }
+
+        let monster = Monster(
+            icon: monsterBase.icon,
+            name: monsterBase.name,
+            level: level,
+            stats: [:],
+            inventory: inventory
+        )
+
+        return .init(monster: monster, rarity: rarity)
+    }
+
     enum Rarity {
         case normal, magic, rare
 

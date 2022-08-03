@@ -39,13 +39,14 @@ struct Monster: Equatable, PlayerIdentifiable {
         .init(item: .nothing, weight: 64)
     ])
 
-    init(icon: String, name: String, level: Int, stats: [Stat.Key : Double]) {
+    init(icon: String, name: String, level: Int, stats: [Stat.Key : Double], inventory: [InventorySlot]) {
         self.icon = icon
         self.name = name
         self.level = level
         self.stats = stats
+        self.inventory = inventory
 
-        self.stats[.flatMaxLife] = Double(level) * 10
+        self.stats[.flatMaxLife] = Double(level) * 100
         self.currentLife = 0
         self.currentLife = maxLife
     }
@@ -72,7 +73,7 @@ struct Monster: Equatable, PlayerIdentifiable {
         return false
     }
 
-    var inventory: [InventorySlot] = [.init(item: .food(.shrimp)), .init(item: .food(.shrimp)), .init(item: .food(.shrimp))]
+    var inventory: [InventorySlot]
 
     var baseDamage: Double { Monster.baseDamage(level: level) }
 
@@ -89,10 +90,10 @@ struct Monster: Equatable, PlayerIdentifiable {
         4
     }
 
-    var damagePerAttack: Double {
+    var damagePerAttack: Damage {
         let flatDamage = stats[.flatPhysical] ?? 0
         let percentIncreaseFromStrength = 1 + ((stats[.strength] ?? 0 / 10) * 0.02)
         let baseDamage = (baseDamage + flatDamage) * percentIncreaseFromStrength
-        return baseDamage
+        return .init(type: .physical, rawAmount: baseDamage)
     }
 }

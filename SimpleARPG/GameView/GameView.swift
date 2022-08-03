@@ -10,7 +10,11 @@ import Foundation
 import GameplayKit
 import SwiftUI
 
+#if canImport(UIKit)
 let screen = UIScreen.main.bounds
+#elseif canImport(AppKit)
+let screen = NSScreen.main!.frame
+#endif
 
 struct GameView: View {
 
@@ -43,6 +47,11 @@ struct GameView: View {
                                     }
                                 }
                             }
+                            Button(action: {
+                                viewStore.send(.addRandomEncounter)
+                            }) {
+                                Text("Add random encounter")
+                            }
 
                             Spacer()
 
@@ -72,9 +81,31 @@ struct GameView: View {
                             case .stats:
                                 StatsView(store: store.scope(state: \.statsViewState, action: GameAction.statsViewAction))
                             case .inventory:
-                                InventoryView(store: store.scope(state: \.inventoryState, action: GameAction.inventoryAction))
-                                    .padding(.horizontal, 64)
-                                    .padding(.vertical, 12)
+                                HStack {
+                                    PlayerInventoryView(store: store.scope(state: \.inventoryState, action: GameAction.inventoryAction))
+
+                                    if let encounter = viewStore.encounter {
+                                        Divider()
+                                            .frame(width: 1, height: 200)
+                                            .overlay(Color.uiBorder)
+                                        VStack(spacing: 8) {
+                                            Text("\(encounter.monster.icon)")
+                                                .font(.appSubheadline)
+                                                .foregroundColor(.white)
+                                            InventoryGrid(
+                                                inventory: encounter.monster.inventory,
+                                                slotBackgroundColor: { _ in .uiButton },
+                                                contextMenu: nil,
+                                                dropDelegate: nil,
+                                                inventorySlotTapped: nil,
+                                                onDrag: nil
+                                            )
+                                            .opacity(0.5)
+                                            Spacer()
+                                        }
+                                    }
+                                }
+                                .padding(12)
                             case .equipment:
                                 EquipmentView(store: store)
                             case .spells:
@@ -95,7 +126,7 @@ struct GameView: View {
                 // MARK: Item Preview
                 if let previewItem = viewStore.currentPreviewingItem {
                     Group {
-                        Color.black.opacity(0.5).edgesIgnoringSafeArea(.all)
+                        Color.black.opacity(0.6).edgesIgnoringSafeArea(.all)
                             .onTapGesture {
                                 viewStore.send(.closePreview, animation: .default)
                             }
@@ -115,7 +146,7 @@ struct GameView: View {
 
                 if let previewingEncounter = viewStore.previewingEncounter {
                     Group {
-                        Color.black.opacity(0.5).edgesIgnoringSafeArea(.all)
+                        Color.black.opacity(0.6).edgesIgnoringSafeArea(.all)
                             .onTapGesture {
                                 viewStore.send(.closePreview, animation: .default)
                             }
