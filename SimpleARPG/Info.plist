@@ -6,5 +6,7 @@
 	<array>
 		<string>cryos-font.ttf</string>
 	</array>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<true/>
 </dict>
 </plist>
