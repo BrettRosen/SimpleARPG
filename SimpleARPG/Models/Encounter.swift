@@ -8,7 +8,17 @@
 import Foundation
 import SwiftUI
 
+struct PastEncounterState: Equatable {
+    let encounter: Encounter
+    let playerDamageLog: [DamageLogEntry]
+}
+
 struct Encounter: Equatable {
+
+    enum WinLossState {
+        case win
+        case loss
+    }
 
     static func generate(
         level: Int,
@@ -75,11 +85,14 @@ struct Encounter: Equatable {
         }
     }
 
+    var winLossState: WinLossState?
     var rarity: Rarity = .normal
     var monster: Monster
     var mods: [Modifier] = []
     var itemRarity: Double = 0
     var itemQuantity: Double = 0
+
+    var isOver: Bool { winLossState != nil }
 
     init(
         monster: Monster,

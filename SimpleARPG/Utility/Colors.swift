@@ -13,6 +13,7 @@ extension Color {
     static let uiRed = Color(.init(red: 121/255.0, green: 41/255.0, blue: 32/255.0, alpha: 1.0))
     static let uiPurple = Color(.init(red: 70/255.0, green: 51/255.0, blue: 105/255.0, alpha: 1.0))
     static let uiBackground = Color(.init(red: 74/255.0, green: 66/255.0, blue: 57/255.0, alpha: 1.0))
+    static let uiDarkBackground = Color(.init(red: 59/255.0, green: 52/255.0, blue: 43/255.0, alpha: 1.0))
     static let uiButton = Color(.init(red: 84/255.0, green: 85/255.0, blue: 81/255.0, alpha: 1.0))
     static let uiBorder = Color(.init(red: 113/255.0, green: 99/255.0, blue: 81/255.0, alpha: 1.0))
 }

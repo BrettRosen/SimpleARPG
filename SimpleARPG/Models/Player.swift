@@ -28,6 +28,7 @@ protocol PlayerIdentifiable {
     var combatLockDetails: CombatLockDetails { get set }
     var isAttacking: Bool { get }
     var isEating: Bool { get }
+    var damageLog: [DamageLogEntry] { get set }
 }
 
 struct CombatLockDetails: Equatable {
@@ -99,6 +100,8 @@ struct Player: Equatable, PlayerIdentifiable {
         if case .eating = combatLockDetails.animation { return true }
         return false
     }
+
+    var damageLog: [DamageLogEntry] = []
 
     var allEquipment = [Equipment]()
     var inventory: [InventorySlot] = [

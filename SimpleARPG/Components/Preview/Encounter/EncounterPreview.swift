@@ -76,9 +76,8 @@ struct EncounterPreview: View {
             }
         }
         .padding()
-        .background(Rectangle().fill(transparentBackground ? Color.clear : Color.uiBackground))
+        .background(Rectangle().fill(transparentBackground ? Color.clear : Color.uiBackground).shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 10))
         .cornerRadius(4)
-        .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 10)
         .onTapGesture {
             withAnimation {
                 isExpanded.toggle()

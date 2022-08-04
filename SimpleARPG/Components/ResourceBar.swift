@@ -39,7 +39,7 @@ struct ResourceBar: View {
             HStack {
                 Spacer()
                 if showTotal {
-                    Text("\(Int(current))/\(Int(total))").font(.appCaption).bold().foregroundColor(.white.opacity(0.5))
+                    Text("\(Int(current))/\(Int(total))").font(.appCaption).bold().foregroundColor(.white.opacity(0.75))
                         .padding(.trailing, 8)
                 }
             }

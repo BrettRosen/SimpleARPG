@@ -31,10 +31,18 @@ struct GameView: View {
                     ZStack {
                         VStack {
                             if let encounter = viewStore.encounter {
-                                HStack {
-                                    EncounterModifierPreview(encounter: encounter)
-                                        .padding([.leading, .top], 12)
-                                    Spacer()
+                                if viewStore.player.isDead {
+                                    YouDiedView(didTapRevive: { viewStore.send(.reviveTapped) }, playerDamageLog: viewStore.player.damageLog, monsterDamageLog: encounter.monster.damageLog)
+                                        .transition(.opacity)
+                                } else if encounter.monster.isDead {
+                                    YouWonView(didTapExit: { })
+                                        .transition(.opacity)
+                                } else {
+                                    HStack {
+                                        EncounterModifierPreview(encounter: encounter)
+                                            .padding([.leading, .top], 12)
+                                        Spacer()
+                                    }
                                 }
 
                                 if encounter.combatBeginTimerCount >= 0 {
@@ -56,7 +64,7 @@ struct GameView: View {
                             Spacer()
 
                             HStack(alignment: .bottom) {
-                                PlayerView(player: viewStore.player)
+                                PlayerView(store: store, player: viewStore.player)
                                 Spacer()
                                 if let monster = viewStore.encounter?.monster {
                                     VStack {
@@ -64,22 +72,11 @@ struct GameView: View {
                                             .font(.appFootnote)
                                             .foregroundColor(.black)
                                         ResourceBar(current: monster.currentLife, total: monster.maxLife, frontColor: .uiGreen, backColor: .uiRed, icon: "", showTotal: false, width: 80, height: 20)
-                                        PlayerView(player: monster)
-                                            .scaleEffect(x: -1)
+                                        PlayerView(store: store, player: monster, xScale: -1)
                                     }
                                 }
                             }
                             .padding(.horizontal, 24)
-                        }
-
-                        if let encounter = viewStore.encounter {
-                            VStack {
-                                if viewStore.player.isDead {
-                                    YouDiedView(didTapRevive: { viewStore.send(.reviveTapped) })
-                                } else if encounter.monster.isDead {
-                                    YouWonView(didTapExit: { })
-                                }
-                            }
                         }
                     }
 
@@ -98,9 +95,6 @@ struct GameView: View {
                                     PlayerInventoryView(store: store.scope(state: \.inventoryState, action: GameAction.inventoryAction))
 
                                     if let encounter = viewStore.encounter {
-                                        Divider()
-                                            .frame(width: 1, height: 200)
-                                            .overlay(Color.uiBorder)
                                         VStack(spacing: 8) {
                                             Text("\(encounter.monster.icon.asset)")
                                                 .font(.appSubheadline)
@@ -169,7 +163,7 @@ struct GameView: View {
                             }
                             .transition(.opacity)
                         EncounterConfirm(store: store, encounter: previewingEncounter.encounter)
-                            .transition(.slide)
+                            .transition(.opacity)
                     }
                     .zIndex(5)
                 }

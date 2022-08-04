@@ -64,5 +64,7 @@ struct InventoryGrid: View {
             }
         }
         .frame(maxWidth: 4 * maxSlotWidth + 3 * slotSpacing)
+        .padding(8)
+        .background(Color.uiDarkBackground.cornerRadius(2))
     }
 }

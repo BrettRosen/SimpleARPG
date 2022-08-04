@@ -38,6 +38,7 @@ func damage<S: PlayerIdentifiable>(
     damage: Damage
 ) {
     player.currentLife = max(0, player.currentLife - damage.rawAmount)
+    player.damageLog.append(.init(damage: damage, show: false))
 }
 
 // --
@@ -61,6 +62,8 @@ enum GameAction: Equatable {
 
     case combatBeginTimerTicked
     case combatTimerTicked
+    case showDamageLogEntry(DamageLogEntry)
+    case hideDamageLogEntry(DamageLogEntry)
 
     case clearAnimation(CombatPlayer)
     case clearMonsterActionLock
@@ -169,7 +172,7 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
 
         // MARK: Combat Timer Ticked
         case .combatTimerTicked:
-            guard let encounter = state.encounter else { return .none }
+            guard let encounter = state.encounter, !encounter.isOver else { return .none }
             var effects: [Effect<GameAction, Never>] = [
                 env.combatClient.bestMoveForActivePlayer()
                     .receive(on: env.mainQueue)
@@ -215,8 +218,13 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
 
             if state.player.isDead {
                 state.player.allEquipment = []
+                state.encounter?.winLossState = .loss
             } else if encounter.monster.isDead {
-
+                state.encounter?.winLossState = .win
+                for equipment in encounter.monster.allEquipment {
+                    let inventorySlot = InventorySlot(item: .equipment(equipment))
+                    state.encounter?.monster.inventory.append(inventorySlot)
+                }
             }
 
             return Effect.merge(effects)
@@ -266,6 +274,27 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
             }
         case .clearMonsterActionLock:
             state.encounter?.monster.combatLockDetails.actionLocked = false
+        case let .showDamageLogEntry(entry):
+            guard let encounter = state.encounter else { return .none }
+
+            if let playerIndex = state.player.damageLog.firstIndex(where: { $0.id == entry.id }) {
+                state.player.damageLog[playerIndex].show = true
+            } else if let monsterIndex = encounter.monster.damageLog.firstIndex(where: { $0.id == entry.id }) {
+                state.encounter?.monster.damageLog[monsterIndex].show = true
+            }
+
+            return Effect(value: .hideDamageLogEntry(entry))
+                .delay(for: .init(floatLiteral: tickUnit * 2), scheduler: env.mainQueue)
+                .eraseToEffect()
+
+        case let .hideDamageLogEntry(entry):
+            guard let encounter = state.encounter else { return .none }
+
+            if let playerIndex = state.player.damageLog.firstIndex(where: { $0.id == entry.id }) {
+                state.player.damageLog[playerIndex].show = false
+            } else if let monsterIndex = encounter.monster.damageLog.firstIndex(where: { $0.id == entry.id }) {
+                state.encounter?.monster.damageLog[monsterIndex].show = false
+            }
         case let .unequip(equipment):
             // If there's a slot that has no item...
             if let index = state.player.firstOpenInventorySlotIndex {

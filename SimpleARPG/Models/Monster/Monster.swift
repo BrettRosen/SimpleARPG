@@ -85,8 +85,14 @@ struct Monster: Equatable, PlayerIdentifiable {
         return false
     }
 
+    var damageLog: [DamageLogEntry] = []
+
     var allEquipment = [Equipment]()
     var inventory: [InventorySlot]
+
+    var firstOpenInventorySlotIndex: Int? {
+        inventory.firstIndex(where: { $0.item == nil })
+    }
 
     var weapon: WeaponBase? {
         let equipment = allEquipment.first(where: {

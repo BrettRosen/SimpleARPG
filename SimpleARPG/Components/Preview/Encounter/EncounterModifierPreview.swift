@@ -19,11 +19,14 @@ struct EncounterModifierPreview: View {
                 Text("\(encounter.monster.icon.asset) " + encounter.monster.name)
                     .font(.appCallout).bold()
                     .foregroundColor(encounter.rarity.color)
-                Image(systemName: "chevron.down")
-                    .font(.caption)
-                    .bold()
-                    .foregroundColor(.white)
-                    .rotationEffect(.degrees(isExpanded ? 0 : -90))
+
+                if !encounter.mods.isEmpty {
+                    Image(systemName: "chevron.down")
+                        .font(.caption)
+                        .bold()
+                        .foregroundColor(.white)
+                        .rotationEffect(.degrees(isExpanded ? 0 : -90))
+                }
             }
             Text("Level \(encounter.monster.level)")
                 .font(.appFootnote).bold()
