@@ -23,8 +23,21 @@ struct Vendor: Equatable {
         }
     }
 
-    var name: String = ""
-    var icon: String = ""
+    let name: String
+    let icon: String
+
+    /// Level is used to to determine the items that the vendor has for sale
+    init(name: String = "Nathaniel", icon: String = "🥸", level: Int = 1) {
+        self.name = name
+        self.icon = icon
+
+        var weapons = [InventorySlot]()
+        for _ in 0..<10 {
+            let weapon = Equipment.generateEquipment(level: level, slot: .weapon, incRarity: 0)
+            weapons.append(.init(item: .equipment(weapon)))
+        }
+        tabs[.weapons] = weapons
+    }
 
     var selectedTab: TabType = .weapons
     var tabs: [TabType: [InventorySlot]] = [

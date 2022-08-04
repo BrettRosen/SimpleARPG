@@ -13,7 +13,7 @@ struct ResourceBar: View {
     var current: Double
     var total: Double
     var frontColor: Color
-    var backColor: Color = .uiButton
+    var backColor: Color = .uiBackground
     var icon: String
     var showTotal: Bool = true
 

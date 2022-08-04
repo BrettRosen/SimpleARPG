@@ -13,6 +13,8 @@ struct PlayerView: View {
     let player: PlayerIdentifiable
     var xScale: CGFloat = 1
 
+    @State private var idling = false
+
     var body: some View {
         WithViewStore(store) { viewStore in
             ZStack {
@@ -38,6 +40,11 @@ struct PlayerView: View {
                 }
                 .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 5)
                 .scaleEffect(x: xScale)
+                .offset(y: idling ? 6 : 0)
+                .animation(Animation.linear(duration: 1).repeatForever(autoreverses: true), value: idling)
+                .onAppear {
+                    idling = true
+                }
 
                 // Damage log
                 ForEach(player.damageLog) { entry in
@@ -46,8 +53,8 @@ struct PlayerView: View {
                         .foregroundColor(.white)
                         .background {
                             Image(systemName: "seal.fill")
-                                .frame(width: 25, height: 25)
-                                .foregroundColor(.uiRed)
+                                .frame(width: 15, height: 15)
+                                .foregroundColor(entry.damage.rawAmount == 0 ? .blue : .uiRed)
                                 .scaleEffect(entry.show ? 1.5 : 1)
                         }
                         .offset(y: entry.show ? -25 : 0)

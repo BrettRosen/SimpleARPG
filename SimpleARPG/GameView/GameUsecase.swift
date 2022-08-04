@@ -43,20 +43,12 @@ func damage<S: PlayerIdentifiable>(
 
 // --
 
-enum GameplayState: Equatable {
-    case combat(Encounter)
-    case idle(IdleState)
-}
-
-struct IdleState: Equatable {
-    var vendor: Vendor = .init()
-}
-
 struct GameState: Equatable {
     var player = Player()
-    var gameplayState: GameplayState = .idle(.init())
     var pastEncounters: [PastEncounterState] = []
     var encounter: Encounter?
+
+    var vendor: Vendor = .init()
 
     var selectedTab: Tab = .inventory
 
@@ -65,6 +57,10 @@ struct GameState: Equatable {
 
     var inventoryLocalState: InventoryLocalState = .init()
     var statsViewLocalState: StatsViewLocalState = .init()
+
+    /// This is so that `onAppear` action is only executed once as it'll be used for
+    /// some initialization
+    var didAppear: Bool = false
 }
 
 enum GameAction: Equatable {
@@ -343,7 +339,10 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
             state.previewingEncounter = nil
         case let .updateTab(tab):
             state.selectedTab = tab
-        case .onAppear: break
+        case .onAppear:
+            guard !state.didAppear else { return .none }
+            state.vendor = Vendor(name: "Nathaniel", icon: "🥸", level: state.player.level)
+            state.didAppear = true
         case .inventoryAction,
             .statsViewAction,
             .resetCombatClientModelResult,

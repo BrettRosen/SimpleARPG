@@ -71,7 +71,7 @@ struct StatsView: View {
         WithViewStore(store) { viewStore in
             VStack(spacing: 8) {
                 HStack {
-                    Text("🧙🏼 Level \(viewStore.player.level)")
+                    Text("\(viewStore.player.icon.asset) Level \(viewStore.player.level)")
                         .font(.appCallout)
                         .foregroundColor(.white)
                     Spacer()
@@ -138,6 +138,7 @@ struct StatsView: View {
                             StatsViewRow(statName: "💪🏽 Strength", statValue: "\(viewStore.player.stats[.strength]!)")
                             StatsViewRow(statName: "🏃🏽 Dexterity", statValue: "\(viewStore.player.stats[.dexterity]!)")
                             StatsViewRow(statName: "🧠 Intelligence", statValue: "\(viewStore.player.stats[.intelligence]!)")
+                            StatsViewRow(statName: "🌀 Hit Chance", statValue: "\(viewStore.player.stats[.percentHitChance]! * 100)")
                         case .misc:
                             StatsViewRow(statName: "🪙 Item Quantity", statValue: "\(viewStore.player.stats[.incItemQuantity]! * 100)")
                             StatsViewRow(statName: "🪙 Item Rarity", statValue: "\(viewStore.player.stats[.incItemRarity]! * 100)")

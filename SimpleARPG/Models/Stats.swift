@@ -17,6 +17,7 @@ enum Stat: Equatable, Codable {
         case dexterity
         case intelligence
         case flatPhysical
+        case percentHitChance
         case incItemRarity
         case incItemQuantity
     }
@@ -29,7 +30,7 @@ enum Stat: Equatable, Codable {
         /// Base stats assume level 1 initially
         static var baseStats: [Stat.Defensive] = [
             .armour(10),
-            .flatMaxLife(50),
+            .flatMaxLife(70),
             .percentMaxLife(0)
         ]
 
@@ -60,12 +61,14 @@ enum Stat: Equatable, Codable {
             .dexterity(20),
             .intelligence(20),
             .flatPhysical(0),
+            .percentHitChance(0.78),
         ]
 
         case strength(Double)
         case dexterity(Double)
         case intelligence(Double)
         case flatPhysical(Double)
+        case percentHitChance(Double)
 
         var key: Key {
             switch self {
@@ -73,6 +76,7 @@ enum Stat: Equatable, Codable {
             case .dexterity: return .dexterity
             case .intelligence: return .intelligence
             case .flatPhysical: return .flatPhysical
+            case .percentHitChance: return .percentHitChance
             }
         }
         var value: Double {
@@ -81,6 +85,7 @@ enum Stat: Equatable, Codable {
             case let .dexterity(value): return value
             case let .intelligence(value): return value
             case let .flatPhysical(value): return value
+            case let .percentHitChance(value): return value
             }
         }
     }

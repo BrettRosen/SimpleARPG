@@ -128,6 +128,8 @@ struct Monster: Equatable, PlayerIdentifiable {
         if Double.random(in: 0...1.0) <= critChance {
             baseDamage *= 2
         }
-        return Damage(type: weapon.identifiableWeaponBase.damageType, rawAmount: baseDamage)
+
+        let rawAmount = stats[.percentHitChance]! <= Double.random(in: 0.0...1.0) ? 0 : baseDamage
+        return Damage(type: weapon.identifiableWeaponBase.damageType, rawAmount: rawAmount)
     }
 }
