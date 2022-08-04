@@ -43,8 +43,19 @@ func damage<S: PlayerIdentifiable>(
 
 // --
 
+enum GameplayState: Equatable {
+    case combat(Encounter)
+    case idle(IdleState)
+}
+
+struct IdleState: Equatable {
+    var vendor: Vendor = .init()
+}
+
 struct GameState: Equatable {
     var player = Player()
+    var gameplayState: GameplayState = .idle(.init())
+    var pastEncounters: [PastEncounterState] = []
     var encounter: Encounter?
 
     var selectedTab: Tab = .inventory
@@ -70,6 +81,7 @@ enum GameAction: Equatable {
 
     case beginEncounter(Encounter)
     case reviveTapped
+    case exitEncounterTapped
 
     case closePreview
 
@@ -82,7 +94,6 @@ enum GameAction: Equatable {
     case attemptLoot(InventorySlot)
 
     // MARK: Debug
-    case increasePlayerExp
     case addRandomEncounter
 
     // MARK: Noops
@@ -191,11 +202,17 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
                encounter.tickCount % state.player.ticksPerAttack == 0 {
 
                 print("Player attacking")
-                damage(
-                    player: &state.encounter!.monster,
-                    damage: state.player.damagePerAttack
-                )
+                let dam = state.player.damagePerAttack
+                damage(player: &state.encounter!.monster, damage: dam)
                 state.player.combatLockDetails.animation = .attacking
+
+                state.player.currentLevelExperience += dam.rawAmount * 4
+                state.player.totalExperience += dam.rawAmount * 4
+                if state.player.currentLevelExperience >= state.player.expForNextLevel {
+                    state.player.currentLevelExperience = 0
+                    state.player.level += 1
+                }
+
                 effects.append(clearAnimation(for: .player, delay: 0.2, cancelId: state.player.combatLockDetails.animationEffectCancelId))
             }
 
@@ -314,8 +331,11 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
                 state.encounter!.monster.inventory[monsterInvIndex].item = nil
                 state.player.inventory[playerInvIndex].item = item
             }
-        case .reviveTapped:
+        case .reviveTapped, .exitEncounterTapped:
+            guard let encounter = state.encounter else { return .none }
+            let pastEncounter = PastEncounterState(encounter: encounter, playerDamageLog: state.player.damageLog)
             state.encounter = nil
+            state.player.damageLog = []
             state.player.currentLife = state.player.maxLife
             return .cancel(id: CombatTimerId.self)
         case .closePreview:
@@ -336,13 +356,6 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
             else { return .none }
 
             state.player.inventory[firstEmptyIndex].item = .encounter(encounter)
-        case .increasePlayerExp:
-            state.player.currentLevelExperience += 100
-            state.player.totalExperience += 100
-            if state.player.currentLevelExperience >= state.player.expForNextLevel {
-                state.player.currentLevelExperience = 0
-                state.player.level += 1
-            }
         }
         return .none
     },

@@ -9,7 +9,11 @@ import ComposableArchitecture
 import Foundation
 import SwiftUI
 
-enum Tab {
+protocol TabIdentifiable {
+    var icon: String { get }
+}
+
+enum Tab: TabIdentifiable {
     case stats
     case inventory
     case equipment
@@ -27,9 +31,9 @@ enum Tab {
     }
 }
 
-struct TabView: View {
-    let tab: Tab
-    let selectedTab: Tab
+struct TabView<T: TabIdentifiable & Equatable>: View {
+    let tab: T
+    let selectedTab: T
     let namespace: Namespace.ID
     var statusText: String = ""
     var onTap: () -> ()

@@ -45,6 +45,8 @@
 		1F767D742899F8EC0016E6B8 /* OneHandedAxe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F767D732899F8EC0016E6B8 /* OneHandedAxe.swift */; };
 		1F767D762899F9010016E6B8 /* Bow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F767D752899F9010016E6B8 /* Bow.swift */; };
 		1F767D78289A2B5C0016E6B8 /* YouWonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F767D77289A2B5C0016E6B8 /* YouWonView.swift */; };
+		1F767D7C289B85CD0016E6B8 /* Vendor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F767D7B289B85CD0016E6B8 /* Vendor.swift */; };
+		1F767D7E289B8DA40016E6B8 /* VendorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F767D7D289B8DA40016E6B8 /* VendorView.swift */; };
 		1FAC93F628865C6C00ED7F38 /* CombatClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FAC93F528865C6C00ED7F38 /* CombatClient.swift */; };
 		1FAC93F828865CA800ED7F38 /* Damage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FAC93F728865CA800ED7F38 /* Damage.swift */; };
 		1FAC93FA2887743800ED7F38 /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FAC93F92887743800ED7F38 /* Haptics.swift */; };
@@ -115,6 +117,8 @@
 		1F767D732899F8EC0016E6B8 /* OneHandedAxe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneHandedAxe.swift; sourceTree = "<group>"; };
 		1F767D752899F9010016E6B8 /* Bow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bow.swift; sourceTree = "<group>"; };
 		1F767D77289A2B5C0016E6B8 /* YouWonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouWonView.swift; sourceTree = "<group>"; };
+		1F767D7B289B85CD0016E6B8 /* Vendor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vendor.swift; sourceTree = "<group>"; };
+		1F767D7D289B8DA40016E6B8 /* VendorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VendorView.swift; sourceTree = "<group>"; };
 		1FAC93F528865C6C00ED7F38 /* CombatClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombatClient.swift; sourceTree = "<group>"; };
 		1FAC93F728865CA800ED7F38 /* Damage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Damage.swift; sourceTree = "<group>"; };
 		1FAC93F92887743800ED7F38 /* Haptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
@@ -280,6 +284,7 @@
 				1F71638128987F430012B04C /* Monster */,
 				1F345E85287F5D2100A4E452 /* Stats.swift */,
 				1FAC93F728865CA800ED7F38 /* Damage.swift */,
+				1F767D7B289B85CD0016E6B8 /* Vendor.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -323,6 +328,7 @@
 				1FD17CEC2891BD7900E0BEB0 /* YouDiedView.swift */,
 				1F767D77289A2B5C0016E6B8 /* YouWonView.swift */,
 				1FD17CEE2891BEAC00E0BEB0 /* ResourceBarStack.swift */,
+				1F767D7D289B8DA40016E6B8 /* VendorView.swift */,
 			);
 			path = GameView;
 			sourceTree = "<group>";
@@ -464,6 +470,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F767D7E289B8DA40016E6B8 /* VendorView.swift in Sources */,
 				1FD17CEF2891BEAC00E0BEB0 /* ResourceBarStack.swift in Sources */,
 				1F1DE18D287CF0F200D4FD9D /* Fonts.swift in Sources */,
 				1FD17CE92891BBF500E0BEB0 /* PlayerView.swift in Sources */,
@@ -501,6 +508,7 @@
 				1F5CA85028766473002D92CF /* Player.swift in Sources */,
 				1F5CA85728768187002D92CF /* Extensions+View.swift in Sources */,
 				1F5CA81128760D87002D92CF /* SimpleARPGApp.swift in Sources */,
+				1F767D7C289B85CD0016E6B8 /* Vendor.swift in Sources */,
 				1F5CA859287688A7002D92CF /* ItemPreview.swift in Sources */,
 				1F2D5BC6288902E00061F4D3 /* TreeDiagram.swift in Sources */,
 			);

@@ -8,7 +8,9 @@
 import Foundation
 
 func experienceNeededForLevel(_ level: Int) -> Double {
-    pow(Double(level)/0.07, 2)
+    let p1: Double = Double(level) - 1
+    let p2 = 300 * pow(2, Double(level)-1/6)
+    return (p1 + p2) / 4
 }
 
 func getLevelFromExperience(_ exp: Double) -> Int {

@@ -35,7 +35,7 @@ struct GameView: View {
                                     YouDiedView(didTapRevive: { viewStore.send(.reviveTapped) }, playerDamageLog: viewStore.player.damageLog, monsterDamageLog: encounter.monster.damageLog)
                                         .transition(.opacity)
                                 } else if encounter.monster.isDead {
-                                    YouWonView(didTapExit: { })
+                                    YouWonView(didTapExit: { viewStore.send(.exitEncounterTapped) })
                                         .transition(.opacity)
                                 } else {
                                     HStack {
