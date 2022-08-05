@@ -41,6 +41,13 @@ func damage<S: PlayerIdentifiable>(
     player.damageLog.append(.init(damage: damage, show: false))
 }
 
+func message<S: PlayerIdentifiable>(
+    player: inout S,
+    message: Message
+) {
+    player.currentMessage = message
+}
+
 // --
 
 struct GameState: Equatable {
@@ -85,6 +92,7 @@ enum GameAction: Equatable {
 
     case inventoryAction(InventoryAction)
     case statsViewAction(StatsViewAction)
+    case messageAction(MessageAction)
 
     case bestMoveForActivePlayerResult(Result<GameModelMove?, CombatClient.Error>)
     case attemptLoot(InventorySlot)
@@ -345,6 +353,7 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
             state.didAppear = true
         case .inventoryAction,
             .statsViewAction,
+            .messageAction,
             .resetCombatClientModelResult,
             .updateCombatClientGameStateResult,
             .updateCombatClientActivePlayerResult:
@@ -365,6 +374,11 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
     statsViewReducer
         .pullback(state: \.statsViewState, action: /GameAction.statsViewAction, environment: { _ in
             .init()
+        }),
+
+    messageReducer
+        .pullback(state: \.messageState, action: /GameAction.messageAction, environment: { env in
+            .init(mainQueue: env.mainQueue)
         })
 )
 

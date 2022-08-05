@@ -16,12 +16,7 @@ struct YouDiedView: View {
         VStack(spacing: 8) {
             Text("YOU DIED!")
                 .foregroundColor(.white)
-                .font(.appBody)
-            Text("Your equipment has been destroyed in battle.")
-                .foregroundColor(.white)
-                .font(.appFootnote)
-                .opacity(0.7)
-                .padding(.bottom, 8)
+                .font(.appCallout)
 
             Button(action: {
                 didTapRevive()
@@ -29,8 +24,9 @@ struct YouDiedView: View {
                 Text("✨ Revive")
                     .font(.appFootnote)
                     .foregroundColor(.white)
+                    .frame(width: 100)
                     .padding(12)
-                    .background(Color.uiButton.gradient, in: RoundedRectangle(cornerRadius: 4))
+                    .background(Color.uiButton.gradient, in: RoundedRectangle(cornerRadius: 2))
                     .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 5)
             }
             .padding(.bottom, 8)
@@ -50,12 +46,12 @@ struct YouDiedView: View {
                         Text("Monster hit you for ").font(.appFootnote).foregroundColor(.white.opacity(0.7)) +
                         Text("\(Int(entry.damage.rawAmount)) ").font(.appFootnote).foregroundColor(.white) +
                         Text("\(entry.damage.type.name)")
-                            .font(.appFootnote)
+                            .font(.appCaption)
                             .foregroundColor(.white)
                     }
                 }
             }
-            .frame(height: 60)
+            .frame(height: 50)
         }
         .padding()
         .frame(width: screen.width)

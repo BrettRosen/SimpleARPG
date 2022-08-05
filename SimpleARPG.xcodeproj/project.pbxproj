@@ -47,6 +47,8 @@
 		1F767D78289A2B5C0016E6B8 /* YouWonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F767D77289A2B5C0016E6B8 /* YouWonView.swift */; };
 		1F767D7C289B85CD0016E6B8 /* Vendor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F767D7B289B85CD0016E6B8 /* Vendor.swift */; };
 		1F767D7E289B8DA40016E6B8 /* VendorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F767D7D289B8DA40016E6B8 /* VendorView.swift */; };
+		1F767D80289D966C0016E6B8 /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F767D7F289D966C0016E6B8 /* MessageView.swift */; };
+		1F767D82289D991B0016E6B8 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F767D81289D991B0016E6B8 /* Message.swift */; };
 		1FAC93F628865C6C00ED7F38 /* CombatClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FAC93F528865C6C00ED7F38 /* CombatClient.swift */; };
 		1FAC93F828865CA800ED7F38 /* Damage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FAC93F728865CA800ED7F38 /* Damage.swift */; };
 		1FAC93FA2887743800ED7F38 /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FAC93F92887743800ED7F38 /* Haptics.swift */; };
@@ -119,6 +121,8 @@
 		1F767D77289A2B5C0016E6B8 /* YouWonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouWonView.swift; sourceTree = "<group>"; };
 		1F767D7B289B85CD0016E6B8 /* Vendor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vendor.swift; sourceTree = "<group>"; };
 		1F767D7D289B8DA40016E6B8 /* VendorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VendorView.swift; sourceTree = "<group>"; };
+		1F767D7F289D966C0016E6B8 /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
+		1F767D81289D991B0016E6B8 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		1FAC93F528865C6C00ED7F38 /* CombatClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombatClient.swift; sourceTree = "<group>"; };
 		1FAC93F728865CA800ED7F38 /* Damage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Damage.swift; sourceTree = "<group>"; };
 		1FAC93F92887743800ED7F38 /* Haptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
@@ -285,6 +289,7 @@
 				1F345E85287F5D2100A4E452 /* Stats.swift */,
 				1FAC93F728865CA800ED7F38 /* Damage.swift */,
 				1F767D7B289B85CD0016E6B8 /* Vendor.swift */,
+				1F767D81289D991B0016E6B8 /* Message.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -329,6 +334,7 @@
 				1F767D77289A2B5C0016E6B8 /* YouWonView.swift */,
 				1FD17CEE2891BEAC00E0BEB0 /* ResourceBarStack.swift */,
 				1F767D7D289B8DA40016E6B8 /* VendorView.swift */,
+				1F767D7F289D966C0016E6B8 /* MessageView.swift */,
 			);
 			path = GameView;
 			sourceTree = "<group>";
@@ -480,8 +486,10 @@
 				1F71638328987F560012B04C /* Monster+Base.swift in Sources */,
 				1FD17CED2891BD7900E0BEB0 /* YouDiedView.swift in Sources */,
 				1F5CA85B2877A734002D92CF /* HapticsManager.swift in Sources */,
+				1F767D82289D991B0016E6B8 /* Message.swift in Sources */,
 				1F1DE18F287DBC2100D4FD9D /* Encounter.swift in Sources */,
 				1F2D5BCA2889B4690061F4D3 /* EncounterPreview.swift in Sources */,
+				1F767D80289D966C0016E6B8 /* MessageView.swift in Sources */,
 				1FD17CE72891B8C900E0BEB0 /* TabRowView.swift in Sources */,
 				1F403A7F2882672000CC3130 /* EncounterConfirm.swift in Sources */,
 				1F767D742899F8EC0016E6B8 /* OneHandedAxe.swift in Sources */,

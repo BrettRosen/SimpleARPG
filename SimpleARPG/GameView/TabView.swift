@@ -14,6 +14,7 @@ protocol TabIdentifiable {
 }
 
 enum Tab: TabIdentifiable {
+    case messages
     case stats
     case inventory
     case equipment
@@ -22,6 +23,7 @@ enum Tab: TabIdentifiable {
 
     var icon: String {
         switch self {
+        case .messages: return "💬"
         case .stats: return "📊"
         case .inventory: return "🎒"
         case .equipment: return "⚔️"
@@ -41,8 +43,8 @@ struct TabView<T: TabIdentifiable & Equatable>: View {
     var body: some View {
         ZStack(alignment: .bottom) {
             Text(tab.icon)
-                .font(.title2)
-                .frame(width: 50, height: 40)
+                .font(.appSubheadline)
+                .frame(width: 45, height: 35)
                 .background {
                     ZStack {
                         if selectedTab != tab {
@@ -60,6 +62,7 @@ struct TabView<T: TabIdentifiable & Equatable>: View {
             Text(statusText).font(.appCaption)
                 .foregroundColor(.white)
         }
+        .animation(.spring(), value: selectedTab)
         .onTapGesture { onTap() }
     }
 }

@@ -74,6 +74,10 @@ struct GameView: View {
                                         ResourceBar(current: monster.currentLife, total: monster.maxLife, frontColor: .uiGreen, backColor: .uiRed, icon: "", showTotal: false, width: 80, height: 20)
                                         PlayerView(store: store, player: monster, xScale: -1)
                                     }
+                                } else {
+                                    VendorView(vendor: viewStore.vendor, onTap: {
+                                        
+                                    })
                                 }
                             }
                             .padding(.horizontal, 24)
@@ -88,6 +92,8 @@ struct GameView: View {
 
                         Group {
                             switch viewStore.selectedTab {
+                            case .messages:
+                                MessageView(store: store.scope(state: \.messageState, action: GameAction.messageAction))
                             case .stats:
                                 StatsView(store: store.scope(state: \.statsViewState, action: GameAction.statsViewAction))
                             case .inventory:
@@ -128,9 +134,12 @@ struct GameView: View {
                             }
                         }
                         .frame(height: 40 * 7)
-                        .background(Color.uiBackground.frame(width: screen.width).edgesIgnoringSafeArea(.bottom))
+                        .background(Color.uiBackground.frame(width: screen.width))
+
+                        TabRowView(store: store)
+                        Divider().background(Color.black)
+                        Divider().background(Color.uiDarkBackground)
                     }
-                    .frame(height: screen.height / 2.4)
                 }
                 .zIndex(1)
 

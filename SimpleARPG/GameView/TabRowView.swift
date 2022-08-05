@@ -16,6 +16,9 @@ struct TabRowView: View {
     var body: some View {
         WithViewStore(store) { viewStore in
             HStack {
+                TabView(tab: .messages, selectedTab: viewStore.selectedTab, namespace: tabAnimation) {
+                    viewStore.send(.updateTab(.messages))
+                }
                 TabView(tab: .stats, selectedTab: viewStore.selectedTab, namespace: tabAnimation) {
                     viewStore.send(.updateTab(.stats))
                 }
