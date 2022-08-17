@@ -75,12 +75,14 @@ struct GameView: View {
                                         PlayerView(store: store, player: monster, xScale: -1)
                                     }
                                 } else {
-                                    VendorView(vendor: viewStore.vendor, onTap: {
-                                        
-                                    })
+                                    VendorView(store: store.scope(state: \.vendorViewState, action: GameAction.vendorViewAction))
                                 }
                             }
                             .padding(.horizontal, 24)
+                        }
+
+                        if viewStore.vendor.isActive {
+                            VendorInventoryView(store: store.scope(state: \.vendorViewState, action: GameAction.vendorViewAction))
                         }
                     }
 

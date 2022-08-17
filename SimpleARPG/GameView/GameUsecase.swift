@@ -93,6 +93,7 @@ enum GameAction: Equatable {
     case inventoryAction(InventoryAction)
     case statsViewAction(StatsViewAction)
     case messageAction(MessageAction)
+    case vendorViewAction(VendorAction)
 
     case bestMoveForActivePlayerResult(Result<GameModelMove?, CombatClient.Error>)
     case attemptLoot(InventorySlot)
@@ -354,6 +355,7 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
         case .inventoryAction,
             .statsViewAction,
             .messageAction,
+            .vendorViewAction,
             .resetCombatClientModelResult,
             .updateCombatClientGameStateResult,
             .updateCombatClientActivePlayerResult:
@@ -379,6 +381,11 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
     messageReducer
         .pullback(state: \.messageState, action: /GameAction.messageAction, environment: { env in
             .init(mainQueue: env.mainQueue)
+        }),
+
+    vendorReducer
+        .pullback(state: \.vendorViewState, action: /GameAction.vendorViewAction, environment: { env in
+            .init()
         })
 )
 

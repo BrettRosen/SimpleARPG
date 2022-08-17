@@ -13,10 +13,11 @@ extension GameState {
     // MARK: Inventory State
     var inventoryState: InventoryState {
         get {
-            InventoryState(local: inventoryLocalState, player: player, previewingEncounter: previewingEncounter, currentPreviewingItem: currentPreviewingItem)
+            InventoryState(local: inventoryLocalState, player: player, vendor: vendor, previewingEncounter: previewingEncounter, currentPreviewingItem: currentPreviewingItem)
         } set {
             inventoryLocalState = newValue.local
             player = newValue.player
+            vendor = newValue.vendor
             previewingEncounter = newValue.previewingEncounter
             currentPreviewingItem = newValue.currentPreviewingItem
         }
@@ -35,6 +36,7 @@ struct PreviewingEncounter: Equatable {
 struct InventoryState: Equatable {
     var local: InventoryLocalState = .init()
     var player: Player = .init()
+    var vendor: Vendor = .init()
     var previewingEncounter: PreviewingEncounter?
     var currentPreviewingItem: Item?
 }
@@ -167,13 +169,23 @@ struct PlayerInventoryView: View {
                         guard let item = slot.item else { return AnyView(EmptyView()) }
                         return AnyView(VStack {
                             Text("\(item.icon) \(item.name)")
+
+                            if viewStore.vendor.isActive {
+                                Button(role: .destructive) {
+
+                                } label: {
+                                   Text("Sell for 100c")
+                                        .foregroundColor(.red)
+                                }
+                            }
+
                             Button {
                                 viewStore.send(.presentItemPreview(item), animation: .default)
                             } label: {
                                 Label("Inspect", systemImage: "magnifyingglass")
                             }
 
-                            Button {
+                            Button(role: .destructive) {
                                 viewStore.send(.destroyItem(in: slot), animation: .default)
                             } label: {
                                 Label("Destroy", systemImage: "trash")

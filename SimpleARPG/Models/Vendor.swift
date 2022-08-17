@@ -32,15 +32,27 @@ struct Vendor: Equatable {
         self.icon = icon
 
         var weapons = [InventorySlot]()
+        var armors = [InventorySlot]()
+        var foodAndMiscs = [InventorySlot]()
+
         for _ in 0..<10 {
             let weapon = Equipment.generateEquipment(level: level, slot: .weapon, incRarity: 0)
+            let armor = InventorySlot()
+            let foodAndMisc = InventorySlot()
+
             weapons.append(.init(item: .equipment(weapon)))
+            armors.append(armor)
+            foodAndMiscs.append(foodAndMisc)
         }
         tabs[.weapons] = weapons
+        tabs[.armor] = armors
+        tabs[.foodAndMisc] = foodAndMiscs
     }
 
     var selectedTab: TabType = .weapons
     var tabs: [TabType: [InventorySlot]] = [
         .weapons: [], .armor: [], .foodAndMisc: []
     ]
+
+    var isActive = false
 }
