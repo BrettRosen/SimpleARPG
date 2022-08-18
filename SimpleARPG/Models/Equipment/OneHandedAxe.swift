@@ -24,8 +24,4 @@ struct OneHandedAxe: Equatable, WeaponBaseIdentifiable, EquipmentBaseIdentifiabl
 
     static let rustedHatchet: Self = .init(presentationDetails: .init(xScale: -1, degreeRotation: 0, offSet: .init(width: 20, height: 0)), name: "Rusted Hatchet", levelRequirement: 1, strengthRequirement: 12, dexterityRequirement: 6, damage: 6.0...11.0, critChance: 0.05)
     static let stoneAxe: Self = .init(presentationDetails: .init(xScale: -1, degreeRotation: 0, offSet: .init(width: 20, height: 0)), name: "Stone Axe", handidness: .twoHand, levelRequirement: 1, strengthRequirement: 17, dexterityRequirement: 8, damage: 12.0...20.0, ticksPerAttack: 5, critChance: 0.05)
-
-    static let allBases = [
-        OneHandedAxe.rustedHatchet,
-    ]
 }

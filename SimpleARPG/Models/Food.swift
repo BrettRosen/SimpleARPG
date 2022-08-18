@@ -109,6 +109,11 @@ enum Food: String, CaseIterable, InventoryDisplayable {
         case .anglerfish: return 89...100
         }
     }
+
+    var price: Price {
+        let minDropLevel = dropLevelRange.lowerBound
+        return .init(buy: minDropLevel * 8, sell: minDropLevel * 6)
+    }
 }
 
 extension Food {

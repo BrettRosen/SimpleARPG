@@ -43,6 +43,7 @@ enum EquipmentBase: Equatable {
         .weapon(.oneHandedAxe(.rustedHatchet)),
         .weapon(.oneHandedAxe(.stoneAxe)),
         .weapon(.bow(.crudeBow)),
+        .weapon(.dagger(.glassShank)),
     ]
 
     case weapon(WeaponBase)
@@ -89,22 +90,26 @@ enum WeaponBase: Equatable {
     static let all: [WeaponBase] = [
         .oneHandedAxe(.rustedHatchet),
         .oneHandedAxe(.stoneAxe),
-        .bow(.crudeBow)
+        .bow(.crudeBow),
+        .dagger(.glassShank),
     ]
 
     case oneHandedAxe(OneHandedAxe)
     case bow(Bow)
+    case dagger(Dagger)
 
     var identifiableWeaponBase: any WeaponBaseIdentifiable {
         switch self {
         case let .oneHandedAxe(axe): return axe
         case let .bow(bow): return bow
+        case let .dagger(dagger): return dagger
         }
     }
     var identifiableEquipmentBase: any EquipmentBaseIdentifiable {
         switch self {
         case let .oneHandedAxe(axe): return axe
         case let .bow(bow): return bow
+        case let .dagger(dagger): return dagger
         }
     }
 }
@@ -123,9 +128,17 @@ struct Equipment: Equatable, InventoryDisplayable {
             }
         }
 
+        var priceModifier: Double {
+            switch self {
+            case .normal: return 1
+            case .magic: return 2.2
+            case .rare: return 3.4
+            }
+        }
+
         static func rarity(for incRarity: Double = 0) -> Self {
-            var rareUpperBound: Double = 3 * (1 + incRarity)
-            var magicUpperBound: Double = 20 * (1 + incRarity)
+            let rareUpperBound: Double = 3 * (1 + incRarity)
+            let magicUpperBound: Double = 20 * (1 + incRarity)
             let randomNumber = Double(Int.random(in: 1...100))
             switch randomNumber {
             case 1.0...rareUpperBound:
@@ -144,6 +157,14 @@ struct Equipment: Equatable, InventoryDisplayable {
 
     var icon: String { base.icon }
     var name: String { base.name }
+
+    var price: Price {
+        var price: Double = Double(base.levelRequirement) * 22.0 * rarity.priceModifier
+        switch base {
+        case .weapon: price *= 1.1
+        }
+        return .init(buy: Int(price), sell: Int(price * 0.75))
+    }
 
     static func generateEquipment(
         level: Int,
@@ -189,43 +210,49 @@ enum EquipmentSlot {
     }
 }
 
-func generateDropFor(
-    encounter: Encounter,
+func generateItem(
+    level: Int,
+    lootTable: LootTable,
+    itemRarity: Double,
     player: Player
 ) -> Item? {
-    var drops = encounter.monster.lootTable.drops
-
-    let incItemRarity = encounter.itemRarity + player.stats[.incItemRarity]!
-    let incItemQuantity = encounter.itemQuantity + player.stats[.incItemQuantity]!
+    var drops = lootTable.drops
 
     for (index, _) in drops.enumerated() {
-        drops[index].weight *= (1 + Int(incItemRarity))
+        drops[index].weight *= (1 + Int(itemRarity))
     }
 
     let randomNumberMax = drops.map(\.weight).reduce(0, +)
     let randomNumber = Int.random(in: 1...randomNumberMax)
     var selectedDrop: ItemDrop!
 
-    for drop in drops {
-        if randomNumber <= drop.weight {
+    var previous = 0
+    for drop in drops.sorted(by: { $0.weight < $1.weight }) {
+        let range = (previous + 1)...(previous + drop.weight)
+        if range ~= randomNumber {
             selectedDrop = drop.item
+            break
         }
+        previous += drop.weight
     }
 
     switch selectedDrop {
     case .equipment:
-        guard let base = EquipmentBase.allBases.filter({ $0.levelRequirement <= player.level }).shuffled().first else {
+        guard let base = EquipmentBase.allBases.filter({ $0.levelRequirement <= level }).shuffled().first else {
             fatalError()
         }
         return .equipment(.init(base: base, rarity: .normal, stats: [:]))
     case .food:
-        return .food(Food.generate(level: player.level))
+        return .food(Food.generate(level: level))
     case .encounter:
         return .encounter(Encounter.generate(
-            level: player.level,
-            rarity: Encounter.Rarity.rarity(for: incItemRarity),
-            incRarity: incItemRarity
+            level: level,
+            rarity: Encounter.Rarity.rarity(for: itemRarity),
+            player: player
         ))
+    case .coins:
+        let coins = pow(Double(Int.random(in: 1...10) * level), 1.2)
+        return .coins(Int(coins))
     case .nothing:
         return nil
     case .none:

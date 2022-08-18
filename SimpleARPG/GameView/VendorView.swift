@@ -114,11 +114,12 @@ struct VendorInventoryView: View {
                         .uiButton
                     },
                     contextMenu: { slot in
-                        AnyView(
+                        guard let price = slot.item?.price else { return AnyView(EmptyView())}
+                        return AnyView(
                             Button {
 
                             } label: {
-                                Text("Buy for 100c")
+                                Text("Buy for \(price.buy) 🪙")
                             }
                         )
                     },

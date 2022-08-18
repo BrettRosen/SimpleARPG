@@ -361,7 +361,7 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
             .updateCombatClientActivePlayerResult:
             break
         case .addRandomEncounter:
-            let encounter = Encounter.generate(level: state.player.level, rarity: Encounter.Rarity.rarity(), incRarity: 0)
+            let encounter = Encounter.generate(level: state.player.level, rarity: Encounter.Rarity.rarity(), player: state.player)
             guard let firstEmptyIndex = state.player.firstOpenInventorySlotIndex
             else { return .none }
 

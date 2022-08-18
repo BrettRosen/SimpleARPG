@@ -170,13 +170,14 @@ struct PlayerInventoryView: View {
                         return AnyView(VStack {
                             Text("\(item.icon) \(item.name)")
 
-                            if viewStore.vendor.isActive {
-                                Button(role: .destructive) {
+                            if viewStore.vendor.isActive, let price = item.price {
+                                Button {
 
                                 } label: {
-                                   Text("Sell for 100c")
-                                        .foregroundColor(.red)
+                                    Text("Sell for \(price.sell) 🪙")
                                 }
+                            } else if let price = item.price {
+                                Text("\(price.sell) 🪙")
                             }
 
                             Button {

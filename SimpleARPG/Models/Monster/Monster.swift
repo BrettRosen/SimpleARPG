@@ -8,12 +8,6 @@
 import Foundation
 import SwiftUI
 
-/// Defines items that can drop from mobs.
-/// This is different than Item since we don't want the associted type
-enum ItemDrop: Equatable {
-    case equipment, food, encounter, nothing
-}
-
 struct LootTable: Equatable {
     struct LootDrop: Equatable {
         var item: ItemDrop // To indicate a drop can also be... nothing
@@ -21,23 +15,28 @@ struct LootTable: Equatable {
     }
 
     var drops: [LootDrop]
+
+    static var `default`: LootTable = .init(drops: [
+        .init(item: .equipment, weight: 24),
+        .init(item: .food, weight: 11),
+        .init(item: .encounter, weight: 32),
+        .init(item: .nothing, weight: 33)
+    ])
 }
 
 struct Monster: Equatable, PlayerIdentifiable {
     var playerId: Int = UUID().hashValue
 
-    static let baseDropChance = 0.16
+    static let maxInventorySlots = 24
+    /// Defines the maximum amount of random items that can be
+    /// generated for a monster after required items (food).
+    static let maxRandomInventoryItem = 4
+    static let maxFoodCountRange = 5...10
 
     var icon: PlayerIcon
     let name: String
     let level: Int
     var stats: [Stat.Key: Double]
-    var lootTable: LootTable = .init(drops: [
-        .init(item: .equipment, weight: 8),
-        .init(item: .food, weight: 24),
-        .init(item: .encounter, weight: 4),
-        .init(item: .nothing, weight: 64)
-    ])
 
     init(
         icon: PlayerIcon,
