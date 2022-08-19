@@ -12,7 +12,7 @@ import GameplayKit
 struct Success: Equatable { }
 
 enum CombatMove {
-    case attack(damage: Damage)
+    case attack(damage: [Damage])
     case heal(Food, InventorySlot)
 }
 
@@ -186,7 +186,7 @@ class GameModel: NSObject, GKGameModel {
             score += 10
         }
 
-        if player.damagePerAttack.rawAmount >= opponent.currentLife {
+        if player.damagePerAttack.map(\.rawAmount).reduce(0, +) >= opponent.currentLife {
             score += 30
         }
 
@@ -208,15 +208,17 @@ class GameModel: NSObject, GKGameModel {
 
             switch gameModelUpdate.move {
             case let .attack(damagePacket):
-                isPlayer(playerId: player.playerId)
-                    ? damage(
-                        player: &gameState.encounter!.monster,
-                        damage: damagePacket
-                    )
-                    : damage(
-                        player: &gameState.player,
-                        damage: damagePacket
-                    )
+                for dam in damagePacket {
+                    isPlayer(playerId: player.playerId)
+                        ? damage(
+                            player: &gameState.encounter!.monster,
+                            damage: dam
+                        )
+                        : damage(
+                            player: &gameState.player,
+                            damage: dam
+                        )
+                }
             case let .heal(food, slot):
                 isPlayer(playerId: player.playerId)
                     ? heal(player: &gameState.player, food: food, slot: slot)

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 enum ElementalType: Equatable {
     case fire, cold, lightning
@@ -28,11 +29,39 @@ enum DamageType: Equatable {
             }
         }
     }
+
+    var color: Color {
+        switch self {
+        case .melee: return .uiRed
+        case .ranged: return .uiRed
+        case let .magic(elementalType):
+            switch elementalType {
+            case .fire: return .orange
+            case .cold: return .blue
+            case .lightning: return .yellow
+            }
+        }
+    }
+
+    var icon: String {
+        switch self {
+        case .melee: return "🗡"
+        case .ranged: return "🏹"
+        case let .magic(elementalType):
+            switch elementalType {
+            case .fire: return "🔥"
+            case .cold: return "❄️"
+            case .lightning: return "⚡️"
+            }
+        }
+    }
 }
 
 struct Damage: Equatable {
     var type: DamageType
     var rawAmount: Double
+    /// This value is used to define damage that is not from the player's primary source
+    var secondary: Bool = false
 }
 
 struct DamageLogEntry: Equatable, Identifiable {
@@ -40,4 +69,5 @@ struct DamageLogEntry: Equatable, Identifiable {
     let damage: Damage
     /// Controls the animation of the damage entry
     var show: Bool
+    var splatOffset: CGPoint = CGPoint(x: .random(in: -30...30), y: .random(in: -30...30))
 }

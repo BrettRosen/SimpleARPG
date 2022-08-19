@@ -21,6 +21,10 @@ struct Bow: Equatable, WeaponBaseIdentifiable, EquipmentBaseIdentifiable {
     var damage: ClosedRange<Double> = 0.0...0.0
     var ticksPerAttack: Int = 2
     var critChance: Double = 0
+    var affixPool: AffixPool = .init(
+        prefix: [.flatPhysical, .flatCold, .flatFire, .flatLightning],
+        suffix: [.dexterity]
+    )
 
     static let crudeBow: Self = .init(presentationDetails: .init(xScale: 1, degreeRotation: 15, offSet: .init(width: 20, height: 0)), name: "Crude Bow", levelRequirement: 1, dexterityRequirement: 14, damage: 5.0...13.0, critChance: 0.05)
 }

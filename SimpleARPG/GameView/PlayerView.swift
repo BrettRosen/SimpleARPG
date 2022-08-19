@@ -73,17 +73,15 @@ struct PlayerView: View {
 
                 // Damage log
                 ForEach(player.damageLog) { entry in
-                    Text("\(Int(entry.damage.rawAmount))")
+                    Text("\(entry.damage.type.icon) \(Int(entry.damage.rawAmount))")
                         .font(.appCaption)
                         .foregroundColor(.white)
-                        .background {
-                            Image(systemName: "seal.fill")
-                                .frame(width: 15, height: 15)
-                                .foregroundColor(entry.damage.rawAmount == 0 ? .blue : .uiRed)
-                                .scaleEffect(entry.show ? 1.5 : 1)
-                        }
+                        .padding(.horizontal, 4)
+                        .padding(.vertical, 6)
+                        .background(entry.damage.type.color, in: RoundedRectangle(cornerRadius: 4))
+                        .offset(x: entry.splatOffset.x, y: entry.splatOffset.y)
                         .offset(y: entry.show ? -25 : 0)
-                        .scaleEffect(entry.show ? 1.4 : 1)
+                        .scaleEffect(entry.show ? (entry.damage.secondary ? 0.8 : 1.2) : (entry.damage.secondary ? 0.5 : 1))
                         .transition(.move(edge: .top))
                         .animation(.spring(response: 0.6, dampingFraction: 0.4), value: entry.show)
                         .opacity(entry.show ? 1 : 0)

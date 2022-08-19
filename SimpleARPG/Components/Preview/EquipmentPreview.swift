@@ -55,6 +55,13 @@ struct EquipmentPreview: View {
                     + Text("\(Int(weapon.identifiableEquipmentBase.intelligenceRequirement)) ").font(.appFootnote).foregroundColor(.white)
                     + Text("Int").font(.appFootnote).foregroundColor(.white.opacity(0.6))
                 }
+
+                Divider().frame(width: 100).overlay(Color.uiBorder)
+
+                ForEach(Array(equipment.stats.keys.enumerated()), id:\.element) { _, key in
+                    Text(key.displayName + ": ").font(.appFootnote).foregroundColor(.white) +
+                    Text("\(equipment.stats[key]!, specifier: "%.2f")").font(.appFootnote).foregroundColor(.yellow)
+                }
             }
         }
         .padding()

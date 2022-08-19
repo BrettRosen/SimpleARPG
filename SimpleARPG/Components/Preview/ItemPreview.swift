@@ -25,6 +25,6 @@ struct ItemPreview: View {
 
 struct ItemPreview_Previews: PreviewProvider {
     static var previews: some View {
-        ItemPreview(item: .stoneAxeMock)
+        ItemPreview(item: .equipment(.generateEquipment(level: 1, slot: .weapon, incRarity: 0)))
     }
 }

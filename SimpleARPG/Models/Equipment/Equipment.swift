@@ -28,6 +28,7 @@ protocol EquipmentBaseIdentifiable: Equatable {
     var strengthRequirement: Double { get }
     var dexterityRequirement: Double { get }
     var intelligenceRequirement: Double { get }
+    var affixPool: AffixPool { get }
 }
 
 protocol WeaponBaseIdentifiable: Equatable {
@@ -53,6 +54,11 @@ enum EquipmentBase: Equatable {
     case weapon(WeaponBase)
     //case armor(ArmorBase)
 
+    var affixPool: AffixPool {
+        switch self {
+        case let .weapon(weapon): return weapon.identifiableEquipmentBase.affixPool
+        }
+    }
     var icon: String {
         switch self {
         case let .weapon(weapon): return weapon.identifiableEquipmentBase.icon
@@ -141,6 +147,14 @@ struct Equipment: Equatable, InventoryDisplayable {
             }
         }
 
+        var maxAffixCount: Int {
+            switch self {
+            case .normal: return 0
+            case .magic: return 2
+            case .rare: return 3
+            }
+        }
+
         static func rarity(for incRarity: Double = 0) -> Self {
             let rareUpperBound: Double = 3 * (1 + incRarity)
             let magicUpperBound: Double = 20 * (1 + incRarity)
@@ -181,15 +195,31 @@ struct Equipment: Equatable, InventoryDisplayable {
             .shuffled().first else {
             fatalError()
         }
-        return .init(
-            base: base,
-            rarity: Equipment.Rarity.rarity(for: incRarity),
-            stats: [:]
-        )
+        var affixPool = base.affixPool
+        let rarity = Equipment.Rarity.rarity(for: incRarity)
+        var stats: [Stat.Key: Double] = [:]
+        let prefixCount = rarity == .normal ? 0 : Int.random(in: 1...rarity.maxAffixCount)
+        let suffixCount = rarity == .normal ? 0 : Int.random(in: 1...rarity.maxAffixCount)
+
+        // Given a random number of prefixes, grab a random one, assign a value, and remove it from the affix pool
+        for _ in 0..<prefixCount {
+            if let statKey = affixPool.prefix.randomElement() {
+                stats[statKey] = Double.random(in: statKey.valueRange(for: level))
+                affixPool.prefix.removeAll(where: { $0 == statKey })
+            }
+        }
+        for _ in 0..<suffixCount {
+            if let statKey = affixPool.suffix.randomElement() {
+                stats[statKey] = Double.random(in: statKey.valueRange(for: level))
+                affixPool.suffix.removeAll(where: { $0 == statKey })
+            }
+        }
+
+        return .init(base: base, rarity: rarity, stats: stats)
     }
 }
 
-enum EquipmentSlot {
+enum EquipmentSlot: CaseIterable {
     case helmet
     case body
     case weapon
@@ -243,10 +273,8 @@ func generateItem(
 
     switch selectedDrop {
     case .equipment:
-        guard let base = EquipmentBase.allBases.filter({ $0.levelRequirement <= level }).shuffled().first else {
-            fatalError()
-        }
-        return .equipment(.init(base: base, rarity: .normal, stats: [:]))
+        let equipment = Equipment.generateEquipment(level: level, slot: .weapon, incRarity: player.stats[.incItemRarity]!)
+        return .equipment(equipment)
     case .food:
         return .food(Food.generate(level: level))
     case .encounter:

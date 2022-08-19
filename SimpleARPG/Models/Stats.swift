@@ -7,6 +7,11 @@
 
 import Foundation
 
+struct AffixPool: Equatable {
+    var prefix: [Stat.Key]
+    var suffix: [Stat.Key]
+}
+
 enum Stat: Equatable, Codable {
 
     enum Key: String {
@@ -17,9 +22,49 @@ enum Stat: Equatable, Codable {
         case dexterity
         case intelligence
         case flatPhysical
+        case flatCold
+        case flatFire
+        case flatLightning
         case percentHitChance
         case incItemRarity
         case incItemQuantity
+
+        var displayName: String {
+            switch self {
+            case .armour: return "Armour"
+            case .flatMaxLife: return "Max Life"
+            case .percentMaxLife: return "% Inc Life"
+            case .strength: return "Strength"
+            case .dexterity: return "Dexterity"
+            case .intelligence: return "Intelligence"
+            case .flatPhysical: return "Added Physical"
+            case .flatCold: return "Added Cold"
+            case .flatFire: return "Added Fire"
+            case .flatLightning: return "Added Lightning"
+            case .percentHitChance: return "Hit Chance"
+            case .incItemRarity: return "Item Rarity"
+            case .incItemQuantity: return "Item Quantity"
+            }
+        }
+
+        func valueRange(for level: Int) -> ClosedRange<Double> {
+            let level = Double(level)
+            switch self {
+            case .armour: return 10*level...12*level
+            case .flatMaxLife: return 5*level...7*level
+            case .percentMaxLife: return 5*level...7*level
+            case .strength: return 1*level...1.5*level
+            case .dexterity: return 1*level...1.5*level
+            case .intelligence: return 1*level...7*level
+            case .flatPhysical: return 1*level...1.2*level
+            case .flatCold: return 1*level...1.2*level
+            case .flatFire: return 1*level...1.2*level
+            case .flatLightning: return 1*level...1.2*level
+            case .percentHitChance: return 0.1*level...0.5*level
+            case .incItemRarity: return 1...40
+            case .incItemQuantity: return 1...40
+            }
+        }
     }
 
     static let baseDefensiveStats = Defensive.baseStats
@@ -61,6 +106,9 @@ enum Stat: Equatable, Codable {
             .dexterity(20),
             .intelligence(20),
             .flatPhysical(0),
+            .flatCold(0),
+            .flatFire(0),
+            .flatLightning(0),
             .percentHitChance(0.78),
         ]
 
@@ -68,6 +116,9 @@ enum Stat: Equatable, Codable {
         case dexterity(Double)
         case intelligence(Double)
         case flatPhysical(Double)
+        case flatCold(Double)
+        case flatFire(Double)
+        case flatLightning(Double)
         case percentHitChance(Double)
 
         var key: Key {
@@ -76,6 +127,9 @@ enum Stat: Equatable, Codable {
             case .dexterity: return .dexterity
             case .intelligence: return .intelligence
             case .flatPhysical: return .flatPhysical
+            case .flatCold: return .flatCold
+            case .flatFire: return .flatFire
+            case .flatLightning: return .flatLightning
             case .percentHitChance: return .percentHitChance
             }
         }
@@ -85,6 +139,9 @@ enum Stat: Equatable, Codable {
             case let .dexterity(value): return value
             case let .intelligence(value): return value
             case let .flatPhysical(value): return value
+            case let .flatCold(value): return value
+            case let .flatFire(value): return value
+            case let .flatLightning(value): return value
             case let .percentHitChance(value): return value
             }
         }

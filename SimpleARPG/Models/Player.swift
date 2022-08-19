@@ -26,7 +26,7 @@ protocol PlayerIdentifiable {
     var weapon: WeaponBase? { get }
     var allEquipment: [Equipment] { get set }
     var inventory: [InventorySlot] { get set }
-    var damagePerAttack: Damage { get }
+    var damagePerAttack: [Damage] { get }
     var combatLockDetails: CombatLockDetails { get set }
     var isAttacking: Bool { get }
     var isEating: Bool { get }
@@ -78,6 +78,9 @@ struct Player: Equatable, PlayerIdentifiable {
         self.stats = baseStats()
         self.currentLife = 0
         self.currentLife = maxLife
+
+        self.inventory[0].item = .equipment(.generateEquipment(level: 1, slot: .weapon, incRarity: 10))
+        self.inventory[1].item = .equipment(.generateEquipment(level: 1, slot: .weapon, incRarity: 10))
     }
 
     var level: Int = 1
@@ -108,7 +111,7 @@ struct Player: Equatable, PlayerIdentifiable {
 
     var allEquipment = [Equipment]()
     var inventory: [InventorySlot] = [
-        .init(item: .shrimp), .init(item: .stoneAxeMock), .init(item: .crudeBowMock), .init(),
+        .init(), .init(), .init(), .init(),
         .init(item: .shrimp), .init(item: .shrimp), .init(item: .shrimp), .init(item: .shrimp),
         .init(), .init(), .init(), .init(),
         .init(), .init(), .init(), .init(),
@@ -146,8 +149,8 @@ struct Player: Equatable, PlayerIdentifiable {
             && stats[.intelligence]! >= equipment.base.intelligenceRequirement
     }
 
-    var damagePerAttack: Damage {
-        guard let weapon = weapon else { return .init(type: .melee, rawAmount: 0) }
+    var damagePerAttack: [Damage] {
+        guard let weapon = weapon else { return [] }
         let baseDamageRange = weapon.identifiableWeaponBase.damage
         let flatDamage = stats[.flatPhysical]!
         let percentIncreaseFromStrength = 1 + ((stats[.strength]! / 10) * 0.02)
@@ -158,7 +161,24 @@ struct Player: Equatable, PlayerIdentifiable {
         }
 
         let rawAmount = stats[.percentHitChance]! <= Double.random(in: 0.0...1.0) ? 0 : baseDamage
-        return Damage(type: weapon.identifiableWeaponBase.damageType, rawAmount: rawAmount)
+
+        var damages: [Damage] = []
+        let weaponDamage = Damage(type: weapon.identifiableWeaponBase.damageType, rawAmount: rawAmount)
+        damages.append(weaponDamage)
+
+        if let coldDamage = stats[.flatCold], coldDamage > 0 {
+            let damage = Damage(type: .magic(.cold), rawAmount: coldDamage, secondary: true)
+            damages.append(damage)
+        }
+        if let fireDamage = stats[.flatFire], fireDamage > 0 { 
+            let damage = Damage(type: .magic(.fire), rawAmount: fireDamage, secondary: true)
+            damages.append(damage)
+        }
+        if let lightningDamage = stats[.flatLightning], lightningDamage > 0 {
+            let damage = Damage(type: .magic(.lightning), rawAmount: lightningDamage, secondary: true)
+            damages.append(damage)
+        }
+        return damages
     }
 
     var currentMessage: Message?

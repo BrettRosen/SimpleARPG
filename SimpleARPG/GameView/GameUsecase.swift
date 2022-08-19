@@ -207,12 +207,15 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
                encounter.tickCount % state.player.ticksPerAttack == 0 {
 
                 print("Player attacking")
-                let dam = state.player.damagePerAttack
-                damage(player: &state.encounter!.monster, damage: dam)
-                state.player.combatLockDetails.animation = .attacking
+                for dam in state.player.damagePerAttack {
+                    damage(player: &state.encounter!.monster, damage: dam)
 
-                state.player.currentLevelExperience += dam.rawAmount * 4
-                state.player.totalExperience += dam.rawAmount * 4
+                    state.player.combatLockDetails.animation = .attacking
+
+                    state.player.currentLevelExperience += dam.rawAmount * 4
+                    state.player.totalExperience += dam.rawAmount * 4
+                }
+
                 if state.player.currentLevelExperience >= state.player.expForNextLevel {
                     state.player.currentLevelExperience = 0
                     state.player.level += 1
@@ -230,10 +233,13 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
                     Haptics.error()
                 #endif
 
-                damage(
-                    player: &state.player,
-                    damage: encounter.monster.damagePerAttack
-                )
+                for dam in encounter.monster.damagePerAttack {
+                    damage(
+                        player: &state.player,
+                        damage: dam
+                    )
+                }
+
                 state.encounter!.monster.combatLockDetails.animation = .attacking
                 effects.append(clearAnimation(for: .monster, delay: 0.2, cancelId: encounter.monster.combatLockDetails.animationEffectCancelId))
             }

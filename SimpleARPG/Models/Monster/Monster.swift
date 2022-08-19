@@ -117,8 +117,8 @@ struct Monster: Equatable, PlayerIdentifiable {
         return weapon.identifiableWeaponBase.ticksPerAttack
     }
 
-    var damagePerAttack: Damage {
-        guard let weapon = weapon else { return .init(type: .melee, rawAmount: 0) }
+    var damagePerAttack: [Damage] {
+        guard let weapon = weapon else { return [] }
         let baseDamageRange = weapon.identifiableWeaponBase.damage
         let flatDamage = stats[.flatPhysical] ?? 0
         let percentIncreaseFromStrength = 1 + ((stats[.strength]! / 10) * 0.02)
@@ -129,7 +129,24 @@ struct Monster: Equatable, PlayerIdentifiable {
         }
 
         let rawAmount = stats[.percentHitChance]! <= Double.random(in: 0.0...1.0) ? 0 : baseDamage
-        return Damage(type: weapon.identifiableWeaponBase.damageType, rawAmount: rawAmount)
+
+        var damages: [Damage] = []
+        let weaponDamage = Damage(type: weapon.identifiableWeaponBase.damageType, rawAmount: rawAmount)
+        damages.append(weaponDamage)
+
+        if let coldDamage = stats[.flatCold], coldDamage > 0 {
+            let damage = Damage(type: .magic(.cold), rawAmount: coldDamage, secondary: true)
+            damages.append(damage)
+        }
+        if let fireDamage = stats[.flatFire], fireDamage > 0 { // BRB
+            let damage = Damage(type: .magic(.fire), rawAmount: fireDamage, secondary: true)
+            damages.append(damage)
+        }
+        if let lightningDamage = stats[.flatCold], lightningDamage > 0 {
+            let damage = Damage(type: .magic(.cold), rawAmount: lightningDamage, secondary: true)
+            damages.append(damage)
+        }
+        return damages
     }
 
     var currentMessage: Message?
