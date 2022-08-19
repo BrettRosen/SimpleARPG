@@ -40,10 +40,14 @@ protocol WeaponBaseIdentifiable: Equatable {
 
 enum EquipmentBase: Equatable {
     static var allBases: [EquipmentBase] = [
+        // One Handed Axe
         .weapon(.oneHandedAxe(.rustedHatchet)),
         .weapon(.oneHandedAxe(.stoneAxe)),
+        // Bow
         .weapon(.bow(.crudeBow)),
+        // Dagger
         .weapon(.dagger(.glassShank)),
+        .weapon(.dagger(.skinningKnife))
     ]
 
     case weapon(WeaponBase)
@@ -92,6 +96,7 @@ enum WeaponBase: Equatable {
         .oneHandedAxe(.stoneAxe),
         .bow(.crudeBow),
         .dagger(.glassShank),
+        .dagger(.skinningKnife),
     ]
 
     case oneHandedAxe(OneHandedAxe)

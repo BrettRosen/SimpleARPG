@@ -9,7 +9,7 @@ import Foundation
 
 struct Dagger: Equatable, WeaponBaseIdentifiable, EquipmentBaseIdentifiable {
     var damageType: DamageType = .melee
-    var presentationDetails: EquipmentPresentationDetails = .init()
+    var presentationDetails: EquipmentPresentationDetails = .init(xScale: -1, degreeRotation: -45, offSet: .init(width: 25, height: 0))
     var icon: String = "🗡"
     var name: String = ""
     var slot: EquipmentSlot = .weapon
@@ -22,9 +22,6 @@ struct Dagger: Equatable, WeaponBaseIdentifiable, EquipmentBaseIdentifiable {
     var ticksPerAttack: Int = 2
     var critChance: Double = 0
 
-    static let glassShank: Self = .init(presentationDetails: .init(xScale: -1, degreeRotation: -30, offSet: .init(width: 20, height: 0)), name: "Glass Shank", levelRequirement: 1, strengthRequirement: 9, dexterityRequirement: 6, damage: 6.0...10.0, critChance: 0.06)
-
-    static let allBases = [
-        OneHandedAxe.rustedHatchet,
-    ]
+    static let glassShank: Self = .init(name: "Glass Shank", levelRequirement: 1, dexterityRequirement: 9, intelligenceRequirement: 6, damage: 6.0...10.0, critChance: 0.06)
+    static let skinningKnife: Self = .init(name: "Skinning Knife", levelRequirement: 5, dexterityRequirement: 16, intelligenceRequirement: 11, damage: 5.0...19.0, critChance: 0.06)
 }

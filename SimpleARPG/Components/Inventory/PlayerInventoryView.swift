@@ -48,6 +48,8 @@ enum InventoryAction: Equatable {
     case handleInventorySwap(fromIndex: Int, toIndex: Int, fromSlot: InventorySlot)
     case presentItemPreview(Item)
 
+    case sell(Item)
+
     case clearAnimation
     case clearActionLock
 }
@@ -130,6 +132,19 @@ let inventoryReducer: Reducer<InventoryState, InventoryAction, InventoryEnvironm
                 .cancellable(id: ActionLockedCancelId.self, cancelInFlight: true)
         )
         return Effect.merge(effects)
+    case let .sell(item):
+        if let itemIndex = state.player.inventory.firstIndex(where: { $0.item == item }) {
+            state.player.inventory[itemIndex].item = nil
+
+            if let coinsIndex = state.player.inventory.firstIndex(where: {
+                if case .coins = $0.item { return true }
+                return false
+            }), case let .coins(coins) = state.player.inventory[coinsIndex].item {
+                state.player.inventory[coinsIndex].item = .coins(coins + item.price!.sell)
+            } else if let emptyIndex = state.player.firstOpenInventorySlotIndex {
+                state.player.inventory[emptyIndex].item = .coins(item.price!.sell)
+            }
+        }
     case .clearAnimation:
         state.player.combatLockDetails.animation = .none
     case .clearActionLock:
@@ -172,7 +187,7 @@ struct PlayerInventoryView: View {
 
                             if viewStore.vendor.isActive, let price = item.price {
                                 Button {
-
+                                    viewStore.send(.sell(item))
                                 } label: {
                                     Text("Sell for \(price.sell) 🪙")
                                 }

@@ -105,7 +105,7 @@ struct Monster: Equatable, PlayerIdentifiable {
     var baseDamage: Double { Monster.baseDamage(level: level) }
 
     static func baseDamage(level: Int) -> Double {
-        0.0015 * pow(Double(level), 1.2) + 0.2 * Double(level) + 6
+        0.0015 * pow(Double(level), 1.2) + 0.2 * Double(level) + 3
     }
 
     var canAttack: Bool {
