@@ -11,10 +11,11 @@ import SwiftUI
 extension GameState {
     var vendorViewState: VendorState {
         get {
-            VendorState(player: player, vendor: vendor)
+            VendorState(player: player, vendor: vendor, currentPreviewingItem: currentPreviewingItem)
         } set {
             player = newValue.player
             vendor = newValue.vendor
+            currentPreviewingItem = newValue.currentPreviewingItem
         }
     }
 }
@@ -22,6 +23,7 @@ extension GameState {
 struct VendorState: Equatable {
     var player = Player()
     var vendor = Vendor()
+    var currentPreviewingItem: Item?
 }
 
 enum VendorAction: Equatable {
@@ -29,6 +31,7 @@ enum VendorAction: Equatable {
     case vendorTabTapped(Vendor.TabType)
 
     case buy(Item)
+    case itemTapped(Item)
 }
 
 struct VendorEnvironment {
@@ -41,8 +44,9 @@ let vendorReducer: Reducer<VendorState, VendorAction, VendorEnvironment> = .init
         state.vendor.isActive.toggle()
     case let .vendorTabTapped(tab):
         state.vendor.selectedTab = tab
+    case let .itemTapped(item):
+        state.currentPreviewingItem = item
     case let .buy(item):
-
         if let coinsIndex = state.player.inventory.firstIndex(where: {
             if case .coins = $0.item { return true }
             return false
@@ -146,7 +150,7 @@ struct VendorInventoryView: View {
                     dropDelegate: nil,
                     inventorySlotTapped: { slot in
                         guard let item = slot.item else { return }
-
+                        viewStore.send(.itemTapped(item))
                     },
                     onDrag: nil
                 )

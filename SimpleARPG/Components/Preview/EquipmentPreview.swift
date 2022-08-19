@@ -15,6 +15,11 @@ struct EquipmentPreview: View {
     var body: some View {
         ZStack(alignment: .topTrailing) {
             VStack(spacing: 5) {
+                Text("🪙 \(equipment.price.sell)")
+                    .font(.appFootnote)
+                    .foregroundColor(.white)
+                    .padding(.bottom, 6)
+
                 Text("Some Unique Name".uppercased())
                     .font(.appCallout)
                     .bold()
