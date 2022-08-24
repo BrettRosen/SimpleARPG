@@ -88,7 +88,7 @@ struct GameView: View {
 
                     VStack(spacing: 0) {
                         ResourceBarStack(store: store)
-                        TabRowView(store: store)
+                        TabRowView(tabs: [.stats, .inventory, .equipment, .spells], store: store)
 
                         Divider().background(Color.black)
 
@@ -138,7 +138,8 @@ struct GameView: View {
                         .frame(height: 40 * 7)
                         .background(Color.uiBackground.frame(width: screen.width))
 
-                        TabRowView(store: store)
+                        TabRowView(tabs: [.messages, .settings], store: store)
+
                         Divider().background(Color.black)
                         Divider().background(Color.uiDarkBackground)
                     }

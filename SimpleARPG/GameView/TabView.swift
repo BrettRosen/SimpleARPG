@@ -13,7 +13,9 @@ protocol TabIdentifiable {
     var icon: String { get }
 }
 
-enum Tab: TabIdentifiable {
+enum Tab: TabIdentifiable, Identifiable {
+    var id: String { icon }
+
     case messages
     case stats
     case inventory
@@ -21,6 +23,7 @@ enum Tab: TabIdentifiable {
     case spells
     case settings
 
+    /// This should be unique!
     var icon: String {
         switch self {
         case .messages: return "💬"
@@ -29,6 +32,17 @@ enum Tab: TabIdentifiable {
         case .equipment: return "⚔️"
         case .spells: return "📖"
         case .settings: return "⚙️"
+        }
+    }
+
+    var statusText: ((ViewStore<GameState, GameAction>) -> String)? {
+        switch self {
+        case .messages: return nil
+        case .stats: return nil
+        case .inventory: return nil
+        case .equipment: return { viewStore in viewStore.player.weapon == nil ? "❗️Unarmed" : "" }
+        case .spells: return nil
+        case .settings: return  nil
         }
     }
 }
