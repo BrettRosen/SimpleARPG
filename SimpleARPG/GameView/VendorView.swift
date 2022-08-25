@@ -28,6 +28,7 @@ struct VendorState: Equatable {
 
 enum VendorAction: Equatable {
     case vendorTapped
+    case vendorDismissed
     case vendorTabTapped(Vendor.TabType)
 
     case buy(Item)
@@ -42,6 +43,8 @@ let vendorReducer: Reducer<VendorState, VendorAction, VendorEnvironment> = .init
     switch action {
     case .vendorTapped:
         state.vendor.isActive.toggle()
+    case .vendorDismissed:
+        state.vendor.isActive = false
     case let .vendorTabTapped(tab):
         state.vendor.selectedTab = tab
     case let .itemTapped(item):
@@ -114,54 +117,64 @@ struct VendorInventoryView: View {
 
     var body: some View {
         WithViewStore(store) { viewStore in
-            VStack(spacing: 12) {
-                Text(viewStore.vendor.icon) + Text(" Merchant " + viewStore.vendor.name).font(.appFootnote).foregroundColor(.white)
+            ZStack(alignment: .topTrailing) {
 
-                Divider()
-                    .frame(width: 150, height: 2)
-                    .overlay(Color.uiDarkBackground)
-
-                HStack {
-                    TabView(tab: Vendor.TabType.weapons, selectedTab: viewStore.vendor.selectedTab, namespace: tabAnimation) {
-                        viewStore.send(.vendorTabTapped(.weapons))
-                    }
-                    TabView(tab: Vendor.TabType.armor, selectedTab: viewStore.vendor.selectedTab, namespace: tabAnimation) {
-                        viewStore.send(.vendorTabTapped(.armor))
-                    }
-                    TabView(tab: Vendor.TabType.foodAndMisc, selectedTab: viewStore.vendor.selectedTab, namespace: tabAnimation) {
-                        viewStore.send(.vendorTabTapped(.foodAndMisc))
-                    }
+                Button(action: {
+                    viewStore.send(.vendorDismissed)
+                }) {
+                    Image(systemName: "x.circle.fill")
+                        .foregroundColor(.white.opacity(0.6))
                 }
-                InventoryGrid(
-                    inventory: viewStore.vendor.tabs[viewStore.vendor.selectedTab]!,
-                    slotBackgroundColor: { slot in
-                        .uiButton
-                    },
-                    contextMenu: { slot in
-                        guard let item = slot.item, let price = item.price else { return AnyView(EmptyView())}
-                        return AnyView(
-                            Button {
-                                viewStore.send(.buy(item))
-                            } label: {
-                                Text("Buy for \(price.buy) 🪙")
-                            }
-                        )
-                    },
-                    dropDelegate: nil,
-                    inventorySlotTapped: { slot in
-                        guard let item = slot.item else { return }
-                        viewStore.send(.itemTapped(item))
-                    },
-                    onDrag: nil
-                )
 
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Tap to inspect. Tap and hold to purchase.")
-                        .font(.appCaption)
-                        .foregroundColor(.white.opacity(0.6))
-                    Text("Tap and hold your items to sell.")
-                        .font(.appCaption)
-                        .foregroundColor(.white.opacity(0.6))
+                VStack(spacing: 12) {
+                    Text(viewStore.vendor.icon) + Text(" Merchant " + viewStore.vendor.name).font(.appFootnote).foregroundColor(.white)
+
+                    Divider()
+                        .frame(width: 150, height: 2)
+                        .overlay(Color.uiDarkBackground)
+
+                    HStack {
+                        TabView(tab: Vendor.TabType.weapons, selectedTab: viewStore.vendor.selectedTab, namespace: tabAnimation) {
+                            viewStore.send(.vendorTabTapped(.weapons))
+                        }
+                        TabView(tab: Vendor.TabType.armor, selectedTab: viewStore.vendor.selectedTab, namespace: tabAnimation) {
+                            viewStore.send(.vendorTabTapped(.armor))
+                        }
+                        TabView(tab: Vendor.TabType.foodAndMisc, selectedTab: viewStore.vendor.selectedTab, namespace: tabAnimation) {
+                            viewStore.send(.vendorTabTapped(.foodAndMisc))
+                        }
+                    }
+                    InventoryGrid(
+                        inventory: viewStore.vendor.tabs[viewStore.vendor.selectedTab]!,
+                        slotBackgroundColor: { slot in
+                            .uiButton
+                        },
+                        contextMenu: { slot in
+                            guard let item = slot.item, let price = item.price else { return AnyView(EmptyView())}
+                            return AnyView(
+                                Button {
+                                    viewStore.send(.buy(item))
+                                } label: {
+                                    Text("Buy for \(price.buy) 🪙")
+                                }
+                            )
+                        },
+                        dropDelegate: nil,
+                        inventorySlotTapped: { slot in
+                            guard let item = slot.item else { return }
+                            viewStore.send(.itemTapped(item))
+                        },
+                        onDrag: nil
+                    )
+
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Tap to inspect. Tap and hold to purchase.")
+                            .font(.appCaption)
+                            .foregroundColor(.white.opacity(0.6))
+                        Text("Tap and hold your items to sell.")
+                            .font(.appCaption)
+                            .foregroundColor(.white.opacity(0.6))
+                    }
                 }
             }
             .padding(12)

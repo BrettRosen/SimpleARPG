@@ -247,12 +247,16 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
             if state.player.isDead {
                 state.player.allEquipment = []
                 state.encounter?.winLossState = .loss
+
+                effects.append(.cancel(id: CombatTimerId.self))
             } else if encounter.monster.isDead {
                 state.encounter?.winLossState = .win
                 for equipment in encounter.monster.allEquipment {
                     let inventorySlot = InventorySlot(item: .equipment(equipment))
                     state.encounter?.monster.inventory.append(inventorySlot)
                 }
+
+                effects.append(.cancel(id: CombatTimerId.self))
             }
 
             return Effect.merge(effects)

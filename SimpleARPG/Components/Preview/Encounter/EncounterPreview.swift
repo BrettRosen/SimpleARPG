@@ -15,28 +15,6 @@ struct EncounterPreview: View {
 
     var body: some View {
         VStack(spacing: 8) {
-
-            HStack {
-                Text(encounter.monster.icon.asset)
-                    .padding(12)
-                    .background(encounter.rarity.color.gradient.shadow(.inner(color: .black.opacity(1), radius: 2, x: 0, y: 2)), in: Circle())
-                    .padding(.bottom, 8)
-
-                VStack(alignment: .leading, spacing: 0) {
-                    Text(encounter.monster.name.capitalized)
-                        .font(.appCallout)
-                        .foregroundColor(encounter.rarity.color)
-                        .padding(.bottom, 8)
-                    Text("Level \(encounter.monster.level)")
-                        .font(.appCaption)
-                        .foregroundColor(.white)
-                        .padding(.bottom, 8)
-                }
-            }
-
-            Divider().frame(width: 80, height: 2)
-                .background(Color.white.opacity(0.2))
-
             Text("Inventory")
                 .font(.appCaption).bold()
                 .foregroundColor(.white)
@@ -52,8 +30,7 @@ struct EncounterPreview: View {
 
             if !encounter.mods.isEmpty {
 
-                Divider().frame(width: 80, height: 2)
-                    .background(Color.white.opacity(0.2))
+                Divider().frame(width: 100).overlay(Color.uiBorder)
 
                 HStack {
                     Text("Modifiers")
@@ -78,9 +55,6 @@ struct EncounterPreview: View {
                 .clipped()
             }
         }
-        .padding()
-        .background(Rectangle().fill(transparentBackground ? Color.clear : Color.uiBackground).shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 10))
-        .cornerRadius(4)
         .onTapGesture {
             withAnimation {
                 isExpanded.toggle()

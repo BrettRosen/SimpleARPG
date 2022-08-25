@@ -38,13 +38,12 @@ struct PlayerView: View {
                                 .blur(radius: idling ? 5 : 20)
                                 .rotation3DEffect(.degrees(80), axis: (x: 1, y: 0, z: 0))
                                 .offset(y: 20)
-                                .animation(Animation.linear(duration: 1).repeatForever(autoreverses: true), value: idling)
 
                             Text(player.icon.asset).font(.system(size: 42))
                                 .scaleEffect(x: player.icon.xScale)
                                 .offset(y: idling ? 6 : 0)
-                                .animation(Animation.linear(duration: 1).repeatForever(autoreverses: true), value: idling)
                         }
+                        .animation(Animation.linear(duration: 1).repeatForever(autoreverses: true), value: idling)
 
                         if let weapon = player.weapon {
                             Text(weapon.identifiableEquipmentBase.icon).font(.system(size: 34))

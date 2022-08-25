@@ -13,7 +13,7 @@ struct ItemPreview: View {
     var item: Item
     var body: some View {
 
-        VStack {
+        VStack(spacing: 6) {
             if let price = item.price {
                 Text("🪙 \(price.sell)")
                     .font(.appFootnote)
@@ -36,8 +36,10 @@ struct ItemPreview: View {
             Divider().frame(width: 100).overlay(Color.uiBorder)
 
             switch item {
-            case .food, .coins:
+            case .coins:
                 EmptyView()
+            case let .food(food):
+                FoodPreview(food: food)
             case let .equipment(equipment):
                 EquipmentPreview(equipment: equipment)
             case let .encounter(encounter):
