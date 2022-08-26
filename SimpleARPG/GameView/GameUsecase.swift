@@ -381,6 +381,9 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
             case let .success(gameState):
                 if let gameState = gameState {
                     state = gameState
+                    if state.encounter != nil {
+                        state.encounter = nil
+                    }
                 }
                 state.didSetup = true
             case let .failure(error):

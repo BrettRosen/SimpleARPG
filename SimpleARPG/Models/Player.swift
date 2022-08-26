@@ -5,6 +5,7 @@
 //  Created by Brett Rosen on 7/6/22.
 //
 
+import BetterCodable
 import Foundation
 
 func experienceNeededForLevel(_ level: Int) -> Double {
@@ -108,6 +109,7 @@ struct Player: Equatable, Codable, PlayerIdentifiable {
         return false
     }
 
+    @CodableIgnored<DefaultEmptyArrayStrategy>
     var damageLog: [DamageLogEntry] = []
 
     var allEquipment = [Equipment]()

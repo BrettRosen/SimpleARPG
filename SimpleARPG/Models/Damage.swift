@@ -65,7 +65,7 @@ struct Damage: Equatable, Codable {
 }
 
 struct DamageLogEntry: Equatable, Codable, Identifiable {
-    let id: UUID = UUID()
+    var id: UUID = UUID()
     let damage: Damage
     /// Controls the animation of the damage entry
     var show: Bool
