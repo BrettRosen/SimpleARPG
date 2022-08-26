@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Food: String, CaseIterable, InventoryDisplayable {
+enum Food: String, Codable, CaseIterable, InventoryDisplayable {
     case shrimp
     case chicken
     case sardine

@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct Vendor: Equatable {
+struct Vendor: Equatable, Codable {
 
-    enum TabType: Equatable, TabIdentifiable {
+    enum TabType: Equatable, Codable, TabIdentifiable {
         case weapons
         case armor
         case foodAndMisc

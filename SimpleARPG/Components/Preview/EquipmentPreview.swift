@@ -37,6 +37,8 @@ struct EquipmentPreview: View {
                 + Text("Dex, ").font(.appFootnote).foregroundColor(.white.opacity(0.6))
                 + Text("\(Int(weapon.identifiableEquipmentBase.intelligenceRequirement)) ").font(.appFootnote).foregroundColor(.white)
                 + Text("Int").font(.appFootnote).foregroundColor(.white.opacity(0.6))
+            case let .armor(armor):
+                EmptyView()
             }
 
             Divider().frame(width: 100).overlay(Color.uiBorder)

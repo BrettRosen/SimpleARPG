@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Dagger: Equatable, WeaponBaseIdentifiable, EquipmentBaseIdentifiable {
+struct Dagger: Equatable, Codable, WeaponBaseIdentifiable, EquipmentBaseIdentifiable {
     var damageType: DamageType = .melee
     var presentationDetails: EquipmentPresentationDetails = .init(xScale: -1, degreeRotation: -45, offSet: .init(width: 25, height: 0))
     var icon: String = "🗡"

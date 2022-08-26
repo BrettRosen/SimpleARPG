@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Message: Equatable, CaseIterable, Hashable {
+enum Message: Equatable, Codable, CaseIterable, Hashable {
     static var allCases: [Message] = [
         .gg(.gg),
         .gg(.gf),
@@ -26,14 +26,14 @@ enum Message: Equatable, CaseIterable, Hashable {
     case gg(GGMessage)
     case bm(BMMessage)
 
-    enum GGMessage: String, Equatable, CaseIterable {
+    enum GGMessage: String, Codable, Equatable, CaseIterable {
         case gg = "gg"
         case gf = "gf"
         case uDidWell = "u did well but i did betta"
         case sitTFDown = "sit tf down brutha"
     }
 
-    enum BMMessage: String, Equatable, CaseIterable {
+    enum BMMessage: String, Codable, Equatable, CaseIterable {
         case zoggy = "zoggy"
     }
 }

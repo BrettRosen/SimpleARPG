@@ -8,14 +8,14 @@
 import Foundation
 import SwiftUI
 
-struct PastEncounterState: Equatable {
+struct PastEncounterState: Equatable, Codable {
     let encounter: Encounter
     let playerDamageLog: [DamageLogEntry]
 }
 
-struct Encounter: Equatable {
+struct Encounter: Equatable, Codable {
 
-    enum WinLossState {
+    enum WinLossState: Codable {
         case win
         case loss
     }
@@ -110,7 +110,7 @@ struct Encounter: Equatable {
         )
     }
 
-    enum Rarity {
+    enum Rarity: Codable {
         case normal, magic, rare
 
         var color: Color {
@@ -175,7 +175,7 @@ struct Encounter: Equatable {
 }
 
 extension Encounter {
-    enum Modifier: CaseIterable, Identifiable {
+    enum Modifier: Codable, CaseIterable, Identifiable {
         /// An unusual amount of coins in the monster's inventory
         case risking
 

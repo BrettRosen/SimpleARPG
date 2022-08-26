@@ -32,22 +32,23 @@ protocol PlayerIdentifiable {
     var isEating: Bool { get }
     var damageLog: [DamageLogEntry] { get set }
     var currentMessage: Message? { get set }
+    var specialResource: Int { get set }
 }
 
-struct CombatLockDetails: Equatable {
+struct CombatLockDetails: Equatable, Codable {
     var animation: PlayerAnimation = .none
     var animationEffectCancelId = UUID()
 
     var actionLocked: Bool = false
 }
 
-enum PlayerAnimation: Equatable {
+enum PlayerAnimation: Equatable, Codable {
     case eating(Food)
     case attacking
     case none
 }
 
-struct PlayerIcon: Equatable {
+struct PlayerIcon: Equatable, Codable {
     var asset: String
     /// 1 or -1 depending on Player or Monster
     var xScale: CGFloat
@@ -67,7 +68,7 @@ func baseStats() -> [Stat.Key: Double] {
     return stats
 }
 
-struct Player: Equatable, PlayerIdentifiable {
+struct Player: Equatable, Codable, PlayerIdentifiable {
     var playerId: Int = UUID().hashValue
 
     static let flatMaxLifePerLevel = 12
@@ -123,6 +124,7 @@ struct Player: Equatable, PlayerIdentifiable {
         inventory.firstIndex(where: { $0.item == nil })
     }
 
+    var specialResource: Int = 100
     var weapon: WeaponBase? {
         let equipment = allEquipment.first(where: {
             if case .weapon(_) = $0.base { return true }

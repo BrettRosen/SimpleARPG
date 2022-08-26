@@ -8,11 +8,11 @@
 import Foundation
 import SwiftUI
 
-enum ElementalType: Equatable {
+enum ElementalType: Equatable, Codable {
     case fire, cold, lightning
 }
 
-enum DamageType: Equatable {
+enum DamageType: Equatable, Codable {
     case melee
     case ranged
     case magic(ElementalType)
@@ -57,14 +57,14 @@ enum DamageType: Equatable {
     }
 }
 
-struct Damage: Equatable {
+struct Damage: Equatable, Codable {
     var type: DamageType
     var rawAmount: Double
     /// This value is used to define damage that is not from the player's primary source
     var secondary: Bool = false
 }
 
-struct DamageLogEntry: Equatable, Identifiable {
+struct DamageLogEntry: Equatable, Codable, Identifiable {
     let id: UUID = UUID()
     let damage: Damage
     /// Controls the animation of the damage entry

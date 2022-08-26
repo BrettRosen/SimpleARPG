@@ -13,7 +13,7 @@ protocol TabIdentifiable {
     var icon: String { get }
 }
 
-enum Tab: TabIdentifiable, Identifiable {
+enum Tab: TabIdentifiable, Codable, Identifiable {
     var id: String { icon }
 
     case messages

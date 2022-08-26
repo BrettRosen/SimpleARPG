@@ -16,6 +16,9 @@
 		1F2D5BCA2889B4690061F4D3 /* EncounterPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2D5BC92889B4690061F4D3 /* EncounterPreview.swift */; };
 		1F344CEE28AEF64E006102B1 /* Dagger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F344CED28AEF64E006102B1 /* Dagger.swift */; };
 		1F344CF028B7DF1F006102B1 /* FoodPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F344CEF28B7DF1F006102B1 /* FoodPreview.swift */; };
+		1F344CF428B7F56E006102B1 /* Helmet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F344CF328B7F56E006102B1 /* Helmet.swift */; };
+		1F344CF628B8060B006102B1 /* FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F344CF528B8060B006102B1 /* FileManager.swift */; };
+		1F344CF828B806B8006102B1 /* LocalStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F344CF728B806B8006102B1 /* LocalStore.swift */; };
 		1F345E84287F5BA700A4E452 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F345E83287F5BA700A4E452 /* StatsView.swift */; };
 		1F345E86287F5D2100A4E452 /* Stats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F345E85287F5D2100A4E452 /* Stats.swift */; };
 		1F35B6F7287E3B350038D3DA /* Monster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F35B6F6287E3B350038D3DA /* Monster.swift */; };
@@ -51,6 +54,7 @@
 		1F767D7E289B8DA40016E6B8 /* VendorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F767D7D289B8DA40016E6B8 /* VendorView.swift */; };
 		1F767D80289D966C0016E6B8 /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F767D7F289D966C0016E6B8 /* MessageView.swift */; };
 		1F767D82289D991B0016E6B8 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F767D81289D991B0016E6B8 /* Message.swift */; };
+		1F9D205628B9152F006D55C3 /* BetterCodable in Frameworks */ = {isa = PBXBuildFile; productRef = 1F9D205528B9152F006D55C3 /* BetterCodable */; };
 		1FAC93F628865C6C00ED7F38 /* CombatClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FAC93F528865C6C00ED7F38 /* CombatClient.swift */; };
 		1FAC93F828865CA800ED7F38 /* Damage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FAC93F728865CA800ED7F38 /* Damage.swift */; };
 		1FAC93FA2887743800ED7F38 /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FAC93F92887743800ED7F38 /* Haptics.swift */; };
@@ -89,6 +93,9 @@
 		1F2D5BC92889B4690061F4D3 /* EncounterPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterPreview.swift; sourceTree = "<group>"; };
 		1F344CED28AEF64E006102B1 /* Dagger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dagger.swift; sourceTree = "<group>"; };
 		1F344CEF28B7DF1F006102B1 /* FoodPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodPreview.swift; sourceTree = "<group>"; };
+		1F344CF328B7F56E006102B1 /* Helmet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helmet.swift; sourceTree = "<group>"; };
+		1F344CF528B8060B006102B1 /* FileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManager.swift; sourceTree = "<group>"; };
+		1F344CF728B806B8006102B1 /* LocalStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalStore.swift; sourceTree = "<group>"; };
 		1F345E83287F5BA700A4E452 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
 		1F345E85287F5D2100A4E452 /* Stats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stats.swift; sourceTree = "<group>"; };
 		1F35B6F6287E3B350038D3DA /* Monster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Monster.swift; sourceTree = "<group>"; };
@@ -143,6 +150,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1F5CA83D28760DB2002D92CF /* ComposableArchitecture in Frameworks */,
+				1F9D205628B9152F006D55C3 /* BetterCodable in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -180,6 +188,24 @@
 				1F35B6FD287E81F50038D3DA /* EncounterModifierPreview.swift */,
 			);
 			path = Encounter;
+			sourceTree = "<group>";
+		};
+		1F344CF128B7F560006102B1 /* Weapons */ = {
+			isa = PBXGroup;
+			children = (
+				1F767D732899F8EC0016E6B8 /* OneHandedAxe.swift */,
+				1F767D752899F9010016E6B8 /* Bow.swift */,
+				1F344CED28AEF64E006102B1 /* Dagger.swift */,
+			);
+			path = Weapons;
+			sourceTree = "<group>";
+		};
+		1F344CF228B7F564006102B1 /* Armor */ = {
+			isa = PBXGroup;
+			children = (
+				1F344CF328B7F56E006102B1 /* Helmet.swift */,
+			);
+			path = Armor;
 			sourceTree = "<group>";
 		};
 		1F35B6FA287E48830038D3DA /* Preview */ = {
@@ -271,6 +297,8 @@
 		1F5CA84328765FD1002D92CF /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				1F344CF528B8060B006102B1 /* FileManager.swift */,
+				1F344CF728B806B8006102B1 /* LocalStore.swift */,
 				1FAC93F528865C6C00ED7F38 /* CombatClient.swift */,
 				1F5CA84428765FD8002D92CF /* Colors.swift */,
 				1F5CA85A2877A734002D92CF /* HapticsManager.swift */,
@@ -320,10 +348,9 @@
 		1F767D722899F8DC0016E6B8 /* Equipment */ = {
 			isa = PBXGroup;
 			children = (
+				1F344CF228B7F564006102B1 /* Armor */,
+				1F344CF128B7F560006102B1 /* Weapons */,
 				1F5CA849287663ED002D92CF /* Equipment.swift */,
-				1F767D732899F8EC0016E6B8 /* OneHandedAxe.swift */,
-				1F767D752899F9010016E6B8 /* Bow.swift */,
-				1F344CED28AEF64E006102B1 /* Dagger.swift */,
 			);
 			path = Equipment;
 			sourceTree = "<group>";
@@ -363,6 +390,7 @@
 			name = SimpleARPG;
 			packageProductDependencies = (
 				1F5CA83C28760DB2002D92CF /* ComposableArchitecture */,
+				1F9D205528B9152F006D55C3 /* BetterCodable */,
 			);
 			productName = SimpleARPG;
 			productReference = 1F5CA80D28760D87002D92CF /* SimpleARPG.app */;
@@ -438,6 +466,7 @@
 			mainGroup = 1F5CA80428760D87002D92CF;
 			packageReferences = (
 				1F5CA83B28760DB2002D92CF /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+				1F9D205428B9152F006D55C3 /* XCRemoteSwiftPackageReference "BetterCodable" */,
 			);
 			productRefGroup = 1F5CA80E28760D87002D92CF /* Products */;
 			projectDirPath = "";
@@ -512,9 +541,12 @@
 				1F35B6F9287E467A0038D3DA /* EquipmentPreview.swift in Sources */,
 				1FD17CF1289228DD00E0BEB0 /* GameUsecase.swift in Sources */,
 				1F35B6F7287E3B350038D3DA /* Monster.swift in Sources */,
+				1F344CF628B8060B006102B1 /* FileManager.swift in Sources */,
 				1F5CA84E28766449002D92CF /* Food.swift in Sources */,
 				1F5CA842287651C6002D92CF /* TabView.swift in Sources */,
+				1F344CF428B7F56E006102B1 /* Helmet.swift in Sources */,
 				1F35B6FE287E81F50038D3DA /* EncounterModifierPreview.swift in Sources */,
+				1F344CF828B806B8006102B1 /* LocalStore.swift in Sources */,
 				1F767D78289A2B5C0016E6B8 /* YouWonView.swift in Sources */,
 				1FAC93F628865C6C00ED7F38 /* CombatClient.swift in Sources */,
 				1FAC93FA2887743800ED7F38 /* Haptics.swift in Sources */,
@@ -882,6 +914,14 @@
 				kind = branch;
 			};
 		};
+		1F9D205428B9152F006D55C3 /* XCRemoteSwiftPackageReference "BetterCodable" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/marksands/BetterCodable.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.4.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -889,6 +929,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1F5CA83B28760DB2002D92CF /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
 			productName = ComposableArchitecture;
+		};
+		1F9D205528B9152F006D55C3 /* BetterCodable */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1F9D205428B9152F006D55C3 /* XCRemoteSwiftPackageReference "BetterCodable" */;
+			productName = BetterCodable;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -179,11 +179,47 @@ struct GameView: View {
                     }
                     .zIndex(5)
                 }
+
+                if !viewStore.didSetup {
+                    LoadingView()
+                        .zIndex(10) // Need to specify zIndex here because of animations
+                }
             }
             .onAppear {
                 viewStore.send(.onAppear)
             }
         }
+    }
+}
+
+struct LoadingView: View {
+
+    @State var isLoading: Bool = false
+
+    var body: some View {
+        Rectangle()
+            .fill(Color.white)
+            .edgesIgnoringSafeArea(.all)
+            .overlay {
+                VStack(spacing: 4) {
+                    HStack {
+                        Text("🌀")
+                            .font(.appSubheadline)
+                            .foregroundColor(.black)
+                            .rotationEffect(.degrees(isLoading ? 360 : 0))
+                            .animation(Animation.spring().repeatForever(), value: isLoading)
+                        Text("Loading...")
+                            .font(.appSubheadline)
+                            .foregroundColor(.black)
+                    }
+                    Text("[BETA] If you're stuck here, please reinstall the app fresh!")
+                        .font(.appFootnote)
+                        .foregroundColor(.black.opacity(0.6))
+                }
+            }
+            .onAppear {
+                isLoading.toggle()
+            }
     }
 }
 

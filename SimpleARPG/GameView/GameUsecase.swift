@@ -50,7 +50,11 @@ func message<S: PlayerIdentifiable>(
 
 // --
 
-struct GameState: Equatable {
+struct GameState: Equatable, Codable {
+    /// This flag controls whether we did the intial loading of the Player/State.
+    /// Opted to used this flag instead of having an optional Player. 
+    var didSetup: Bool = false
+
     var player = Player()
     var pastEncounters: [PastEncounterState] = []
     var encounter: Encounter?
@@ -64,13 +68,13 @@ struct GameState: Equatable {
 
     var inventoryLocalState: InventoryLocalState = .init()
     var statsViewLocalState: StatsViewLocalState = .init()
-
-    /// This is so that `onAppear` action is only executed once as it'll be used for
-    /// some initialization
-    var didAppear: Bool = false
 }
 
 enum GameAction: Equatable {
+    case saveGameStateResult(Result<Success, LocalStore.Error>)
+    case loadGameStateResult(Result<GameState?, LocalStore.Error>)
+    case gameSaveTimerTicked
+
     case onAppear
     case updateTab(Tab)
 
@@ -109,14 +113,16 @@ enum GameAction: Equatable {
 
 struct GameEnvironment {
     var mainQueue: AnySchedulerOf<DispatchQueue>
+    var localStore: LocalStoreClient
     var combatClient: CombatClient
     var inventory: InventoryEnvironment
 
-    static let live: Self = .init(mainQueue: .main, combatClient: .init(), inventory: .live)
+    static let live: Self = .init(mainQueue: .main, localStore: .live, combatClient: .init(), inventory: .live)
 }
 
 let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
     .init { state, action, env in
+        enum GameSaveTimerId {}
         enum CombatBeginTimerId {}
         enum CombatTimerId {}
         enum MonsterCombatLockedCancelId {}
@@ -359,9 +365,34 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
         case let .updateTab(tab):
             state.selectedTab = tab
         case .onAppear:
-            guard !state.didAppear else { return .none }
-            state.vendor = Vendor(name: "Nathaniel", icon: "🥸", level: state.player.level)
-            state.didAppear = true
+            if !state.didSetup {
+                return Effect.merge([
+                    env.localStore
+                        .loadGameState()
+                        .catchToEffect()
+                        .map(GameAction.loadGameStateResult),
+                    Effect.timer(id: GameSaveTimerId.self, every: 1, on: env.mainQueue)
+                        .animation(.spring())
+                        .map { _ in .gameSaveTimerTicked }
+                ])
+            }
+        case let .loadGameStateResult(result):
+            switch result {
+            case let .success(gameState):
+                if let gameState = gameState {
+                    state = gameState
+                }
+                state.didSetup = true
+            case let .failure(error):
+                print(error)
+            }
+        case .gameSaveTimerTicked:
+            return env.localStore
+                .saveGameState(state)
+                .catchToEffect()
+                .map(GameAction.saveGameStateResult)
+        case .saveGameStateResult:
+            return .none
         case .inventoryAction,
             .statsViewAction,
             .messageAction,

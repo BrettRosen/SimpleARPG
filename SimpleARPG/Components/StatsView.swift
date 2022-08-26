@@ -19,8 +19,8 @@ extension GameState {
     }
 }
 
-struct StatsViewLocalState: Equatable {
-    enum Tab: Equatable {
+struct StatsViewLocalState: Equatable, Codable {
+    enum Tab: Equatable, Codable {
         case offensive, defensive, misc
     }
     var selectedTab: Tab = .defensive

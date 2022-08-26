@@ -24,7 +24,7 @@ struct LootTable: Equatable {
     ])
 }
 
-struct Monster: Equatable, PlayerIdentifiable {
+struct Monster: Equatable, Codable, PlayerIdentifiable {
     var playerId: Int = UUID().hashValue
 
     static let maxInventorySlots = 24
@@ -93,6 +93,7 @@ struct Monster: Equatable, PlayerIdentifiable {
         inventory.firstIndex(where: { $0.item == nil })
     }
 
+    var specialResource: Int = 100
     var weapon: WeaponBase? {
         let equipment = allEquipment.first(where: {
             if case .weapon(_) = $0.base { return true }

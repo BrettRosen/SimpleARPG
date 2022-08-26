@@ -7,14 +7,14 @@
 
 import Foundation
 
-struct AffixPool: Equatable {
+struct AffixPool: Equatable, Codable {
     var prefix: [Stat.Key]
     var suffix: [Stat.Key]
 }
 
 enum Stat: Equatable, Codable {
 
-    enum Key: String {
+    enum Key: String, Codable {
         case armour
         case flatMaxLife
         case percentMaxLife
@@ -28,6 +28,28 @@ enum Stat: Equatable, Codable {
         case percentHitChance
         case incItemRarity
         case incItemQuantity
+
+        enum DisplayType {
+            case int, double
+        }
+
+        var displayType: DisplayType {
+            switch self {
+            case .armour: return .int
+            case .flatMaxLife: return .int
+            case .percentMaxLife: return .int
+            case .strength: return .int
+            case .dexterity: return .int
+            case .intelligence: return .int
+            case .flatPhysical: return .int
+            case .flatCold: return .int
+            case .flatFire: return .int
+            case .flatLightning: return .int
+            case .percentHitChance: return .double
+            case .incItemRarity: return .int
+            case .incItemQuantity: return .int
+            }
+        }
 
         var displayName: String {
             switch self {

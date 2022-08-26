@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Bow: Equatable, WeaponBaseIdentifiable, EquipmentBaseIdentifiable {
+struct Bow: Equatable, Codable, WeaponBaseIdentifiable, EquipmentBaseIdentifiable {
     var damageType: DamageType = .ranged
     var presentationDetails: EquipmentPresentationDetails = .init()
     var icon: String = "🏹"

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct OneHandedAxe: Equatable, WeaponBaseIdentifiable, EquipmentBaseIdentifiable {
+struct OneHandedAxe: Equatable, Codable, WeaponBaseIdentifiable, EquipmentBaseIdentifiable {
     var damageType: DamageType = .melee
     var presentationDetails: EquipmentPresentationDetails = .init()
     var icon: String = "🪓"

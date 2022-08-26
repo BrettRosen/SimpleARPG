@@ -22,7 +22,7 @@ enum ItemDrop: Equatable {
     case nothing
 }
 
-enum Item: Equatable {
+enum Item: Equatable, Codable {
     case food(Food)
     case equipment(Equipment)
     case encounter(Encounter)
@@ -64,7 +64,7 @@ enum Item: Equatable {
     }
 }
 
-struct Price: Equatable {
+struct Price: Equatable, Codable {
     var buy: Int
     var sell: Int
 }

@@ -24,11 +24,11 @@ extension GameState {
     }
 }
 
-struct InventoryLocalState: Equatable {
+struct InventoryLocalState: Equatable, Codable {
     var currentDraggingSlot: InventorySlot?
 }
 
-struct PreviewingEncounter: Equatable {
+struct PreviewingEncounter: Equatable, Codable {
     var encounter: Encounter
     var slot: InventorySlot
 }

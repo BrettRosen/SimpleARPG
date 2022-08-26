@@ -8,12 +8,12 @@
 import Foundation
 import SwiftUI
 
-enum Handidness: Equatable {
+enum Handidness: Equatable, Codable {
     case oneHand
     case twoHand
 }
 
-struct EquipmentPresentationDetails: Equatable {
+struct EquipmentPresentationDetails: Equatable, Codable {
     var xScale: Double = 1
     var degreeRotation: Double = 0
     var offSet: CGSize = .zero
@@ -39,7 +39,7 @@ protocol WeaponBaseIdentifiable: Equatable {
     var critChance: Double { get }
 }
 
-enum EquipmentBase: Equatable {
+enum EquipmentBase: Equatable, Codable {
     static var allBases: [EquipmentBase] = [
         // One Handed Axe
         .weapon(.oneHandedAxe(.rustedHatchet)),
@@ -52,51 +52,69 @@ enum EquipmentBase: Equatable {
     ]
 
     case weapon(WeaponBase)
-    //case armor(ArmorBase)
+    case armor(ArmorBase)
 
     var affixPool: AffixPool {
         switch self {
         case let .weapon(weapon): return weapon.identifiableEquipmentBase.affixPool
+        case let .armor(armor): return armor.identifiableEquipmentBase.affixPool
         }
     }
     var icon: String {
         switch self {
         case let .weapon(weapon): return weapon.identifiableEquipmentBase.icon
+        case let .armor(armor): return armor.identifiableEquipmentBase.icon
         }
     }
     var name: String {
         switch self {
         case let .weapon(weapon): return weapon.identifiableEquipmentBase.name
+        case let .armor(armor): return armor.identifiableEquipmentBase.name
         }
     }
     var levelRequirement: Int {
         switch self {
         case let .weapon(weapon): return weapon.identifiableEquipmentBase.levelRequirement
+        case let .armor(armor): return armor.identifiableEquipmentBase.levelRequirement
         }
     }
     var strengthRequirement: Double {
         switch self {
         case let .weapon(weapon): return weapon.identifiableEquipmentBase.strengthRequirement
+        case let .armor(armor): return armor.identifiableEquipmentBase.strengthRequirement
         }
     }
     var dexterityRequirement: Double {
         switch self {
         case let .weapon(weapon): return weapon.identifiableEquipmentBase.dexterityRequirement
+        case let .armor(armor): return armor.identifiableEquipmentBase.dexterityRequirement
         }
     }
     var intelligenceRequirement: Double {
         switch self {
         case let .weapon(weapon): return weapon.identifiableEquipmentBase.intelligenceRequirement
+        case let .armor(armor): return armor.identifiableEquipmentBase.intelligenceRequirement
         }
     }
     var slot: EquipmentSlot {
         switch self {
         case let .weapon(weapon): return weapon.identifiableEquipmentBase.slot
+        case let .armor(armor): return armor.identifiableEquipmentBase.slot
         }
     }
 }
 
-enum WeaponBase: Equatable {
+enum ArmorBase: Equatable, Codable {
+    case helmet(Helmet)
+
+    var identifiableEquipmentBase: any EquipmentBaseIdentifiable {
+        switch self {
+        case let .helmet(helmet): return helmet
+        }
+    }
+}
+
+enum WeaponBase: Equatable, Codable {
     static let all: [WeaponBase] = [
         .oneHandedAxe(.rustedHatchet),
         .oneHandedAxe(.stoneAxe),
@@ -125,8 +143,8 @@ enum WeaponBase: Equatable {
     }
 }
 
-struct Equipment: Equatable, InventoryDisplayable {
-    enum Rarity: Equatable {
+struct Equipment: Equatable, Codable, InventoryDisplayable {
+    enum Rarity: Equatable, Codable {
         case normal
         case magic
         case rare
@@ -180,7 +198,8 @@ struct Equipment: Equatable, InventoryDisplayable {
     var price: Price {
         var price: Double = Double(base.levelRequirement) * 22.0 * rarity.priceModifier
         switch base {
-        case .weapon: price *= 1.1
+        case .weapon: price *= 1.2
+        case .armor: price *= 1.1
         }
         return .init(buy: Int(price), sell: Int(price * 0.75))
     }
@@ -219,7 +238,7 @@ struct Equipment: Equatable, InventoryDisplayable {
     }
 }
 
-enum EquipmentSlot: CaseIterable {
+enum EquipmentSlot: CaseIterable, Codable {
     case helmet
     case body
     case weapon

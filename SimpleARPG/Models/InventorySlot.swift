@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct InventorySlot: Equatable, Identifiable {
+struct InventorySlot: Equatable, Codable, Identifiable {
     var id = UUID().uuidString
     var item: Item?
 }
