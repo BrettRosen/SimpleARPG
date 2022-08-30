@@ -28,6 +28,26 @@ enum Item: Equatable, Codable {
     case encounter(Encounter)
     case coins(Int)
 
+    /// At the moment, using this to determine if two items are the same "type"
+    /// without comparing the associated values. An example is for stackable items
+    var key: String {
+        switch self {
+        case .food: return "food"
+        case .equipment: return "equipment"
+        case .encounter: return "encounter"
+        case .coins: return "coins"
+        }
+    }
+
+    var stackable: Bool {
+        switch self {
+        case .food: return false
+        case .equipment: return false
+        case .encounter: return false
+        case .coins: return true
+        }
+    }
+
     var name: String {
         switch self {
         case let .food(food): return food.name

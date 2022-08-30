@@ -48,6 +48,28 @@ func message<S: PlayerIdentifiable>(
     player.currentMessage = message
 }
 
+func attemptLoot<S: PlayerIdentifiable>(
+    player: inout S,
+    item: Item
+) -> Bool {
+    if item.stackable,
+        let index = player.inventory.firstIndex(where: { $0.item?.key == item.key }),
+        let originalItem = player.inventory.first(where: { $0.item?.key == item.key })?.item {
+
+        switch item {
+        case let .coins(coins):
+            guard case let .coins(coins2) = originalItem else { return false }
+            player.inventory[index].item = .coins(coins + coins2)
+            return true
+        default: return false
+        }
+    } else if let index = player.inventory.firstIndex(where: { $0.item == nil }) {
+        player.inventory[index].item = item
+        return true
+    }
+    return false
+}
+
 // --
 
 struct GameState: Equatable, Codable {
@@ -346,11 +368,11 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
             // If the slot has an item and the player has an open inventory slot...
             if let encounter = state.encounter,
                 let item = slot.item,
-                let playerInvIndex = state.player.firstOpenInventorySlotIndex,
                 let monsterInvIndex = state.encounter!.monster.inventory.firstIndex(where: { $0 == slot }) {
 
-                state.encounter!.monster.inventory[monsterInvIndex].item = nil
-                state.player.inventory[playerInvIndex].item = item
+                if attemptLoot(player: &state.player, item: item) {
+                    state.encounter!.monster.inventory[monsterInvIndex].item = nil
+                }
             }
         case .reviveTapped, .exitEncounterTapped:
             guard let encounter = state.encounter else { return .none }
