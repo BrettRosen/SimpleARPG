@@ -75,7 +75,7 @@ let inventoryReducer: Reducer<InventoryState, InventoryAction, InventoryEnvironm
     case let .inventorySlotTapped(slot):
         guard let item = slot.item,
               let index = state.player.inventory.firstIndex(where: { $0 == slot }),
-              !state.player.combatLockDetails.actionLocked
+              !state.player.combatDetails.actionLocked
         else { return .none }
 
         var effects: [Effect<InventoryAction, Never>] = []
@@ -94,7 +94,7 @@ let inventoryReducer: Reducer<InventoryState, InventoryAction, InventoryEnvironm
                 Effect(value: .clearAnimation)
                     .delay(for: .init(floatLiteral: tickUnit * 3), scheduler: env.mainQueue)
                     .eraseToEffect()
-                    .cancellable(id: state.player.combatLockDetails.animationEffectCancelId)
+                    .cancellable(id: state.player.combatDetails.animationEffectCancelId)
             )
         case let .equipment(equipment):
             guard state.player.canEquip(equipment) else { return .none }
@@ -124,7 +124,7 @@ let inventoryReducer: Reducer<InventoryState, InventoryAction, InventoryEnvironm
             break
         }
 
-        state.player.combatLockDetails.actionLocked = true
+        state.player.combatDetails.actionLocked = true
         effects.append(
             Effect(value: .clearActionLock)
                 .delay(for: .init(floatLiteral: tickUnit), scheduler: env.mainQueue)
@@ -146,9 +146,9 @@ let inventoryReducer: Reducer<InventoryState, InventoryAction, InventoryEnvironm
             }
         }
     case .clearAnimation:
-        state.player.combatLockDetails.animation = .none
+        state.player.combatDetails.animation = .none
     case .clearActionLock:
-        state.player.combatLockDetails.actionLocked = false
+        state.player.combatDetails.actionLocked = false
     case let .presentItemPreview(item):
         state.currentPreviewingItem = item
     }

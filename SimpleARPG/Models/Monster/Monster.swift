@@ -76,11 +76,11 @@ struct Monster: Equatable, Codable, PlayerIdentifiable {
         return maxLife
     }
 
-    var combatLockDetails: CombatLockDetails = .init()
+    var combatDetails: CombatDetails = .init()
     var isDead: Bool { currentLife <= 0 }
-    var isAttacking: Bool { combatLockDetails.animation == .attacking }
+    var isAttacking: Bool { combatDetails.animation == .attacking }
     var isEating: Bool {
-        if case .eating = combatLockDetails.animation { return true }
+        if case .eating = combatDetails.animation { return true }
         return false
     }
 
@@ -110,7 +110,7 @@ struct Monster: Equatable, Codable, PlayerIdentifiable {
     }
 
     var canAttack: Bool {
-        !isDead && combatLockDetails.animation == .none
+        !isDead && combatDetails.animation == .none
     }
 
     var ticksPerAttack: Int {

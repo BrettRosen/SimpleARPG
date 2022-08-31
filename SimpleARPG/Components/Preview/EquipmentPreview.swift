@@ -16,6 +16,10 @@ struct EquipmentPreview: View {
         VStack(spacing: 5) {
             switch equipment.base {
             case let .weapon(weapon):
+                if let special = weapon.identifiableWeaponBase.special {
+                    Text("\(special.name)").font(.appFootnote).foregroundColor(.purple)
+                }
+
                 VStack(spacing: 5) {
                     Text("Physical Damage: ").font(.appFootnote).foregroundColor(.white.opacity(0.6)) +
                     Text("\(Int(weapon.identifiableWeaponBase.damage.lowerBound))...\(Int(weapon.identifiableWeaponBase.damage.upperBound))").font(.appFootnote).foregroundColor(.white)

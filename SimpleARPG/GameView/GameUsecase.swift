@@ -25,8 +25,8 @@ func heal<P: PlayerIdentifiable>(
     slot: InventorySlot
 ) {
     player.currentLife = min(player.maxLife, player.currentLife + food.restoreAmount)
-    player.combatLockDetails.animation = .eating(food)
-    player.combatLockDetails.actionLocked = true
+    player.combatDetails.animation = .eating(food)
+    player.combatDetails.actionLocked = true
 
     if let index = player.inventory.firstIndex(where: { $0 == slot }) {
         player.inventory[index].item = nil
@@ -100,6 +100,7 @@ enum GameAction: Equatable {
     case onAppear
     case updateTab(Tab)
 
+
     case combatBeginTimerTicked
     case combatTimerTicked
     case showDamageLogEntry(DamageLogEntry)
@@ -120,6 +121,7 @@ enum GameAction: Equatable {
     case statsViewAction(StatsViewAction)
     case messageAction(MessageAction)
     case vendorViewAction(VendorAction)
+    case specialAttack(SpecialAttackAction)
 
     case bestMoveForActivePlayerResult(Result<GameModelMove?, CombatClient.Error>)
     case attemptLoot(InventorySlot)
@@ -229,6 +231,12 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
 
             state.encounter?.tickCount += 1
 
+            // Restore special attack resource
+            if encounter.tickCount % Int(SpecialAttack.ticksPerRestore) == 0 {
+                state.player.specialResource = min(SpecialAttack.maxSpecialResource, state.player.specialResource + SpecialAttack.restoreAmount)
+                state.encounter?.monster.specialResource = min(SpecialAttack.maxSpecialResource, encounter.monster.specialResource + SpecialAttack.restoreAmount)
+            }
+
             // Player's attack
             if state.player.canAttack,
                !encounter.monster.isDead,
@@ -238,7 +246,9 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
                 for dam in state.player.damagePerAttack {
                     damage(player: &state.encounter!.monster, damage: dam)
 
-                    state.player.combatLockDetails.animation = .attacking
+                    if !state.player.combatDetails.isSpecialAttacking {
+                        state.player.combatDetails.animation = .attacking
+                    }
 
                     state.player.currentLevelExperience += dam.rawAmount * 4
                     state.player.totalExperience += dam.rawAmount * 4
@@ -249,7 +259,7 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
                     state.player.level += 1
                 }
 
-                effects.append(clearAnimation(for: .player, delay: 0.2, cancelId: state.player.combatLockDetails.animationEffectCancelId))
+                effects.append(clearAnimation(for: .player, delay: 0.2, cancelId: state.player.combatDetails.animationEffectCancelId))
             }
 
             // Monster's attack
@@ -268,8 +278,8 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
                     )
                 }
 
-                state.encounter!.monster.combatLockDetails.animation = .attacking
-                effects.append(clearAnimation(for: .monster, delay: 0.2, cancelId: encounter.monster.combatLockDetails.animationEffectCancelId))
+                state.encounter!.monster.combatDetails.animation = .attacking
+                effects.append(clearAnimation(for: .monster, delay: 0.2, cancelId: encounter.monster.combatDetails.animationEffectCancelId))
             }
 
             if state.player.isDead {
@@ -310,13 +320,15 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
                     case let .heal(food, slot):
 
 
-                        if !state.player.combatLockDetails.actionLocked {
+                        if !state.player.combatDetails.actionLocked {
                             print("Monster wants to eat")
                             heal(player: &state.encounter!.monster, food: food, slot: slot)
 
-                            effects.append(clearAnimation(for: .monster, delay: tickUnit * 3, cancelId: monster.combatLockDetails.animationEffectCancelId))
+                            effects.append(clearAnimation(for: .monster, delay: tickUnit * 3, cancelId: monster.combatDetails.animationEffectCancelId))
                             effects.append(clearMonsterActionLock(tickUnits: 1))
                         }
+                    case let .specialAttack(special):
+                        break
                     }
 
                     effects.append(updateCombatClientActivePlayer(state.player))
@@ -328,12 +340,12 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
         case let .clearAnimation(combatPlayer):
             switch combatPlayer {
             case .player:
-                state.player.combatLockDetails.animation = .none
+                state.player.combatDetails.animation = .none
             case .monster:
-                state.encounter?.monster.combatLockDetails.animation = .none
+                state.encounter?.monster.combatDetails.animation = .none
             }
         case .clearMonsterActionLock:
-            state.encounter?.monster.combatLockDetails.actionLocked = false
+            state.encounter?.monster.combatDetails.actionLocked = false
         case let .showDamageLogEntry(entry):
             guard let encounter = state.encounter else { return .none }
 
@@ -380,6 +392,7 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
             state.encounter = nil
             state.player.damageLog = []
             state.player.currentLife = state.player.maxLife
+            state.vendor = Vendor()
             return .cancel(id: CombatTimerId.self)
         case .closePreview:
             state.currentPreviewingItem = nil
@@ -405,6 +418,8 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
                     state = gameState
                     if state.encounter != nil {
                         state.encounter = nil
+                        state.player.currentLife = state.player.maxLife
+                        state.player.specialResource = SpecialAttack.maxSpecialResource
                     }
                 }
                 state.didSetup = true
@@ -422,6 +437,7 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
             .statsViewAction,
             .messageAction,
             .vendorViewAction,
+            .specialAttack,
             .resetCombatClientModelResult,
             .updateCombatClientGameStateResult,
             .updateCombatClientActivePlayerResult:
@@ -452,6 +468,11 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
     vendorReducer
         .pullback(state: \.vendorViewState, action: /GameAction.vendorViewAction, environment: { env in
             .init()
+        }),
+
+    specialAttackReducer
+        .pullback(state: \.specialAttack, action: /GameAction.specialAttack, environment: { env in
+            .init(mainQueue: env.mainQueue)
         })
 )
 

@@ -8,6 +8,7 @@
 import Foundation
 
 struct OneHandedAxe: Equatable, Codable, WeaponBaseIdentifiable, EquipmentBaseIdentifiable {
+    var special: SpecialAttack? = nil
     var damageType: DamageType = .melee
     var presentationDetails: EquipmentPresentationDetails = .init()
     var icon: String = "🪓"

@@ -148,7 +148,7 @@ struct StatsView: View {
                     .offset(y: 12)
                 }
                 .padding(.horizontal, 12)
-                .background(RoundedRectangle(cornerRadius: 4).stroke(Color.uiBorder, lineWidth: 3))
+                .background(Color.uiDarkBackground, in: RoundedRectangle(cornerRadius: 2))
             }
             .padding(12)
         }

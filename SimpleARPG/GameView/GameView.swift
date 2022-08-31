@@ -55,10 +55,13 @@ struct GameView: View {
                                     }
                                 }
                             }
-                            Button(action: {
-                                viewStore.send(.addRandomEncounter)
-                            }) {
-                                Text("Add random encounter")
+
+                            VStack {
+                                Button(action: {
+                                    viewStore.send(.addRandomEncounter)
+                                }) {
+                                    Text("Add random encounter")
+                                }
                             }
 
                             Spacer()
@@ -88,12 +91,14 @@ struct GameView: View {
 
                     VStack(spacing: 0) {
                         ResourceBarStack(store: store)
-                        TabRowView(tabs: [.stats, .inventory, .equipment, .spells], store: store)
+                        TabRowView(tabs: [.specialAttack, .stats, .inventory, .equipment, .spells], store: store)
 
                         Divider().background(Color.black)
 
                         Group {
                             switch viewStore.selectedTab {
+                            case .specialAttack:
+                                SpecialAttackView(store: store.scope(state: \.specialAttack, action: GameAction.specialAttack))
                             case .messages:
                                 MessageView(store: store.scope(state: \.messageState, action: GameAction.messageAction))
                             case .stats:
@@ -137,6 +142,8 @@ struct GameView: View {
                         }
                         .frame(height: 40 * 7)
                         .background(Color.uiBackground.frame(width: screen.width))
+
+                        Divider().background(Color.black)
 
                         TabRowView(tabs: [.messages, .settings], store: store)
 

@@ -14,6 +14,7 @@ struct Success: Equatable { }
 enum CombatMove {
     case attack(damage: [Damage])
     case heal(Food, InventorySlot)
+    case specialAttack(SpecialAttack)
 }
 
 class CombatClient {
@@ -134,6 +135,10 @@ class GameModel: NSObject, GKGameModel {
             moves.append(.init(move: .heal(food, slot), playerId: player.playerId))
         }
 
+        if let special = playerIdentifiable.weapon?.identifiableWeaponBase.special {
+            moves.append(.init(move: .specialAttack(special), playerId: player.playerId))
+        }
+
         moves.append(attackMove)
         return moves
     }
@@ -223,6 +228,11 @@ class GameModel: NSObject, GKGameModel {
                 isPlayer(playerId: player.playerId)
                     ? heal(player: &gameState.player, food: food, slot: slot)
                     : heal(player: &gameState.encounter!.monster, food: food, slot: slot)
+            case let .specialAttack(special):
+                switch special {
+                case .darkBow:
+                    break
+                }
             }
 
             activePlayer = opponent(for: (activePlayer as! GameModelPlayer))

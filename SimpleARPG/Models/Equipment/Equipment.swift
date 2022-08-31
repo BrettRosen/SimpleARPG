@@ -32,6 +32,7 @@ protocol EquipmentBaseIdentifiable: Equatable {
 }
 
 protocol WeaponBaseIdentifiable: Equatable {
+    var special: SpecialAttack? { get }
     var damageType: DamageType { get }
     var handidness: Handidness { get }
     var damage: ClosedRange<Double> { get }

@@ -16,6 +16,7 @@ protocol TabIdentifiable {
 enum Tab: TabIdentifiable, Codable, Identifiable {
     var id: String { icon }
 
+    case specialAttack
     case messages
     case stats
     case inventory
@@ -26,6 +27,7 @@ enum Tab: TabIdentifiable, Codable, Identifiable {
     /// This should be unique!
     var icon: String {
         switch self {
+        case .specialAttack: return "🔋"
         case .messages: return "💬"
         case .stats: return "📊"
         case .inventory: return "🎒"
@@ -37,6 +39,7 @@ enum Tab: TabIdentifiable, Codable, Identifiable {
 
     var statusText: ((ViewStore<GameState, GameAction>) -> String)? {
         switch self {
+        case .specialAttack: return nil
         case .messages: return nil
         case .stats: return nil
         case .inventory: return nil

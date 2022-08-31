@@ -28,24 +28,30 @@ protocol PlayerIdentifiable {
     var allEquipment: [Equipment] { get set }
     var inventory: [InventorySlot] { get set }
     var damagePerAttack: [Damage] { get }
-    var combatLockDetails: CombatLockDetails { get set }
-    var isAttacking: Bool { get }
-    var isEating: Bool { get }
+    var combatDetails: CombatDetails { get set }
     var damageLog: [DamageLogEntry] { get set }
     var currentMessage: Message? { get set }
     var specialResource: Int { get set }
 }
 
-struct CombatLockDetails: Equatable, Codable {
+struct CombatDetails: Equatable, Codable {
     var animation: PlayerAnimation = .none
     var animationEffectCancelId = UUID()
 
     var actionLocked: Bool = false
+
+    var isSpecialAttacking: Bool { animation == .specialAttacking }
+    var isAttacking: Bool { animation == .attacking }
+    var isEating: Bool {
+        if case .eating = animation { return true }
+        return false
+    }
 }
 
 enum PlayerAnimation: Equatable, Codable {
     case eating(Food)
     case attacking
+    case specialAttacking
     case none
 }
 
@@ -82,7 +88,7 @@ struct Player: Equatable, Codable, PlayerIdentifiable {
         self.currentLife = maxLife
 
         self.inventory[0].item = .equipment(.generateEquipment(level: 1, slot: .weapon, incRarity: 10))
-        self.inventory[1].item = .equipment(.generateEquipment(level: 1, slot: .weapon, incRarity: 10))
+        self.inventory[1].item = .equipment(Equipment(base: .weapon(.bow(.crudeBow)), rarity: .rare, stats: [:]))
     }
 
     var level: Int = 1
@@ -101,13 +107,8 @@ struct Player: Equatable, Codable, PlayerIdentifiable {
         return beforeApplyingPercentInc * (1 + stats[.percentMaxLife]!)
     }
 
-    var combatLockDetails: CombatLockDetails = .init()
+    var combatDetails: CombatDetails = .init()
     var isDead: Bool { currentLife <= 0 }
-    var isAttacking: Bool { combatLockDetails.animation == .attacking }
-    var isEating: Bool {
-        if case .eating = combatLockDetails.animation { return true }
-        return false
-    }
 
     @CodableIgnored<DefaultEmptyArrayStrategy>
     var damageLog: [DamageLogEntry] = []
@@ -138,7 +139,7 @@ struct Player: Equatable, Codable, PlayerIdentifiable {
 
     var canAttack: Bool {
         guard let _ = weapon else { return false }
-        return !isDead && combatLockDetails.animation == .none
+        return !isDead && combatDetails.animation == .none
     }
 
     var ticksPerAttack: Int {

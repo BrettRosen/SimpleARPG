@@ -56,6 +56,9 @@
 		1F767D82289D991B0016E6B8 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F767D81289D991B0016E6B8 /* Message.swift */; };
 		1F9D205628B9152F006D55C3 /* BetterCodable in Frameworks */ = {isa = PBXBuildFile; productRef = 1F9D205528B9152F006D55C3 /* BetterCodable */; };
 		1F9D205828B91809006D55C3 /* Codable+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9D205728B91809006D55C3 /* Codable+Extensions.swift */; };
+		1F9D205A28BE997E006D55C3 /* Keyframe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9D205928BE997E006D55C3 /* Keyframe.swift */; };
+		1F9D205C28BEF2C7006D55C3 /* SpecialAttackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9D205B28BEF2C7006D55C3 /* SpecialAttackView.swift */; };
+		1F9D205E28BFA689006D55C3 /* SpecialAttack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9D205D28BFA689006D55C3 /* SpecialAttack.swift */; };
 		1FAC93F628865C6C00ED7F38 /* CombatClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FAC93F528865C6C00ED7F38 /* CombatClient.swift */; };
 		1FAC93F828865CA800ED7F38 /* Damage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FAC93F728865CA800ED7F38 /* Damage.swift */; };
 		1FAC93FA2887743800ED7F38 /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FAC93F92887743800ED7F38 /* Haptics.swift */; };
@@ -136,6 +139,9 @@
 		1F767D7F289D966C0016E6B8 /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
 		1F767D81289D991B0016E6B8 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		1F9D205728B91809006D55C3 /* Codable+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Codable+Extensions.swift"; sourceTree = "<group>"; };
+		1F9D205928BE997E006D55C3 /* Keyframe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keyframe.swift; sourceTree = "<group>"; };
+		1F9D205B28BEF2C7006D55C3 /* SpecialAttackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpecialAttackView.swift; sourceTree = "<group>"; };
+		1F9D205D28BFA689006D55C3 /* SpecialAttack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpecialAttack.swift; sourceTree = "<group>"; };
 		1FAC93F528865C6C00ED7F38 /* CombatClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombatClient.swift; sourceTree = "<group>"; };
 		1FAC93F728865CA800ED7F38 /* Damage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Damage.swift; sourceTree = "<group>"; };
 		1FAC93F92887743800ED7F38 /* Haptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
@@ -325,6 +331,8 @@
 				1FAC93F728865CA800ED7F38 /* Damage.swift */,
 				1F767D7B289B85CD0016E6B8 /* Vendor.swift */,
 				1F767D81289D991B0016E6B8 /* Message.swift */,
+				1F9D205928BE997E006D55C3 /* Keyframe.swift */,
+				1F9D205D28BFA689006D55C3 /* SpecialAttack.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -371,6 +379,7 @@
 				1FD17CEE2891BEAC00E0BEB0 /* ResourceBarStack.swift */,
 				1F767D7D289B8DA40016E6B8 /* VendorView.swift */,
 				1F767D7F289D966C0016E6B8 /* MessageView.swift */,
+				1F9D205B28BEF2C7006D55C3 /* SpecialAttackView.swift */,
 			);
 			path = GameView;
 			sourceTree = "<group>";
@@ -537,6 +546,7 @@
 				1F5CA84A287663ED002D92CF /* Equipment.swift in Sources */,
 				1F5CA854287665B8002D92CF /* EquipmentView.swift in Sources */,
 				1F767D762899F9010016E6B8 /* Bow.swift in Sources */,
+				1F9D205E28BFA689006D55C3 /* SpecialAttack.swift in Sources */,
 				1F5CA84528765FD8002D92CF /* Colors.swift in Sources */,
 				1F200F24289482D0004442A1 /* InventoryGrid.swift in Sources */,
 				1FAC93F828865CA800ED7F38 /* Damage.swift in Sources */,
@@ -547,6 +557,7 @@
 				1F344CF628B8060B006102B1 /* FileManager.swift in Sources */,
 				1F5CA84E28766449002D92CF /* Food.swift in Sources */,
 				1F5CA842287651C6002D92CF /* TabView.swift in Sources */,
+				1F9D205C28BEF2C7006D55C3 /* SpecialAttackView.swift in Sources */,
 				1F344CF428B7F56E006102B1 /* Helmet.swift in Sources */,
 				1F35B6FE287E81F50038D3DA /* EncounterModifierPreview.swift in Sources */,
 				1F344CF828B806B8006102B1 /* LocalStore.swift in Sources */,
@@ -555,6 +566,7 @@
 				1F9D205828B91809006D55C3 /* Codable+Extensions.swift in Sources */,
 				1FAC93FA2887743800ED7F38 /* Haptics.swift in Sources */,
 				1F5CA85D2877C6FA002D92CF /* ResourceBar.swift in Sources */,
+				1F9D205A28BE997E006D55C3 /* Keyframe.swift in Sources */,
 				1F2D5BC82889037E0061F4D3 /* Extensions+CGPoint.swift in Sources */,
 				1F5CA85028766473002D92CF /* Player.swift in Sources */,
 				1F5CA85728768187002D92CF /* Extensions+View.swift in Sources */,

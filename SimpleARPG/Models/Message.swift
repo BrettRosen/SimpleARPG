@@ -20,11 +20,13 @@ enum Message: Equatable, Codable, CaseIterable, Hashable {
         switch self {
         case let .gg(message): return message.rawValue
         case let .bm(message): return message.rawValue
+        case let .error(message): return message.rawValue
         }
     }
 
     case gg(GGMessage)
     case bm(BMMessage)
+    case error(ErrorMessage)
 
     enum GGMessage: String, Codable, Equatable, CaseIterable {
         case gg = "gg"
@@ -35,5 +37,9 @@ enum Message: Equatable, Codable, CaseIterable, Hashable {
 
     enum BMMessage: String, Codable, Equatable, CaseIterable {
         case zoggy = "zoggy"
+    }
+
+    enum ErrorMessage: String, Codable, Equatable, CaseIterable {
+        case mustBeInCombat = "I must be in combat!"
     }
 }
