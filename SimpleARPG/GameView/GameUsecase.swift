@@ -392,6 +392,7 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
             state.encounter = nil
             state.player.damageLog = []
             state.player.currentLife = state.player.maxLife
+            state.player.specialResource = SpecialAttack.maxSpecialResource
             state.vendor = Vendor()
             return .cancel(id: CombatTimerId.self)
         case .closePreview:
