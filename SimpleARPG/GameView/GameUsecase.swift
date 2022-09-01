@@ -100,11 +100,11 @@ enum GameAction: Equatable {
     case onAppear
     case updateTab(Tab)
 
-
     case combatBeginTimerTicked
     case combatTimerTicked
     case showDamageLogEntry(DamageLogEntry)
     case hideDamageLogEntry(DamageLogEntry)
+    case executeSpecialAttack(SpecialAttack)
 
     case clearAnimation(CombatPlayer)
     case clearMonsterActionLock
@@ -177,6 +177,12 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
                 .eraseToEffect()
                 .cancellable(id: cancelId)
         }
+
+        func executeSpecialAttack(special: SpecialAttack, delay: Double) -> Effect<GameAction, Never> {
+            Effect(value: .executeSpecialAttack(special))
+                .delay(for: .init(floatLiteral: delay), scheduler: env.mainQueue)
+                .eraseToEffect()
+        }
         // --
 
         switch action {
@@ -237,8 +243,14 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
                 state.encounter?.monster.specialResource = min(SpecialAttack.maxSpecialResource, encounter.monster.specialResource + SpecialAttack.restoreAmount)
             }
 
-            // Player's attack
-            if state.player.canAttack,
+            if let special = state.player.combatDetails.queuedSpecialAttack {
+                state.player.combatDetails.queuedSpecialAttack = nil
+                state.player.combatDetails.animation = .specialAttacking
+                state.player.specialResource -= special.resourcePerUse
+
+                effects.append(executeSpecialAttack(special: special, delay: special.animationTimeOffsets.reduce(0, +)))
+
+            } else if state.player.canAttack, // Player attack
                !encounter.monster.isDead,
                encounter.tickCount % state.player.ticksPerAttack == 0 {
 
@@ -337,6 +349,18 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
                 effects.append(updateCombatClientGameState())
                 return Effect.merge(effects)
             }
+        case let .executeSpecialAttack(special):
+            guard let encounter = state.encounter else {
+                return .none
+            }
+
+            state.player.combatDetails.animation = .none
+
+            switch special {
+            case .darkBow:
+                darkBow(damager: state.player, player: &state.encounter!.monster)
+            }
+
         case let .clearAnimation(combatPlayer):
             switch combatPlayer {
             case .player:

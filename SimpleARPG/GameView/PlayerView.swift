@@ -49,7 +49,11 @@ struct PlayerView: View {
 
                             if let special = weapon.identifiableWeaponBase.special, player.combatDetails.isSpecialAttacking {
                                 TimelineView(.cyclic(timeOffsets: special.animationTimeOffsets)) { timeline in
-                                    KeyframeUpdatingView(date: timeline.date, keyframes: special.keyframes, view: AnyView(
+                                    KeyframeUpdatingView(
+                                        date: timeline.date,
+                                        keyframes: special.keyframes,
+                                        view: AnyView(
+
                                         Text(weapon.identifiableEquipmentBase.icon).font(.system(size: 34))
                                             .scaleEffect(x: weapon.identifiableEquipmentBase.presentationDetails.xScale)
                                             .rotationEffect(.init(degrees: weapon.identifiableEquipmentBase.presentationDetails.degreeRotation))
@@ -128,6 +132,10 @@ struct KeyframeUpdatingView: View {
     func advanceKeyFrame() {
         // Advance to next keyframe
         idx = (idx + 1) % keyframes.count
+
+        // Skip first frame for animation, which we
+        // only used as the initial state.
+        if idx == 0 { idx = 1 }
     }
 }
 

@@ -26,7 +26,6 @@ struct SpecialAttackState: Equatable {
 
 enum SpecialAttackAction: Equatable {
     case tappedSpecialAttack(SpecialAttack)
-    case clearAnimation
     case clearMessage
 }
 
@@ -54,16 +53,6 @@ func darkBow<
 let specialAttackReducer: Reducer<SpecialAttackState, SpecialAttackAction, SpecialAttackEnvironment> = .init { state, action, env in
     enum MessageCancelId { }
 
-    func clearAnimation(
-        delay: Double,
-        cancelId: UUID
-    ) -> Effect<SpecialAttackAction, Never> {
-        Effect(value: .clearAnimation)
-            .delay(for: .init(floatLiteral: delay), scheduler: env.mainQueue)
-            .eraseToEffect()
-            .cancellable(id: cancelId)
-    }
-
     switch action {
     case let .tappedSpecialAttack(special):
         guard let encounter = state.encounter else {
@@ -74,20 +63,15 @@ let specialAttackReducer: Reducer<SpecialAttackState, SpecialAttackAction, Speci
                 .eraseToEffect()
                 .cancellable(id: MessageCancelId.self, cancelInFlight: true)
         }
-        guard state.player.specialResource >= special.resourcePerUse else {
+        // Must have the required resource and not already queued for a special attack...
+        guard state.player.specialResource >= special.resourcePerUse,
+            state.player.combatDetails.queuedSpecialAttack == nil else {
             return .none
         }
 
-        state.player.specialResource -= special.resourcePerUse
-        state.player.combatDetails.animation = .specialAttacking
+        state.player.combatDetails.queuedSpecialAttack = special
 
-        switch special {
-        case .darkBow:
-            darkBow(damager: state.player, player: &state.encounter!.monster)
-        }
-        return clearAnimation(delay: special.animationTimeOffsets.reduce(0, +), cancelId: state.player.combatDetails.animationEffectCancelId)
-    case .clearAnimation:
-        state.player.combatDetails.animation = .none
+        return .none
     case .clearMessage:
         state.player.currentMessage = nil
     }
@@ -124,10 +108,10 @@ struct SpecialAttackView: View {
                                     Spacer()
                                 }
                             }
-                            .padding(16)
+                            .padding(4)
                             .background {
-                                RoundedRectangle(cornerRadius: 4)
-                                    .fill(Color.uiButton)
+                                RoundedRectangle(cornerRadius: 3)
+                                    .fill(viewStore.player.combatDetails.queuedSpecialAttack != nil ? Color.yellow : Color.clear)
                                     .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 10)
                             }
 

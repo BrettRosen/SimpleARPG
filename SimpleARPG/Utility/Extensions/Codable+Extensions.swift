@@ -44,3 +44,7 @@ extension KeyedEncodingContainer {
         // Do nothing
     }
 }
+
+struct DefaultCombatDetailsStrategy: DefaultCodableStrategy {
+    static var defaultValue: CombatDetails { return .init() }
+}

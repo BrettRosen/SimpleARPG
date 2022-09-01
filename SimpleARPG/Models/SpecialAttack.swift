@@ -36,12 +36,10 @@ enum SpecialAttack: Equatable, Codable {
         switch self {
         case .darkBow:
             return [
-                .init(timeInterval: 0.1, rotation: 0, scale: 1, offset: .init(width: -20, height: 0), animationKind: .linear),
-                .init(timeInterval: 0.1, rotation: 0, scale: 1, offset: .init(width: 0, height: 0), animationKind: .linear),
-                .init(timeInterval: 0.1, rotation: 0, scale: 1, offset: .init(width: -20, height: 0), animationKind: .linear),
-                .init(timeInterval: 0.1, rotation: 0, scale: 1, offset: .init(width: 0, height: 0), animationKind: .linear),
-                .init(timeInterval: 0.1, rotation: 0, scale: 1, offset: .init(width: -20, height: 0), animationKind: .linear),
-                .init(timeInterval: 0.1, rotation: 0, scale: 1, offset: .init(width: 0, height: 0), animationKind: .linear),
+                .init(timeInterval: 0, rotation: 0, scale: 1.0, offset: .zero, animationKind: .none),
+
+                .init(timeInterval: 1, rotation: 0, scale: 1.2, offset: .init(width: -40, height: 0), animationKind: .easeIn),
+                .init(timeInterval: 0.2, rotation: 0, scale: 1, offset: .init(width: 0, height: 0), animationKind: .easeOut),
             ]
         }
     }

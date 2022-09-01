@@ -40,6 +40,8 @@ struct CombatDetails: Equatable, Codable {
 
     var actionLocked: Bool = false
 
+    var queuedSpecialAttack: SpecialAttack?
+
     var isSpecialAttacking: Bool { animation == .specialAttacking }
     var isAttacking: Bool { animation == .attacking }
     var isEating: Bool {
@@ -107,6 +109,7 @@ struct Player: Equatable, Codable, PlayerIdentifiable {
         return beforeApplyingPercentInc * (1 + stats[.percentMaxLife]!)
     }
 
+    @CodableIgnored<DefaultCombatDetailsStrategy>
     var combatDetails: CombatDetails = .init()
     var isDead: Bool { currentLife <= 0 }
 
@@ -186,5 +189,6 @@ struct Player: Equatable, Codable, PlayerIdentifiable {
         return damages
     }
 
+    @CodableIgnored<DefaultNilStrategy>
     var currentMessage: Message?
 }
