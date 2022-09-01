@@ -63,27 +63,7 @@ enum Food: String, Codable, CaseIterable, InventoryDisplayable {
     }
 
     var restoreAmount: Double {
-        switch self {
-        case .shrimp: return 10
-        case .chicken: return 100
-        case .sardine: return 200
-        case .bread: return 300
-        case .herring: return 400
-        case .mackerel: return 500
-        case .trout: return 600
-        case .cod: return 700
-        case .salmon: return 800
-        case .tuna: return 900
-        case .cake: return 1000
-        case .lobster: return 1100
-        case .bass: return 1200
-        case .applePie: return 1300
-        case .chocolateCake: return 1400
-        case .pizza: return 1500
-        case .monkfish: return 1600
-        case .darkCrab: return 1700
-        case .anglerfish: return 1800
-        }
+        return Double(dropLevelRange.lowerBound * 3)
     }
 
     var dropLevelRange: ClosedRange<Int> {

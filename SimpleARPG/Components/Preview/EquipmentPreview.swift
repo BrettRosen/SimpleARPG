@@ -42,12 +42,24 @@ struct EquipmentPreview: View {
                 + Text("\(Int(weapon.identifiableEquipmentBase.intelligenceRequirement)) ").font(.appFootnote).foregroundColor(.white)
                 + Text("Int").font(.appFootnote).foregroundColor(.white.opacity(0.6))
             case let .armor(armor):
-                EmptyView()
+                Text("Armor: ").font(.appFootnote).foregroundColor(.white.opacity(0.6)) +
+                Text("\(Int(armor.identifiableArmorBase.armor))").font(.appFootnote).foregroundColor(.white)
+
+                Divider().frame(width: 100).overlay(Color.uiBorder)
+
+                Text("Requires Level: ").font(.appFootnote).foregroundColor(.white.opacity(0.6))
+                + Text("\(armor.identifiableEquipmentBase.levelRequirement), ").font(.appFootnote).foregroundColor(.white)
+                + Text("\(Int(armor.identifiableEquipmentBase.strengthRequirement)) ").font(.appFootnote).foregroundColor(.white)
+                + Text("Str, ").font(.appFootnote).foregroundColor(.white.opacity(0.6))
+                + Text("\(Int(armor.identifiableEquipmentBase.dexterityRequirement)) ").font(.appFootnote).foregroundColor(.white)
+                + Text("Dex, ").font(.appFootnote).foregroundColor(.white.opacity(0.6))
+                + Text("\(Int(armor.identifiableEquipmentBase.intelligenceRequirement)) ").font(.appFootnote).foregroundColor(.white)
+                + Text("Int").font(.appFootnote).foregroundColor(.white.opacity(0.6))
             }
 
             Divider().frame(width: 100).overlay(Color.uiBorder)
 
-            ForEach(Array(equipment.stats.keys.sorted(by: { $0.displayName > $1.displayName }).enumerated()), id:\.element) { _, key in
+            ForEach(Array(equipment.nonBaseStats.keys.sorted(by: { $0.displayName > $1.displayName }).enumerated()), id:\.element) { _, key in
                 Text(key.displayName + ": ").font(.appFootnote).foregroundColor(.white) +
                 Text("\(equipment.stats[key]!, specifier: "%.2f")").font(.appFootnote).foregroundColor(.yellow)
             }

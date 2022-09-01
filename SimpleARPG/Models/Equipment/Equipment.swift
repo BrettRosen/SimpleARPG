@@ -31,6 +31,10 @@ protocol EquipmentBaseIdentifiable: Equatable {
     var affixPool: AffixPool { get }
 }
 
+protocol ArmorBaseIdentifiable: Equatable {
+    var armor: Double { get }
+}
+
 protocol WeaponBaseIdentifiable: Equatable {
     var special: SpecialAttack? { get }
     var damageType: DamageType { get }
@@ -42,6 +46,8 @@ protocol WeaponBaseIdentifiable: Equatable {
 
 enum EquipmentBase: Equatable, Codable {
     static var allBases: [EquipmentBase] = [
+        // MARK: Weapons
+
         // One Handed Axe
         .weapon(.oneHandedAxe(.rustedHatchet)),
         .weapon(.oneHandedAxe(.stoneAxe)),
@@ -49,12 +55,24 @@ enum EquipmentBase: Equatable, Codable {
         .weapon(.bow(.crudeBow)),
         // Dagger
         .weapon(.dagger(.glassShank)),
-        .weapon(.dagger(.skinningKnife))
+        .weapon(.dagger(.skinningKnife)),
+
+        // MARK: Armor
+        .armor(.helmet(.ironHat)),
     ]
 
     case weapon(WeaponBase)
     case armor(ArmorBase)
 
+    var stats: [Stat.Key: Double] {
+        switch self {
+        case let .weapon(weapon): return [:] // TODO: Add crit chance
+        case let .armor(armor):
+            return [
+                .armour: armor.identifiableArmorBase.armor
+            ]
+        }
+    }
     var affixPool: AffixPool {
         switch self {
         case let .weapon(weapon): return weapon.identifiableEquipmentBase.affixPool
@@ -107,6 +125,12 @@ enum EquipmentBase: Equatable, Codable {
 
 enum ArmorBase: Equatable, Codable {
     case helmet(Helmet)
+
+    var identifiableArmorBase: any ArmorBaseIdentifiable {
+        switch self {
+        case let .helmet(helmet): return helmet
+        }
+    }
 
     var identifiableEquipmentBase: any EquipmentBaseIdentifiable {
         switch self {
@@ -191,7 +215,18 @@ struct Equipment: Equatable, Codable, InventoryDisplayable {
 
     var base: EquipmentBase
     var rarity: Rarity
-    var stats: [Stat.Key: Double]
+    var nonBaseStats: [Stat.Key: Double]
+
+
+    init(base: EquipmentBase, rarity: Rarity, nonBaseStats: [Stat.Key: Double]) {
+        self.base = base
+        self.rarity = rarity
+        self.nonBaseStats = nonBaseStats
+    }
+
+    var stats: [Stat.Key: Double] {
+        nonBaseStats.merging(base.stats, uniquingKeysWith: { $0 + $1 })
+    }
 
     var icon: String { base.icon }
     var name: String { base.name }
@@ -235,7 +270,7 @@ struct Equipment: Equatable, Codable, InventoryDisplayable {
             }
         }
 
-        return .init(base: base, rarity: rarity, stats: stats)
+        return .init(base: base, rarity: rarity, nonBaseStats: stats)
     }
 }
 

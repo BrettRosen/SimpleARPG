@@ -37,11 +37,11 @@ struct Vendor: Equatable, Codable {
 
         for _ in 0..<10 {
             let weapon = Equipment.generateEquipment(level: level, slot: .weapon, incRarity: 0)
-            let armor = InventorySlot()
+            let armor = Equipment.generateEquipment(level: level, slot: .helmet, incRarity: 0)
             let foodAndMisc = Food.generate(level: level)
 
             weapons.append(.init(item: .equipment(weapon)))
-            armors.append(armor)
+            armors.append(.init(item: .equipment(armor)))
             foodAndMiscs.append(.init(item: .food(foodAndMisc)))
         }
         tabs[.weapons] = weapons

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Helmet: Equatable, Codable, EquipmentBaseIdentifiable {
+struct Helmet: Equatable, Codable, ArmorBaseIdentifiable ,EquipmentBaseIdentifiable {
     var presentationDetails: EquipmentPresentationDetails = .init()
     var icon: String = "🪖"
     var name: String = ""
@@ -18,5 +18,7 @@ struct Helmet: Equatable, Codable, EquipmentBaseIdentifiable {
     var intelligenceRequirement: Double = 0
     var affixPool: AffixPool = .init(prefix: [], suffix: [])
 
+    var armor: Double = 0
 
+    static let ironHat = Helmet(armor: 8)
 }

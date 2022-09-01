@@ -90,7 +90,7 @@ struct Player: Equatable, Codable, PlayerIdentifiable {
         self.currentLife = maxLife
 
         self.inventory[0].item = .equipment(.generateEquipment(level: 1, slot: .weapon, incRarity: 10))
-        self.inventory[1].item = .equipment(Equipment(base: .weapon(.bow(.crudeBow)), rarity: .rare, stats: [:]))
+        self.inventory[1].item = .equipment(Equipment(base: .weapon(.bow(.crudeBow)), rarity: .rare, nonBaseStats: [:]))
     }
 
     var level: Int = 1
