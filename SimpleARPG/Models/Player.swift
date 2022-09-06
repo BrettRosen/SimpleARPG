@@ -22,16 +22,22 @@ protocol PlayerIdentifiable {
     // Used for the CombatClient
     var playerId: Int { get }
     var icon: PlayerIcon { get set }
+
     var maxLife: Double { get }
     var currentLife: Double { get set }
+    var maxMana: Double { get }
+    var currentMana: Double { get set }
+    var totalArmour: Double { get }
+
     var weapon: WeaponBase? { get }
     var allEquipment: [Equipment] { get set }
     var inventory: [InventorySlot] { get set }
     var damagePerAttack: [Damage] { get }
     var combatDetails: CombatDetails { get set }
     var damageLog: [DamageLogEntry] { get set }
-    var currentMessage: Message? { get set }
     var specialResource: Int { get set }
+
+    var currentMessage: Message? { get set }
 }
 
 struct CombatDetails: Equatable, Codable {
@@ -87,10 +93,20 @@ struct Player: Equatable, Codable, PlayerIdentifiable {
     init() {
         self.stats = baseStats()
         self.currentLife = 0
+        self.currentMana = 0
         self.currentLife = maxLife
+        self.currentMana = maxMana
 
         self.inventory[0].item = .equipment(.generateEquipment(level: 1, slot: .weapon, incRarity: 10))
         self.inventory[1].item = .equipment(Equipment(base: .weapon(.bow(.crudeBow)), rarity: .rare, nonBaseStats: [:]))
+
+        self.allEquipment.append(.init(base: .armor(.helmet(.ironHat)), rarity: .normal, nonBaseStats: [:]))
+        self.allEquipment.append(.init(base: .armor(.ring(.coralRing())), rarity: .normal, nonBaseStats: [:]))
+        self.allEquipment.append(.init(base: .armor(.amulet(.pauaAmulet)), rarity: .normal, nonBaseStats: [:]))
+        self.allEquipment.append(.init(base: .armor(.body(.plateVest)), rarity: .normal, nonBaseStats: [:]))
+        self.allEquipment.append(.init(base: .armor(.gloves(.ironGauntlets)), rarity: .normal, nonBaseStats: [:]))
+        self.allEquipment.append(.init(base: .armor(.belt(.chainBelt)), rarity: .normal, nonBaseStats: [:]))
+        self.allEquipment.append(.init(base: .armor(.boots(.ironGreaves)), rarity: .normal, nonBaseStats: [:]))
     }
 
     var level: Int = 1
@@ -109,6 +125,17 @@ struct Player: Equatable, Codable, PlayerIdentifiable {
         return beforeApplyingPercentInc * (1 + stats[.percentMaxLife]!)
     }
 
+    var currentMana: Double
+    var maxMana: Double {
+        let beforeApplyingPercentInc = stats[.flatMaxMana]! + (stats[.intelligence]!/10 * 5)
+        return beforeApplyingPercentInc * (1 + stats[.percentMaxMana]!)
+    }
+
+    var totalArmour: Double {
+        let beforeApplyingPercentInc = stats[.armour]!
+        return beforeApplyingPercentInc * (1 + stats[.percentArmour]!)
+    }
+
     @CodableIgnored<DefaultCombatDetailsStrategy>
     var combatDetails: CombatDetails = .init()
     var isDead: Bool { currentLife <= 0 }
@@ -116,7 +143,7 @@ struct Player: Equatable, Codable, PlayerIdentifiable {
     @CodableIgnored<DefaultEmptyArrayStrategy>
     var damageLog: [DamageLogEntry] = []
 
-    var allEquipment = [Equipment]()
+    var allEquipment: [Equipment] = [Equipment]()
     var inventory: [InventorySlot] = [
         .init(), .init(), .init(), .init(),
         .init(item: .shrimp), .init(item: .shrimp), .init(item: .shrimp), .init(item: .shrimp),
@@ -187,6 +214,10 @@ struct Player: Equatable, Codable, PlayerIdentifiable {
             damages.append(damage)
         }
         return damages
+    }
+
+    var lifeRegenPerTick: Double {
+        stats[.lifeRegen]!
     }
 
     @CodableIgnored<DefaultNilStrategy>

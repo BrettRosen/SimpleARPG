@@ -42,8 +42,12 @@ struct EquipmentPreview: View {
                 + Text("\(Int(weapon.identifiableEquipmentBase.intelligenceRequirement)) ").font(.appFootnote).foregroundColor(.white)
                 + Text("Int").font(.appFootnote).foregroundColor(.white.opacity(0.6))
             case let .armor(armor):
-                Text("Armor: ").font(.appFootnote).foregroundColor(.white.opacity(0.6)) +
-                Text("\(Int(armor.identifiableArmorBase.armor))").font(.appFootnote).foregroundColor(.white)
+                ForEach(Array(equipment.base.stats.keys.sorted(by: { $0.displayName > $1.displayName }).enumerated()), id:\.element) { _, key in
+                    if equipment.stats[key]! > 0 {
+                        Text(key.displayName + ": ").font(.appFootnote).foregroundColor(.white) +
+                        Text("\(equipment.stats[key]!, specifier: "%.2f")").font(.appFootnote).foregroundColor(.yellow)
+                    }
+                }
 
                 Divider().frame(width: 100).overlay(Color.uiBorder)
 

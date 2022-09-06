@@ -129,11 +129,16 @@ struct StatsView: View {
                     VStack(alignment: .leading, spacing: 5) {
                         switch viewStore.local.selectedTab {
                         case .defensive:
-                            StatsViewRow(statName: "❤️ Life", statValue: "\(viewStore.player.maxLife)")
-                            StatsViewRow(statName: "🛡 Armour", statValue: "\(viewStore.player.stats[.armour]!)")
+                            StatsViewRow(statName: "❤️ Life", statValue: "\(Int(viewStore.player.maxLife))")
+                            StatsViewRow(statName: "💙 Mana", statValue: "\(Int(viewStore.player.maxMana))")
+                            StatsViewRow(statName: "🛡 Armour", statValue: "\(Int(viewStore.player.totalArmour))")
                             StatsViewRow(
                                 statName: "🛡 Physical Damage Reduction",
                                 statValue: "\(physicalDamageReduction(viewStore: viewStore))%")
+                            StatsViewRow(statName: "🔥 Fire Resistance", statValue: "\(Int(viewStore.player.stats[.fireRes]!))")
+                            StatsViewRow(statName: "❄️ Cold Resistance", statValue: "\(Int(viewStore.player.stats[.coldRes]!))")
+                            StatsViewRow(statName: "⚡️ Lightning Resistance", statValue: "\(Int(viewStore.player.stats[.lightningRes]!))")
+
                         case .offensive:
                             StatsViewRow(statName: "💪🏽 Strength", statValue: "\(viewStore.player.stats[.strength]!)")
                             StatsViewRow(statName: "🏃🏽 Dexterity", statValue: "\(viewStore.player.stats[.dexterity]!)")
@@ -155,7 +160,7 @@ struct StatsView: View {
     }
 
     func physicalDamageReduction(viewStore: ViewStore<StatsViewState, StatsViewAction>) -> String {
-        let percentage = viewStore.player.stats[.armour]! / (viewStore.player.stats[.armour]! + 5 * Monster.baseDamage(level: viewStore.player.level))
+        let percentage = viewStore.player.stats[.armour]! / (viewStore.player.stats[.armour]! + 50 * Monster.baseDamage(level: viewStore.player.level))
         return String(format: "%.2f", percentage * 100)
     }
 }

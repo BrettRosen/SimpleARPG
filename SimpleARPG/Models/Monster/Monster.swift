@@ -59,7 +59,9 @@ struct Monster: Equatable, Codable, PlayerIdentifiable {
         }
 
         self.currentLife = 0
+        self.currentMana = 0
         self.currentLife = maxLife
+        self.currentMana = maxMana
     }
 
     var currentLife: Double
@@ -74,6 +76,25 @@ struct Monster: Equatable, Codable, PlayerIdentifiable {
         }
 
         return maxLife
+    }
+
+    var currentMana: Double
+    var maxMana: Double {
+        var maxMana = stats[.flatMaxMana]!
+
+        if let intelligence = stats[.intelligence] {
+            maxMana += (intelligence/10 * 5)
+        }
+        if let percentMaxMana = stats[.percentMaxMana] {
+            maxMana *= (1 + percentMaxMana)
+        }
+
+        return maxMana
+    }
+
+    var totalArmour: Double {
+        let beforeApplyingPercentInc = stats[.armour]!
+        return beforeApplyingPercentInc * (1 + stats[.percentArmour]!)
     }
 
     var combatDetails: CombatDetails = .init()

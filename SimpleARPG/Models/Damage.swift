@@ -17,6 +17,13 @@ enum DamageType: Equatable, Codable {
     case ranged
     case magic(ElementalType)
 
+    var isPhysical: Bool {
+        switch self {
+        case .melee, .ranged: return true
+        case .magic: return false
+        }
+    }
+
     var name: String {
         switch self {
         case .melee: return "Melee Physical Damage"

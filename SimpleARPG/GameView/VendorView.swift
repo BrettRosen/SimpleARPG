@@ -79,12 +79,21 @@ struct VendorView: View {
             Button(action: {
                 viewStore.send(.vendorTapped)
             }) {
-                VStack(spacing: 0) {
-                    Text("💰")
-                        .font(.system(size: 30))
-                        .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 5)
-                        .offset(y: animating ? -5 : 10)
-                        .animation(.easeInOut(duration: 1).repeatForever(autoreverses: true), value: animating)
+                VStack(spacing: 4) {
+
+                    VStack(spacing: 0) {
+                        Text("🪙")
+                            .font(.system(size: 30))
+
+                        Text("Shop")
+                            .font(.appCaption)
+                            .foregroundColor(.white)
+                            .padding(4)
+                            .background(Color.uiBackground, in: RoundedRectangle(cornerRadius: 4))
+                    }
+                    .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 5)
+                    .offset(y: animating ? -5 : 10)
+                    .animation(.easeInOut(duration: 1).repeatForever(autoreverses: true), value: animating)
 
                     ZStack(alignment: .bottom) {
                         Circle()
@@ -127,7 +136,7 @@ struct VendorInventoryView: View {
                 }
 
                 VStack(spacing: 12) {
-                    Text(viewStore.vendor.icon) + Text(" Merchant " + viewStore.vendor.name).font(.appFootnote).foregroundColor(.white)
+                    Text(viewStore.vendor.icon) + Text(" Shopkeeper " + viewStore.vendor.name).font(.appFootnote).foregroundColor(.white)
 
                     Divider()
                         .frame(width: 150, height: 2)

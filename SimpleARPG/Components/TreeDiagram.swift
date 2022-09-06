@@ -23,6 +23,24 @@ let binaryTree = Tree<Int>(50, children: [
     ])
 ])
 
+let uniqueTalentTree: Tree<Unique<TalentPoint>> = talentTree.map(Unique.init)
+let talentTree = Tree<TalentPoint>(TalentPoint(name: "Max Life", stats: [.flatMaxLife: 5]),
+    children: [
+        Tree<TalentPoint>(TalentPoint(name: "Strength", stats: [.dexterity: 5]),
+            children: [
+
+            ]),
+        Tree<TalentPoint>(TalentPoint(name: "Dexterity", stats: [.strength: 5]),
+            children: [
+
+            ]),
+        Tree<TalentPoint>(TalentPoint(name: "Intelligence", stats: [.intelligence: 5]),
+            children: [
+
+            ])
+    ]
+)
+
 struct StatusEffect {
     enum Ailment {
         case bleeding(amount: Double)
@@ -33,7 +51,9 @@ struct StatusEffect {
     var currentNumberOfTicks: Int
 }
 
-struct TalentPoint {
+struct TalentPoint: Identifiable {
+    var id: String = UUID().uuidString
+
     let name: String
     let stats: [Stat.Key: Double]
 }
@@ -88,11 +108,11 @@ struct CollectDict<Key: Hashable, Value>: PreferenceKey {
     }
 }
 
-struct Diagram<A: Identifiable, V: View>: View {
-    let tree: Tree<A>
-    let node: (A) -> V
+struct Diagram<V: View>: View {
+    let tree: Tree<Unique<TalentPoint>>
+    let node: (Unique<TalentPoint>) -> V
 
-    typealias Key = CollectDict<A.ID, Anchor<CGPoint>>
+    typealias Key = CollectDict<Unique.ID, Anchor<CGPoint>>
 
     var body: some View {
         VStack(alignment: .center) {
@@ -106,7 +126,7 @@ struct Diagram<A: Identifiable, V: View>: View {
                 })
             }
         }
-        .backgroundPreferenceValue(Key.self, { (centers: [A.ID: Anchor<CGPoint>]) in
+        .backgroundPreferenceValue(Key.self, { (centers: [Unique.ID: Anchor<CGPoint>]) in
             GeometryReader { proxy in
                 ForEach(self.tree.children, id: \.value.id, content: { child in
                     Line(

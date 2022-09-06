@@ -27,5 +27,7 @@ struct Bow: Equatable, Codable, WeaponBaseIdentifiable, EquipmentBaseIdentifiabl
         suffix: [.dexterity]
     )
 
-    static let crudeBow: Self = .init(special: .darkBow, presentationDetails: .init(xScale: 1, degreeRotation: 15, offSet: .init(width: 20, height: 0)), name: "Crude Bow", levelRequirement: 1, dexterityRequirement: 14, damage: 5.0...13.0, critChance: 0.05)
+    var stats: [Stat.Key : Double] = [:]
+
+    static let crudeBow: Self = .init(special: .darkBow, presentationDetails: .init(xScale: 1, degreeRotation: 15, offSet: .init(width: 20, height: 0)), name: "Crude Bow", levelRequirement: 1, dexterityRequirement: 0, damage: 5.0...13.0, critChance: 0.05)
 }

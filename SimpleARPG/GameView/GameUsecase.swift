@@ -37,8 +37,18 @@ func damage<S: PlayerIdentifiable>(
     player: inout S,
     damage: Damage
 ) {
-    player.currentLife = max(0, player.currentLife - damage.rawAmount)
+    player.currentLife = max(0, player.currentLife - damageAfterApplyingArmour(damage: damage, armor: player.totalArmour).rawAmount)
     player.damageLog.append(.init(damage: damage, show: false))
+}
+
+func damageAfterApplyingArmour(
+    damage: Damage,
+    armor: Double
+) -> Damage {
+    guard damage.type.isPhysical else { return damage }
+    let reduction = armor / (armor + 50 * damage.rawAmount)
+    let newDamage = damage.rawAmount - (damage.rawAmount * reduction)
+    return Damage(type: damage.type, rawAmount: newDamage)
 }
 
 func message<S: PlayerIdentifiable>(
@@ -236,6 +246,9 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
             ]
 
             state.encounter?.tickCount += 1
+            // Apply life regen
+            state.player.currentLife = min(state.player.maxLife, state.player.currentLife + state.player.lifeRegenPerTick)
+            print(state.player.currentLife)
 
             // Restore special attack resource
             if encounter.tickCount % Int(SpecialAttack.ticksPerRestore) == 0 {
@@ -254,7 +267,6 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
                !encounter.monster.isDead,
                encounter.tickCount % state.player.ticksPerAttack == 0 {
 
-                print("Player attacking")
                 for dam in state.player.damagePerAttack {
                     damage(player: &state.encounter!.monster, damage: dam)
 
@@ -327,13 +339,11 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
                     // When it thinks a non-attack move is the best, it likely will sacrifice an attack from being combat-locked
                     switch move.move {
                     case let .attack(damage):
-                        print("Monster wants to attack")
                         break // Actually don't need to do anything here, since monsters attack on a timer similar as the Player
                     case let .heal(food, slot):
 
 
                         if !state.player.combatDetails.actionLocked {
-                            print("Monster wants to eat")
                             heal(player: &state.encounter!.monster, food: food, slot: slot)
 
                             effects.append(clearAnimation(for: .monster, delay: tickUnit * 3, cancelId: monster.combatDetails.animationEffectCancelId))

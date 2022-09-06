@@ -29,10 +29,7 @@ protocol EquipmentBaseIdentifiable: Equatable {
     var dexterityRequirement: Double { get }
     var intelligenceRequirement: Double { get }
     var affixPool: AffixPool { get }
-}
-
-protocol ArmorBaseIdentifiable: Equatable {
-    var armor: Double { get }
+    var stats: [Stat.Key: Double] { get }
 }
 
 protocol WeaponBaseIdentifiable: Equatable {
@@ -58,7 +55,22 @@ enum EquipmentBase: Equatable, Codable {
         .weapon(.dagger(.skinningKnife)),
 
         // MARK: Armor
+        // Helmet
         .armor(.helmet(.ironHat)),
+        // Body
+        .armor(.body(.plateVest)),
+        // Gloves
+        .armor(.gloves(.ironGauntlets)),
+        // Boots
+        .armor(.boots(.ironGreaves)),
+        // Belt
+        .armor(.belt(.chainBelt)),
+        // Offhand
+        .armor(.offhand(.splinteredTowerShield)),
+        // Ring
+        .armor(.ring(.coralRing())),
+        // Amulet
+        .armor(.amulet(.pauaAmulet)),
     ]
 
     case weapon(WeaponBase)
@@ -66,11 +78,8 @@ enum EquipmentBase: Equatable, Codable {
 
     var stats: [Stat.Key: Double] {
         switch self {
-        case let .weapon(weapon): return [:] // TODO: Add crit chance
-        case let .armor(armor):
-            return [
-                .armour: armor.identifiableArmorBase.armor
-            ]
+        case let .weapon(weapon): return weapon.identifiableEquipmentBase.stats
+        case let .armor(armor): return armor.identifiableEquipmentBase.stats
         }
     }
     var affixPool: AffixPool {
@@ -125,16 +134,24 @@ enum EquipmentBase: Equatable, Codable {
 
 enum ArmorBase: Equatable, Codable {
     case helmet(Helmet)
-
-    var identifiableArmorBase: any ArmorBaseIdentifiable {
-        switch self {
-        case let .helmet(helmet): return helmet
-        }
-    }
+    case body(Body)
+    case gloves(Gloves)
+    case boots(Boots)
+    case belt(Belt)
+    case offhand(Offhand)
+    case ring(Ring)
+    case amulet(Amulet)
 
     var identifiableEquipmentBase: any EquipmentBaseIdentifiable {
         switch self {
         case let .helmet(helmet): return helmet
+        case let .body(body): return body
+        case let .gloves(gloves): return gloves
+        case let .boots(boots): return boots
+        case let .belt(belt): return belt
+        case let .offhand(offhand): return offhand
+        case let .ring(ring): return ring
+        case let .amulet(amulet): return amulet
         }
     }
 }
@@ -285,6 +302,17 @@ enum EquipmentSlot: CaseIterable, Codable {
     case amulet
     case belt
 
+    static let armorSlots: [EquipmentSlot] = [
+        .helmet,
+        .body,
+        .ring,
+        .gloves,
+        .boots,
+        .offhand,
+        .amulet,
+        .belt,
+    ]
+
     var icon: String {
         switch self {
         case .helmet: return "🪖"
@@ -328,7 +356,7 @@ func generateItem(
 
     switch selectedDrop {
     case .equipment:
-        let equipment = Equipment.generateEquipment(level: level, slot: .weapon, incRarity: player.stats[.incItemRarity]!)
+        let equipment = Equipment.generateEquipment(level: level, slot: EquipmentSlot.allCases.randomElement()!, incRarity: player.stats[.incItemRarity]!)
         return .equipment(equipment)
     case .food:
         return .food(Food.generate(level: level))

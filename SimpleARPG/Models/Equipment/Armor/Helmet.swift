@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Helmet: Equatable, Codable, ArmorBaseIdentifiable ,EquipmentBaseIdentifiable {
+struct Helmet: Equatable, Codable, EquipmentBaseIdentifiable {
     var presentationDetails: EquipmentPresentationDetails = .init()
     var icon: String = "🪖"
     var name: String = ""
@@ -16,9 +16,26 @@ struct Helmet: Equatable, Codable, ArmorBaseIdentifiable ,EquipmentBaseIdentifia
     var strengthRequirement: Double = 0
     var dexterityRequirement: Double = 0
     var intelligenceRequirement: Double = 0
-    var affixPool: AffixPool = .init(prefix: [], suffix: [])
+    var affixPool: AffixPool = .init(
+        prefix: [
+            .armour,
+            .percentArmour,
+            .flatMaxLife,
+            .incItemRarity,
+            .flatMaxMana,
+            .percentMaxLife,
+        ],
+        suffix: [
+            .strength,
+            .dexterity,
+            .intelligence,
+            .lifeRegen,
+        ]
+    )
 
-    var armor: Double = 0
+    var stats: [Stat.Key : Double] = [:]
 
-    static let ironHat = Helmet(armor: 8)
+    static let ironHat = Self(name: "Iron Hat", stats: [
+        .armour: 8,
+    ])
 }

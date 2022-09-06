@@ -22,7 +22,7 @@ struct EquipmentSlotView: View {
             viewStore.send(.unequip(equipment), animation: .default)
         }) {
             RoundedRectangle(cornerRadius: 4)
-                .strokeBorder(Color.uiBorder, lineWidth: 1)
+                .strokeBorder(viewStore.player.allEquipment.first(where: { $0.base.slot == slot })?.rarity.color.opacity(0.6) ?? Color.uiBorder, lineWidth: 2)
                 .background(RoundedRectangle(cornerRadius: 4).fill(Color.uiButton))
                 .overlay {
                     Text(viewStore.player.allEquipment.first(where: { $0.base.slot == slot })?.icon ?? slot.icon)

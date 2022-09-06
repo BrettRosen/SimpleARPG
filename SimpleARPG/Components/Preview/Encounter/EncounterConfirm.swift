@@ -20,6 +20,18 @@ struct EncounterConfirm: View {
                     .font(.appCallout)
                     .foregroundColor(.white)
 
+                HStack(spacing: 12) {
+                    Text(encounter.monster.icon.asset).font(.title2)
+                        .padding(8)
+                        .background(Color.uiDarkBackground, in: RoundedRectangle(cornerRadius: 2))
+                    VStack(spacing: 5) {
+                        Text(encounter.monster.name.uppercased())
+                            .font(.appCallout)
+                            .bold()
+                            .foregroundColor(encounter.rarity.color ?? .white)
+                    }
+                }
+
                 EncounterPreview(encounter: encounter, transparentBackground: true)
 
                 HStack {

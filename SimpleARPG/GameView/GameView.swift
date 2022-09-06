@@ -16,11 +16,19 @@ let screen = UIScreen.main.bounds
 let screen = NSScreen.main!.frame
 #endif
 
+struct WTFView: View {
+    @State var tree = uniqueTalentTree
+
+    var body: some View {
+        Diagram(tree: tree) { value in
+            Text("")
+        }
+    }
+}
+
 struct GameView: View {
 
     let store: Store<GameState, GameAction>
-
-    @State var tree = uniqueTree
 
     var body: some View {
         WithViewStore(store) { viewStore in
@@ -61,6 +69,7 @@ struct GameView: View {
                                     viewStore.send(.addRandomEncounter)
                                 }) {
                                     Text("Add random encounter")
+                                        .font(.appCaption)
                                 }
                             }
 
@@ -133,9 +142,7 @@ struct GameView: View {
                             case .equipment:
                                 EquipmentView(store: store)
                             case .spells:
-                                Diagram(tree: tree) { value in
-                                    Text("\(value.value)")
-                                }
+                                TalentTreeView()
                             case .settings:
                                 Text("Unimplemented")
                             }

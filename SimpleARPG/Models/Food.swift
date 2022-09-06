@@ -63,7 +63,7 @@ enum Food: String, Codable, CaseIterable, InventoryDisplayable {
     }
 
     var restoreAmount: Double {
-        return Double(dropLevelRange.lowerBound * 3)
+        return Double(dropLevelRange.lowerBound * 8)
     }
 
     var dropLevelRange: ClosedRange<Int> {

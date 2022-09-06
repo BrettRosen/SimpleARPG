@@ -16,8 +16,15 @@ enum Stat: Equatable, Codable {
 
     enum Key: String, Codable {
         case armour
+        case percentArmour
         case flatMaxLife
         case percentMaxLife
+        case flatMaxMana
+        case percentMaxMana
+        case lifeRegen
+        case fireRes
+        case coldRes
+        case lightningRes
         case strength
         case dexterity
         case intelligence
@@ -36,8 +43,15 @@ enum Stat: Equatable, Codable {
         var displayType: DisplayType {
             switch self {
             case .armour: return .int
+            case .percentArmour: return .double
             case .flatMaxLife: return .int
-            case .percentMaxLife: return .int
+            case .percentMaxLife: return .double
+            case .flatMaxMana: return .int
+            case .percentMaxMana: return .double
+            case .lifeRegen: return .int
+            case .fireRes: return .int
+            case .coldRes: return .int
+            case .lightningRes: return .int
             case .strength: return .int
             case .dexterity: return .int
             case .intelligence: return .int
@@ -54,8 +68,15 @@ enum Stat: Equatable, Codable {
         var displayName: String {
             switch self {
             case .armour: return "Armour"
+            case .percentArmour: return "%Inc Armour"
             case .flatMaxLife: return "Max Life"
-            case .percentMaxLife: return "% Inc Life"
+            case .percentMaxLife: return "%Inc Life"
+            case .flatMaxMana: return "Max Mana"
+            case .percentMaxMana: return "%Inc Mana"
+            case .lifeRegen: return "Life regen per tick"
+            case .fireRes: return "Fire Resistance"
+            case .coldRes: return "Cold Resistance"
+            case .lightningRes: return "Lightning Resistance"
             case .strength: return "Strength"
             case .dexterity: return "Dexterity"
             case .intelligence: return "Intelligence"
@@ -73,8 +94,15 @@ enum Stat: Equatable, Codable {
             let level = Double(level)
             switch self {
             case .armour: return 10*level...12*level
+            case .percentArmour: return 0.01...0.1
             case .flatMaxLife: return 5*level...7*level
-            case .percentMaxLife: return 5*level...7*level
+            case .percentMaxLife: return 0.01...0.1
+            case .flatMaxMana: return 5*level...7*level
+            case .percentMaxMana: return 0.01...0.1
+            case .lifeRegen: return 0.5*level...1*level
+            case .fireRes: return 1...max(20, level/2)
+            case .coldRes: return 1...max(20, level/2)
+            case .lightningRes: return 1...max(20, level/2)
             case .strength: return 1*level...1.5*level
             case .dexterity: return 1*level...1.5*level
             case .intelligence: return 1*level...7*level
@@ -97,26 +125,54 @@ enum Stat: Equatable, Codable {
         /// Base stats assume level 1 initially
         static var baseStats: [Stat.Defensive] = [
             .armour(10),
-            .flatMaxLife(70),
-            .percentMaxLife(0)
+            .percentArmour(0),
+            .flatMaxLife(80),
+            .percentMaxLife(0),
+            .flatMaxMana(80),
+            .percentMaxMana(0),
+            .lifeRegen(0.1),
+            .fireRes(0),
+            .coldRes(0),
+            .lightningRes(0),
         ]
 
         case armour(Double)
+        case percentArmour(Double)
         case flatMaxLife(Double)
         case percentMaxLife(Double)
+        case flatMaxMana(Double)
+        case percentMaxMana(Double)
+        case lifeRegen(Double)
+        case fireRes(Double)
+        case coldRes(Double)
+        case lightningRes(Double)
 
         var key: Key {
             switch self {
             case .armour: return .armour
+            case .percentArmour: return .percentArmour
             case .flatMaxLife: return .flatMaxLife
             case .percentMaxLife: return .percentMaxLife
+            case .flatMaxMana: return .flatMaxMana
+            case .percentMaxMana: return .percentMaxMana
+            case .lifeRegen: return .lifeRegen
+            case .fireRes: return .fireRes
+            case .coldRes: return .coldRes
+            case .lightningRes: return .lightningRes
             }
         }
         var value: Double {
             switch self {
             case let .armour(value): return value
+            case let .percentArmour(value): return value
             case let .flatMaxLife(value): return value
             case let .percentMaxLife(value): return value
+            case let .flatMaxMana(value): return value
+            case let .percentMaxMana(value): return value
+            case let .lifeRegen(value): return value
+            case let .fireRes(value): return value
+            case let .coldRes(value): return value
+            case let .lightningRes(value): return value
             }
         }
     }
@@ -124,9 +180,9 @@ enum Stat: Equatable, Codable {
     enum Offensive: Equatable, Codable {
         /// Base stats assume level 1 initially
         static var baseStats: [Stat.Offensive] = [
-            .strength(20),
-            .dexterity(20),
-            .intelligence(20),
+            .strength(0),
+            .dexterity(0),
+            .intelligence(0),
             .flatPhysical(0),
             .flatCold(0),
             .flatFire(0),
