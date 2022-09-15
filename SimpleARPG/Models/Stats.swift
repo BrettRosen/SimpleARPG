@@ -28,6 +28,7 @@ enum Stat: Equatable, Codable {
         case strength
         case dexterity
         case intelligence
+        case percentPhysical
         case flatPhysical
         case flatCold
         case flatFire
@@ -55,6 +56,7 @@ enum Stat: Equatable, Codable {
             case .strength: return .int
             case .dexterity: return .int
             case .intelligence: return .int
+            case .percentPhysical: return .double
             case .flatPhysical: return .int
             case .flatCold: return .int
             case .flatFire: return .int
@@ -80,6 +82,7 @@ enum Stat: Equatable, Codable {
             case .strength: return "Strength"
             case .dexterity: return "Dexterity"
             case .intelligence: return "Intelligence"
+            case .percentPhysical: return "%Inc Physical"
             case .flatPhysical: return "🗡 Added Physical"
             case .flatCold: return "❄️ Added Cold"
             case .flatFire: return "🔥 Added Fire"
@@ -106,6 +109,7 @@ enum Stat: Equatable, Codable {
             case .strength: return 1*level...1.5*level
             case .dexterity: return 1*level...1.5*level
             case .intelligence: return 1*level...7*level
+            case .percentPhysical: return 0.01...1.5
             case .flatPhysical: return 1*level...1.2*level
             case .flatCold: return 1*level...1.2*level
             case .flatFire: return 1*level...1.2*level
@@ -183,6 +187,7 @@ enum Stat: Equatable, Codable {
             .strength(0),
             .dexterity(0),
             .intelligence(0),
+            .percentPhysical(0),
             .flatPhysical(0),
             .flatCold(0),
             .flatFire(0),
@@ -193,6 +198,7 @@ enum Stat: Equatable, Codable {
         case strength(Double)
         case dexterity(Double)
         case intelligence(Double)
+        case percentPhysical(Double)
         case flatPhysical(Double)
         case flatCold(Double)
         case flatFire(Double)
@@ -204,6 +210,7 @@ enum Stat: Equatable, Codable {
             case .strength: return .strength
             case .dexterity: return .dexterity
             case .intelligence: return .intelligence
+            case .percentPhysical: return .percentPhysical
             case .flatPhysical: return .flatPhysical
             case .flatCold: return .flatCold
             case .flatFire: return .flatFire
@@ -216,6 +223,7 @@ enum Stat: Equatable, Codable {
             case let .strength(value): return value
             case let .dexterity(value): return value
             case let .intelligence(value): return value
+            case let .percentPhysical(value): return value
             case let .flatPhysical(value): return value
             case let .flatCold(value): return value
             case let .flatFire(value): return value

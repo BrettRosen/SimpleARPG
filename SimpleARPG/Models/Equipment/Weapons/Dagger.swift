@@ -23,12 +23,12 @@ struct Dagger: Equatable, Codable, WeaponBaseIdentifiable, EquipmentBaseIdentifi
     var ticksPerAttack: Int = 2
     var critChance: Double = 0
     var affixPool: AffixPool = .init(
-        prefix: [.flatPhysical, .flatCold, .flatFire, .flatLightning],
-        suffix: [.dexterity, .intelligence]
+        prefix: [.percentPhysical, .flatPhysical, .flatCold, .flatFire, .flatLightning],
+        suffix: [.dexterity, .intelligence, .fireRes, .coldRes, .lightningRes, .percentHitChance]
     )
 
     var stats: [Stat.Key : Double] = [:]
 
-    static let glassShank: Self = .init(name: "Glass Shank", levelRequirement: 1, dexterityRequirement: 0, intelligenceRequirement: 0, damage: 6.0...10.0, critChance: 0.06)
+    static let glassShank: Self = .init(name: "Glass Shank", levelRequirement: 1, damage: 6.0...10.0, critChance: 0.06)
     static let skinningKnife: Self = .init(name: "Skinning Knife", levelRequirement: 5, dexterityRequirement: 16, intelligenceRequirement: 11, damage: 5.0...19.0, critChance: 0.06)
 }

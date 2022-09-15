@@ -100,6 +100,7 @@ struct GameState: Equatable, Codable {
 
     var inventoryLocalState: InventoryLocalState = .init()
     var statsViewLocalState: StatsViewLocalState = .init()
+    var talentTreeLocalState: TalentTreeLocalState = .init()
 }
 
 enum GameAction: Equatable {
@@ -132,6 +133,7 @@ enum GameAction: Equatable {
     case messageAction(MessageAction)
     case vendorViewAction(VendorAction)
     case specialAttack(SpecialAttackAction)
+    case talentTreeAction(TalentTreeAction)
 
     case bestMoveForActivePlayerResult(Result<GameModelMove?, CombatClient.Error>)
     case attemptLoot(InventorySlot)
@@ -281,6 +283,7 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
                 if state.player.currentLevelExperience >= state.player.expForNextLevel {
                     state.player.currentLevelExperience = 0
                     state.player.level += 1
+                    state.player.talentPoints += 1
                 }
 
                 effects.append(clearAnimation(for: .player, delay: 0.2, cancelId: state.player.combatDetails.animationEffectCancelId))
@@ -473,6 +476,7 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
             .messageAction,
             .vendorViewAction,
             .specialAttack,
+            .talentTreeAction,
             .resetCombatClientModelResult,
             .updateCombatClientGameStateResult,
             .updateCombatClientActivePlayerResult:
@@ -508,6 +512,11 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
     specialAttackReducer
         .pullback(state: \.specialAttack, action: /GameAction.specialAttack, environment: { env in
             .init(mainQueue: env.mainQueue)
+        }),
+
+    talentTreeReducer
+        .pullback(state: \.talentTreeState, action: /GameAction.talentTreeAction, environment: { env in
+            .init()
         })
 )
 

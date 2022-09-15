@@ -23,11 +23,11 @@ struct Bow: Equatable, Codable, WeaponBaseIdentifiable, EquipmentBaseIdentifiabl
     var ticksPerAttack: Int = 2
     var critChance: Double = 0
     var affixPool: AffixPool = .init(
-        prefix: [.flatPhysical, .flatCold, .flatFire, .flatLightning],
-        suffix: [.dexterity]
+        prefix: [.percentPhysical, .flatPhysical, .flatCold, .flatFire, .flatLightning],
+        suffix: [.dexterity, .fireRes, .coldRes, .lightningRes, .percentHitChance]
     )
 
     var stats: [Stat.Key : Double] = [:]
 
-    static let crudeBow: Self = .init(special: .darkBow, presentationDetails: .init(xScale: 1, degreeRotation: 15, offSet: .init(width: 20, height: 0)), name: "Crude Bow", levelRequirement: 1, dexterityRequirement: 0, damage: 5.0...13.0, critChance: 0.05)
+    static let crudeBow: Self = .init(special: .darkBow, presentationDetails: .init(xScale: 1, degreeRotation: 15, offSet: .init(width: 20, height: 0)), name: "Crude Bow", levelRequirement: 1, damage: 5.0...13.0, critChance: 0.05)
 }

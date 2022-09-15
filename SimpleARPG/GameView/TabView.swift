@@ -69,9 +69,9 @@ struct TabView<T: TabIdentifiable & Equatable>: View {
                                 .fill(Color.uiButton.gradient)                            
                         } else {
                             RoundedRectangle(cornerRadius: 10)
-                                .fill(Color.uiRed.gradient)
+                                .fill(Color.uiRed.gradient.shadow(.inner(color: .black.opacity(0.4), radius: 2, x: 2, y: 2)))
                                 .matchedGeometryEffect(id: "Tab", in: namespace)
-                                .shadow(color: .black, radius: 1, x: 0, y: 0)
+                                //.shadow(color: .black, radius: 0, x: 0, y: 0)
                         }
                     }
                 }

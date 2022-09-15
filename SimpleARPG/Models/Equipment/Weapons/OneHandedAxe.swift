@@ -23,12 +23,12 @@ struct OneHandedAxe: Equatable, Codable, WeaponBaseIdentifiable, EquipmentBaseId
     var ticksPerAttack: Int = 3
     var critChance: Double = 0
     var affixPool: AffixPool = .init(
-        prefix: [.flatPhysical, .flatCold, .flatFire, .flatLightning],
-        suffix: [.dexterity, .strength, .fireRes, .coldRes, .lightningRes]
+        prefix: [.percentPhysical, .flatPhysical, .flatCold, .flatFire, .flatLightning],
+        suffix: [.dexterity, .strength, .fireRes, .coldRes, .lightningRes, .percentHitChance]
     )
 
     var stats: [Stat.Key : Double] = [:]
 
-    static let rustedHatchet: Self = .init(presentationDetails: .init(xScale: -1, degreeRotation: 0, offSet: .init(width: 20, height: 0)), name: "Rusted Hatchet", levelRequirement: 1, strengthRequirement: 0, dexterityRequirement: 0, damage: 6.0...11.0, critChance: 0.05)
-    static let stoneAxe: Self = .init(presentationDetails: .init(xScale: -1, degreeRotation: 0, offSet: .init(width: 20, height: 0)), name: "Stone Axe", handidness: .twoHand, levelRequirement: 1, strengthRequirement: 0, dexterityRequirement: 0, damage: 12.0...20.0, ticksPerAttack: 5, critChance: 0.05)
+    static let rustedHatchet: Self = .init(presentationDetails: .init(xScale: -1, degreeRotation: 0, offSet: .init(width: 20, height: 0)), name: "Rusted Hatchet", levelRequirement: 1, damage: 6.0...11.0, critChance: 0.05)
+    static let stoneAxe: Self = .init(presentationDetails: .init(xScale: -1, degreeRotation: 0, offSet: .init(width: 20, height: 0)), name: "Stone Axe", handidness: .twoHand, levelRequirement: 1, damage: 12.0...20.0, ticksPerAttack: 5, critChance: 0.05)
 }

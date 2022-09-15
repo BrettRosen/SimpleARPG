@@ -234,7 +234,6 @@ struct Equipment: Equatable, Codable, InventoryDisplayable {
     var rarity: Rarity
     var nonBaseStats: [Stat.Key: Double]
 
-
     init(base: EquipmentBase, rarity: Rarity, nonBaseStats: [Stat.Key: Double]) {
         self.base = base
         self.rarity = rarity

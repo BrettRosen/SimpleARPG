@@ -16,16 +16,6 @@ let screen = UIScreen.main.bounds
 let screen = NSScreen.main!.frame
 #endif
 
-struct WTFView: View {
-    @State var tree = uniqueTalentTree
-
-    var body: some View {
-        Diagram(tree: tree) { value in
-            Text("")
-        }
-    }
-}
-
 struct GameView: View {
 
     let store: Store<GameState, GameAction>
@@ -34,6 +24,7 @@ struct GameView: View {
         WithViewStore(store) { viewStore in
             ZStack {
                 Color.white.edgesIgnoringSafeArea(.all)
+                    .zIndex(1)
 
                 VStack {
                     ZStack {
@@ -142,7 +133,8 @@ struct GameView: View {
                             case .equipment:
                                 EquipmentView(store: store)
                             case .spells:
-                                TalentTreeView()
+                                TalentTreeView(store: store.scope(state: \.talentTreeState, action: GameAction.talentTreeAction))
+                                    .zIndex(-1)
                             case .settings:
                                 Text("Unimplemented")
                             }

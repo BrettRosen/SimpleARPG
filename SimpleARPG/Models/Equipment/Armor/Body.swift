@@ -32,7 +32,7 @@ struct Body: Equatable, Codable, EquipmentBaseIdentifiable {
 
     var stats: [Stat.Key : Double] = [:]
 
-    static let plateVest = Self(name: "Plate Vest", strengthRequirement: 8 , stats: [
+    static let plateVest = Self(name: "Plate Vest", stats: [
         .armour: 19,
     ])
 }

@@ -12,6 +12,35 @@ struct EquipmentPreview: View {
 
     let equipment: Equipment
 
+    /// Passes the weapon in as both it's WeaponBase AND Equipment type so that we can
+    /// access the nonbase stats on Equipment type
+    func damageRangeString(from weapon: WeaponBase, equipment: Equipment) -> String {
+        var weaponDamageRangeLow = weapon.identifiableWeaponBase.damage.lowerBound
+        var weaponDamageRangeHigh = weapon.identifiableWeaponBase.damage.upperBound
+
+        switch weapon.identifiableWeaponBase.damageType {
+        case .melee, .ranged:
+            if let flatPhysical = equipment.nonBaseStats[.flatPhysical] {
+                weaponDamageRangeLow += flatPhysical
+                weaponDamageRangeHigh += flatPhysical
+            }
+            if let percentPhysical = equipment.nonBaseStats[.percentPhysical] {
+                weaponDamageRangeLow *= (1 + percentPhysical)
+                weaponDamageRangeHigh *= (1 + percentPhysical)
+            }
+        case let .magic(type):
+            switch type {
+            case .fire:
+                break
+            case .cold:
+                break
+            case .lightning:
+                break
+            }
+        }
+        return "\(Int(weaponDamageRangeLow))...\(Int(weaponDamageRangeHigh))"
+    }
+
     var body: some View {
         VStack(spacing: 5) {
             switch equipment.base {
@@ -21,8 +50,8 @@ struct EquipmentPreview: View {
                 }
 
                 VStack(spacing: 5) {
-                    Text("Physical Damage: ").font(.appFootnote).foregroundColor(.white.opacity(0.6)) +
-                    Text("\(Int(weapon.identifiableWeaponBase.damage.lowerBound))...\(Int(weapon.identifiableWeaponBase.damage.upperBound))").font(.appFootnote).foregroundColor(.white)
+                    Text("\(weapon.identifiableWeaponBase.damageType.name): ").font(.appFootnote).foregroundColor(.white.opacity(0.6)) +
+                    Text(damageRangeString(from: weapon, equipment: equipment)).font(.appFootnote).foregroundColor(.white)
 
                     Text("Critical Strike Chance: ").font(.appFootnote).foregroundColor(.white.opacity(0.6)) +
                     Text("\(Int(weapon.identifiableWeaponBase.critChance * 100))%").font(.appFootnote).foregroundColor(.white)
@@ -65,8 +94,17 @@ struct EquipmentPreview: View {
 
             ForEach(Array(equipment.nonBaseStats.keys.sorted(by: { $0.displayName > $1.displayName }).enumerated()), id:\.element) { _, key in
                 Text(key.displayName + ": ").font(.appFootnote).foregroundColor(.white) +
-                Text("\(equipment.stats[key]!, specifier: "%.2f")").font(.appFootnote).foregroundColor(.yellow)
+                Text(displayString(for: key, value: equipment.stats[key]!)).font(.appFootnote).foregroundColor(.yellow)
             }
+        }
+    }
+
+    func displayString(for statKey: Stat.Key, value: Double) -> String {
+        switch statKey.displayType {
+        case .int:
+            return "\(Int(value))"
+        case .double:
+            return "%" + String(format: "%.2f", value * 100)
         }
     }
 }

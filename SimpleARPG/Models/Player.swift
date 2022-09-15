@@ -29,6 +29,7 @@ protocol PlayerIdentifiable {
     var currentMana: Double { get set }
     var totalArmour: Double { get }
 
+    var stats: [Stat.Key: Double] { get set }
     var weapon: WeaponBase? { get }
     var allEquipment: [Equipment] { get set }
     var inventory: [InventorySlot] { get set }
@@ -111,6 +112,8 @@ struct Player: Equatable, Codable, PlayerIdentifiable {
 
     var level: Int = 1
     var icon: PlayerIcon = .init(asset: "😡", xScale: 1)
+    var talentTree: Tree<Unique<TalentPoint>> = generateTalentTree()
+    var talentPoints: Int = 1
     var totalExperience: Double = 0
     var currentLevelExperience: Double = 0
     var expForNextLevel: Double {
@@ -185,35 +188,7 @@ struct Player: Equatable, Codable, PlayerIdentifiable {
     }
 
     var damagePerAttack: [Damage] {
-        guard let weapon = weapon else { return [] }
-        let baseDamageRange = weapon.identifiableWeaponBase.damage
-        let flatDamage = stats[.flatPhysical]!
-        let percentIncreaseFromStrength = 1 + ((stats[.strength]! / 10) * 0.02)
-        let critChance = weapon.identifiableWeaponBase.critChance
-        var baseDamage = (Double.random(in: baseDamageRange) + flatDamage) * percentIncreaseFromStrength
-        if Double.random(in: 0...1.0) <= critChance {
-            baseDamage *= 2
-        }
-
-        let rawAmount = stats[.percentHitChance]! <= Double.random(in: 0.0...1.0) ? 0 : baseDamage
-
-        var damages: [Damage] = []
-        let weaponDamage = Damage(type: weapon.identifiableWeaponBase.damageType, rawAmount: rawAmount)
-        damages.append(weaponDamage)
-
-        if let coldDamage = stats[.flatCold], coldDamage > 0 {
-            let damage = Damage(type: .magic(.cold), rawAmount: coldDamage, secondary: true)
-            damages.append(damage)
-        }
-        if let fireDamage = stats[.flatFire], fireDamage > 0 { 
-            let damage = Damage(type: .magic(.fire), rawAmount: fireDamage, secondary: true)
-            damages.append(damage)
-        }
-        if let lightningDamage = stats[.flatLightning], lightningDamage > 0 {
-            let damage = Damage(type: .magic(.lightning), rawAmount: lightningDamage, secondary: true)
-            damages.append(damage)
-        }
-        return damages
+        SimpleARPG.damagePerAttack(from: self)
     }
 
     var lifeRegenPerTick: Double {
@@ -222,4 +197,56 @@ struct Player: Equatable, Codable, PlayerIdentifiable {
 
     @CodableIgnored<DefaultNilStrategy>
     var currentMessage: Message?
+}
+
+func damagePerAttack(from player: PlayerIdentifiable) -> [Damage] {
+    guard let weapon = player.weapon else { return [] }
+
+    let weaponDamageType = weapon.identifiableWeaponBase.damageType
+    let baseDamageRange = weapon.identifiableWeaponBase.damage
+    let critChance = weapon.identifiableWeaponBase.critChance
+
+    let flatPhysicalDamage = player.stats[.flatPhysical]!
+
+    let percentIncreasePhysicalFromStrength = 1 + ((player.stats[.strength]! / 10) * 0.02)
+    let percentIncreasePhysical = 1 + (player.stats[.percentPhysical]!)
+
+    var weaponDamage: Double = Double.random(in: baseDamageRange)
+
+    switch weaponDamageType {
+    case .melee, .ranged:
+        weaponDamage = (weaponDamage + flatPhysicalDamage) * percentIncreasePhysicalFromStrength * percentIncreasePhysical
+    case let .magic(elementalType):
+        switch elementalType {
+        case .fire:
+            break
+        case .cold:
+            break
+        case .lightning:
+            break
+        }
+    }
+
+    if Double.random(in: 0...1.0) <= critChance {
+        weaponDamage *= 2
+    }
+
+    let rawAmount = player.stats[.percentHitChance]! <= Double.random(in: 0.0...1.0) ? 0 : weaponDamage
+
+    var damages: [Damage] = []
+    damages.append(Damage(type: weapon.identifiableWeaponBase.damageType, rawAmount: rawAmount))
+
+    if let coldDamage = player.stats[.flatCold], coldDamage > 0 {
+        let damage = Damage(type: .magic(.cold), rawAmount: coldDamage, secondary: true)
+        damages.append(damage)
+    }
+    if let fireDamage = player.stats[.flatFire], fireDamage > 0 {
+        let damage = Damage(type: .magic(.fire), rawAmount: fireDamage, secondary: true)
+        damages.append(damage)
+    }
+    if let lightningDamage = player.stats[.flatLightning], lightningDamage > 0 {
+        let damage = Damage(type: .magic(.lightning), rawAmount: lightningDamage, secondary: true)
+        damages.append(damage)
+    }
+    return damages
 }
