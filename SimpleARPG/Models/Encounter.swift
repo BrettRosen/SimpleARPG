@@ -29,7 +29,7 @@ struct Encounter: Equatable, Codable {
     ) -> Encounter {
         // Select a random monster base
         guard let monsterBase = (Monster.Base.allCases
-            .filter { $0.levelRange ~= level }
+            .filter { (max(1, level-5)...level+5) ~= $0.level }
             .randomElement())
         else { fatalError() }
 
