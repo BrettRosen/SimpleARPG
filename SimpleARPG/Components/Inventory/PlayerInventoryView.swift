@@ -13,11 +13,11 @@ extension GameState {
     // MARK: Inventory State
     var inventoryState: InventoryState {
         get {
-            InventoryState(local: inventoryLocalState, player: player, vendor: vendor, previewingEncounter: previewingEncounter, currentPreviewingItem: currentPreviewingItem)
+            InventoryState(local: inventoryLocalState, player: player, vendors: vendors, previewingEncounter: previewingEncounter, currentPreviewingItem: currentPreviewingItem)
         } set {
             inventoryLocalState = newValue.local
             player = newValue.player
-            vendor = newValue.vendor
+            vendors = newValue.vendors
             previewingEncounter = newValue.previewingEncounter
             currentPreviewingItem = newValue.currentPreviewingItem
         }
@@ -36,7 +36,7 @@ struct PreviewingEncounter: Equatable, Codable {
 struct InventoryState: Equatable {
     var local: InventoryLocalState = .init()
     var player: Player = .init()
-    var vendor: Vendor = .init()
+    var vendors: [Vendor] = []
     var previewingEncounter: PreviewingEncounter?
     var currentPreviewingItem: Item?
 }
@@ -185,7 +185,7 @@ struct PlayerInventoryView: View {
                         return AnyView(VStack {
                             Text("\(item.icon) \(item.name)")
 
-                            if viewStore.vendor.isActive, let price = item.price {
+                            if viewStore.vendors.contains(where: { $0.isActive }), let price = item.price {
                                 Button {
                                     viewStore.send(.sell(item))
                                 } label: {

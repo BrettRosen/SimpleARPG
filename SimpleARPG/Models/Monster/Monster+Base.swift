@@ -8,30 +8,33 @@
 import Foundation
 
 extension Monster {
-    enum Base: String, CaseIterable {
+    enum Base: String, CaseIterable, Codable {
         case rat, chicken, spider, rabbit, duck
         case ram
 
-        case imp, goblin
+        case imp, goblin, man, woman
 
         /// An encounter with this monster can only be within this level range
         var level: Int {
             switch self {
-            case .rat: return 1
-            case .spider: return 1
-            case .rabbit: return 1
-            case .chicken: return 1
-            case .duck: return 1
-            case .ram: return 1
-
-            case .imp: return 2
-            case .goblin: return 2
+            case .rat,
+                .spider,
+                .rabbit,
+                .chicken,
+                .duck,
+                .ram:
+                return 1
+            case .imp,
+                .goblin,
+                .man,
+                .woman:
+                return 2
             }
         }
 
         var name: String {
             switch self {
-            case .rat, .spider, .rabbit, .chicken, .duck, .ram, .goblin, .imp:
+            case .rat, .spider, .rabbit, .chicken, .duck, .ram, .goblin, .imp, .man, .woman:
                 return rawValue.capitalized
             }
         }
@@ -46,6 +49,8 @@ extension Monster {
             case .ram: return .init(asset: "🐏", xScale: -1)
             case .imp: return .init(asset: "👺", xScale: 1)
             case .goblin: return .init(asset: "👹", xScale: 1)
+            case .man: return .init(asset: "👱🏼‍♂️", xScale: 1)
+            case .woman: return .init(asset: "👩🏼‍🦳", xScale: 1)
             }
         }
     }

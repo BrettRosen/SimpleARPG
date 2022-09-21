@@ -14,7 +14,7 @@ struct EncounterConfirm: View {
 
     var body: some View {
         WithViewStore(store) { viewStore in
-            VStack(spacing: 8) {
+            VStack(spacing: 12) {
 
                 Text("Encountering...")
                     .font(.appCallout)
@@ -25,10 +25,13 @@ struct EncounterConfirm: View {
                         .padding(8)
                         .background(Color.uiDarkBackground, in: RoundedRectangle(cornerRadius: 2))
                     VStack(spacing: 5) {
+                        Text("LEVEL \(encounter.monster.level)")
+                            .font(.appCaption)
+                            .foregroundColor(.white.opacity(0.6))
                         Text(encounter.monster.name.uppercased())
                             .font(.appCallout)
                             .bold()
-                            .foregroundColor(encounter.rarity.color ?? .white)
+                            .foregroundColor(encounter.rarity.color)
                     }
                 }
 

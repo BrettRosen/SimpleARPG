@@ -6,6 +6,7 @@
 //
 
 import ComposableArchitecture
+import BetterCodable
 
 /// On every tick is when combat actions are evaluated
 let tickUnit: Double = 0.6 // seconds
@@ -84,14 +85,15 @@ func attemptLoot<S: PlayerIdentifiable>(
 
 struct GameState: Equatable, Codable {
     /// This flag controls whether we did the intial loading of the Player/State.
-    /// Opted to used this flag instead of having an optional Player. 
+    /// Opted to used this flag instead of having an optional Player.
+    @CodableIgnored<DefaultFalseStrategy>
     var didSetup: Bool = false
 
     var player = Player()
     var pastEncounters: [PastEncounterState] = []
     var encounter: Encounter?
 
-    var vendor: Vendor = .init()
+    var vendors: [Vendor] = []
 
     var selectedTab: Tab = .inventory
 
@@ -425,12 +427,27 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
             }
         case .reviveTapped, .exitEncounterTapped:
             guard let encounter = state.encounter else { return .none }
-            let pastEncounter = PastEncounterState(encounter: encounter, playerDamageLog: state.player.damageLog)
+            state.pastEncounters.append(PastEncounterState(encounter: encounter, playerDamageLog: state.player.damageLog))
             state.encounter = nil
             state.player.damageLog = []
             state.player.currentLife = state.player.maxLife
             state.player.specialResource = SpecialAttack.maxSpecialResource
-            state.vendor = Vendor()
+
+            state.vendors = .init([
+                .init(
+                    name: "Juandale",
+                    icon: "🥸",
+                    level: state.player.level,
+                    tabTypes: [.weapons, .armor, .foodAndMisc]
+                ),
+                .init(
+                    name: "Kevin",
+                    icon: "🤠",
+                    level: state.player.level,
+                    tabTypes: [.encounters(state.pastEncounters.filter { $0.encounter.winLossState == .win }.map(\.encounter), state.player)]
+                )
+            ])
+
             return .cancel(id: CombatTimerId.self)
         case .closePreview:
             state.currentPreviewingItem = nil
@@ -439,6 +456,21 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
             state.selectedTab = tab
         case .onAppear:
             if !state.didSetup {
+                state.vendors = .init([
+                    .init(
+                        name: "Juandale",
+                        icon: "🥸",
+                        level: state.player.level,
+                        tabTypes: [.weapons, .armor, .foodAndMisc]
+                    ),
+                    .init(
+                        name: "Kevin",
+                        icon: "🤠",
+                        level: state.player.level,
+                        tabTypes: [.encounters(state.pastEncounters.filter { $0.encounter.winLossState == .win }.map(\.encounter), state.player)]
+                    )
+                ])
+
                 return Effect.merge([
                     env.localStore
                         .loadGameState()

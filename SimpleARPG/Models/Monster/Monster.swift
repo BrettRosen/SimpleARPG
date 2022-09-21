@@ -33,12 +33,14 @@ struct Monster: Equatable, Codable, PlayerIdentifiable {
     static let maxRandomInventoryItem = 4
     static let maxFoodCountRange = 5...10
 
+    var base: Base?
     var icon: PlayerIcon
     let name: String
     let level: Int
     var stats: [Stat.Key: Double]
 
     init(
+        base: Base?,
         icon: PlayerIcon,
         name: String,
         level: Int,
@@ -46,6 +48,7 @@ struct Monster: Equatable, Codable, PlayerIdentifiable {
         inventory: [InventorySlot],
         equipment: [Equipment]
     ) {
+        self.base = base
         self.icon = icon
         self.name = name
         self.level = level

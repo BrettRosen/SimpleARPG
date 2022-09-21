@@ -23,15 +23,22 @@ struct Encounter: Equatable, Codable {
     /// The incRarity and incQuantity here should generally come from the Player's stats.
     /// These will be added to the rarity and quantity generated from the Encounter's mods.
     static func generate(
+        base: Monster.Base? = nil,
         level: Int,
         rarity: Encounter.Rarity,
         player: Player
     ) -> Encounter {
-        // Select a random monster base
-        guard let monsterBase = (Monster.Base.allCases
-            .filter { (max(1, level-5)...level+5) ~= $0.level }
-            .randomElement())
-        else { fatalError() }
+        var monsterBase: Monster.Base
+        if let base = base {
+            monsterBase = base
+        } else {
+            // Select a random monster base
+            guard let base = (Monster.Base.allCases
+                .filter { $0.level <= level }
+                .randomElement())
+            else { fatalError() }
+            monsterBase = base
+        }
 
         // Generate the modpool
         let modPool = Encounter.Modifier.allCases
@@ -91,6 +98,7 @@ struct Encounter: Equatable, Codable {
         }
 
         let monster = Monster(
+            base: monsterBase,
             icon: monsterBase.icon,
             name: monsterBase.name,
             level: level,

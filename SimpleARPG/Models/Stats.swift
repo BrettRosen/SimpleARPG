@@ -114,7 +114,7 @@ enum Stat: Equatable, Codable {
             case .flatCold: return 1*level...1.2*level
             case .flatFire: return 1*level...1.2*level
             case .flatLightning: return 1*level...1.2*level
-            case .percentHitChance: return 0.1*level...0.5*level
+            case .percentHitChance: return 0.01*level...0.05*level
             case .incItemRarity: return 1...40
             case .incItemQuantity: return 1...40
             }

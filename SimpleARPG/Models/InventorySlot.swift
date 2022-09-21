@@ -20,7 +20,6 @@ struct InventorySlot: Equatable, Codable, Identifiable {
         // Make sure the item is stackable and the same type
         guard item.stackable, originalItem.key == item.key else { return }
 
-
         switch originalItem {
         case let .coins(coins1):
             guard case let .coins(coins2) = item else {

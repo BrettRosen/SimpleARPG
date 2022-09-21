@@ -78,14 +78,17 @@ struct GameView: View {
                                         PlayerView(store: store, player: monster, xScale: -1)
                                     }
                                 } else {
-                                    VendorView(store: store.scope(state: \.vendorViewState, action: GameAction.vendorViewAction))
+                                    ForEach(viewStore.vendors) { vendor in
+                                        VendorView(vendor: vendor, store: store.scope(state: \.vendorViewState, action: GameAction.vendorViewAction))
+                                    }
                                 }
                             }
                             .padding(.horizontal, 24)
                         }
 
-                        if viewStore.vendor.isActive {
-                            VendorInventoryView(store: store.scope(state: \.vendorViewState, action: GameAction.vendorViewAction))
+
+                        ForEach(viewStore.vendors.filter { $0.isActive }) { vendor in
+                            VendorInventoryView(vendor: vendor, store: store.scope(state: \.vendorViewState, action: GameAction.vendorViewAction))
                         }
                     }
 

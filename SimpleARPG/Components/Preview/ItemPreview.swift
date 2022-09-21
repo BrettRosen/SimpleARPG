@@ -26,6 +26,11 @@ struct ItemPreview: View {
                     .padding(8)
                     .background(Color.uiDarkBackground, in: RoundedRectangle(cornerRadius: 2))
                 VStack(spacing: 5) {
+                    if case let .encounter(encounter) = item {
+                        Text("LEVEL \(encounter.monster.level)")
+                            .font(.appCaption)
+                            .foregroundColor(.white.opacity(0.6))
+                    }
                     Text(item.name.uppercased())
                         .font(.appCallout)
                         .bold()

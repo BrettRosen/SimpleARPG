@@ -51,6 +51,7 @@ let talentTreeReducer: Reducer<TalentTreeState, TalentTreeAction, TalentTreeEnvi
                 tree.value.value.claimed = true
                 state.player.talentPoints -= 1
                 tree.children.forEach { $0.value.value.unlocked = true }
+                state.player.stats.merge(tree.value.value.stats, uniquingKeysWith: +)
             }
         }
 
