@@ -115,10 +115,7 @@ let inventoryReducer: Reducer<InventoryState, InventoryAction, InventoryEnvironm
             } else {
                 state.player.allEquipment.append(equipment)
                 state.player.inventory[index].item = nil
-
-                for stat in equipment.stats {
-                    state.player.stats[stat.key]! += stat.value
-                }
+                state.player.stats.merge(equipment.stats, uniquingKeysWith: +)
             }
         case .coins:
             break

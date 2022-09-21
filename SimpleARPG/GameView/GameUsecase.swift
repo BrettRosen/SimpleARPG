@@ -411,9 +411,7 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
             if let index = state.player.firstOpenInventorySlotIndex {
                 state.player.inventory[index].item = .equipment(equipment)
                 state.player.allEquipment.removeAll(where: { $0.base.slot == equipment.base.slot })
-                for stat in equipment.stats {
-                    state.player.stats[stat.key]! -= stat.value
-                }
+                state.player.stats.merge(equipment.stats, uniquingKeysWith: -)
             }
         case let .attemptLoot(slot):
             // If the slot has an item and the player has an open inventory slot...

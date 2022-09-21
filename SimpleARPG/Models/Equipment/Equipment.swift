@@ -33,7 +33,7 @@ protocol EquipmentBaseIdentifiable: Equatable {
 }
 
 protocol WeaponBaseIdentifiable: Equatable {
-    var special: SpecialAttack? { get }
+    var special: SpecialAttack? { get set }
     var damageType: DamageType { get }
     var handidness: Handidness { get }
     var damage: ClosedRange<Double> { get }
@@ -157,6 +157,7 @@ enum ArmorBase: Equatable, Codable {
 }
 
 enum WeaponBase: Equatable, Codable {
+
     static let all: [WeaponBase] = [
         .oneHandedAxe(.rustedHatchet),
         .oneHandedAxe(.stoneAxe),
@@ -168,6 +169,22 @@ enum WeaponBase: Equatable, Codable {
     case oneHandedAxe(OneHandedAxe)
     case bow(Bow)
     case dagger(Dagger)
+
+    /// This is currently the only concise way I could think of to update some property on `identifiableWeaponBase`
+    /// being that is a get-only property, we instead have to make a new copy of it, change the value and reconstruct
+    /// a WeaponBase with the newly updated weapon base
+    func updateWeaponIdentifiableBase<KeyPathType>(path: PartialKeyPath<any WeaponBaseIdentifiable>, to value: KeyPathType) -> Self {
+        guard let writableKeyPath = path as? WritableKeyPath<any WeaponBaseIdentifiable, KeyPathType> else {
+            fatalError("Invalid value \(value) for keypath")
+        }
+        var copy = identifiableWeaponBase
+        copy[keyPath: writableKeyPath] = value
+        switch self {
+        case .oneHandedAxe: return .oneHandedAxe(copy as! OneHandedAxe)
+        case .bow: return .bow(copy as! Bow)
+        case .dagger: return .dagger(copy as! Dagger)
+        }
+    }
 
     var identifiableWeaponBase: any WeaponBaseIdentifiable {
         switch self {
@@ -254,6 +271,19 @@ struct Equipment: Equatable, Codable, InventoryDisplayable {
         case .armor: price *= 1.1
         }
         return .init(buy: Int(price), sell: Int(price * 0.75))
+    }
+
+    static func generateWeapon(
+        level: Int,
+        incRarity: Double,
+        forceSpecialAttack: Bool
+    ) -> Equipment {
+        let equipment = generateEquipment(level: level, slot: .weapon, incRarity: incRarity)
+        if case let .weapon(weaponBase) = equipment.base, forceSpecialAttack {
+            let newBase = weaponBase.updateWeaponIdentifiableBase(path: \.special, to: Optional<SpecialAttack>.some(.darkBow))
+            return Equipment(base: .weapon(newBase), rarity: equipment.rarity, nonBaseStats: equipment.nonBaseStats)
+        }
+        return equipment
     }
 
     static func generateEquipment(
@@ -361,7 +391,7 @@ func generateItem(
         return .food(Food.generate(level: level))
     case .encounter:
         return .encounter(Encounter.generate(
-            level: level,
+            level: level + 2, // This is to account for being able to acquire harder content from mobs that are just your level
             rarity: Encounter.Rarity.rarity(for: itemRarity),
             player: player
         ))

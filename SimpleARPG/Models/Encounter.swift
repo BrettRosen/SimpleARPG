@@ -105,7 +105,7 @@ struct Encounter: Equatable, Codable {
             stats: [:],
             inventory: inventory,
             equipment: [
-                Equipment.generateEquipment(level: level, slot: .weapon, incRarity: finalItemRarity),
+                Equipment.generateWeapon(level: level, incRarity: finalItemRarity, forceSpecialAttack: mods.contains(.specialAttack)),
             ]
         )
 
@@ -186,6 +186,8 @@ extension Encounter {
     enum Modifier: Codable, CaseIterable, Identifiable {
         /// An unusual amount of coins in the monster's inventory
         case risking
+        /// Monster will utilize special attack and is guarenteed a weapon with a special
+        case specialAttack
 
         var id: String { displayName }
 
@@ -193,13 +195,17 @@ extension Encounter {
             switch self {
             case .risking:
                 return (rarity: 0.1, quantity: 0.15)
+            case .specialAttack:
+                return (rarity: 0.25, quantity: 0.3)
             }
         }
 
         var displayName: String {
             switch self {
             case .risking:
-                return "Monster is risking"
+                return "Risking"
+            case .specialAttack:
+                return "Special Attack"
             }
         }
     }
