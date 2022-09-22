@@ -55,7 +55,7 @@ struct Vendor: Equatable, Codable, Identifiable, Hashable {
 
     /// Level is used to to determine the items that the vendor has for sale
     init(
-        name: String = "Nathaniel",
+        name: String = "",
         icon: String = "🥸",
         level: Int = 1,
         tabTypes: [TabType] = []

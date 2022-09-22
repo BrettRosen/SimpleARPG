@@ -26,7 +26,9 @@ struct GameView: View {
                 Color.white.edgesIgnoringSafeArea(.all)
                     .zIndex(1)
 
-                VStack {
+                VStack(spacing: 12) {
+                    Spacer()
+
                     ZStack {
                         VStack {
                             if let encounter = viewStore.encounter {
@@ -66,26 +68,28 @@ struct GameView: View {
 
                             Spacer()
 
-                            HStack(alignment: .bottom) {
-                                PlayerView(store: store, player: viewStore.player)
-                                Spacer()
-                                if let monster = viewStore.encounter?.monster {
-                                    VStack {
-                                        Text(monster.name)
-                                            .font(.appFootnote)
-                                            .foregroundColor(.black)
-                                        ResourceBar(current: monster.currentLife, total: monster.maxLife, frontColor: .uiGreen, backColor: .uiRed, icon: "", showTotal: false, width: 80, height: 20)
-                                        PlayerView(store: store, player: monster, xScale: -1)
-                                    }
-                                } else {
-                                    ForEach(viewStore.vendors) { vendor in
-                                        VendorView(vendor: vendor, store: store.scope(state: \.vendorViewState, action: GameAction.vendorViewAction))
+                            ZStack(alignment: .bottom) {
+
+                                HStack(alignment: .bottom) {
+                                    PlayerView(store: store, player: viewStore.player)
+                                    Spacer()
+                                    if let monster = viewStore.encounter?.monster {
+                                        VStack {
+                                            Text(monster.name)
+                                                .font(.appFootnote)
+                                                .foregroundColor(.black)
+                                            ResourceBar(current: monster.currentLife, total: monster.maxLife, frontColor: .uiGreen, backColor: .uiRed, icon: "", showTotal: false, width: 80, height: 20)
+                                            PlayerView(store: store, player: monster, xScale: -1)
+                                        }
+                                    } else {
+                                        ForEach(viewStore.vendors) { vendor in
+                                            VendorView(vendor: vendor, store: store.scope(state: \.vendorViewState, action: GameAction.vendorViewAction))
+                                        }
                                     }
                                 }
                             }
                             .padding(.horizontal, 24)
                         }
-
 
                         ForEach(viewStore.vendors.filter { $0.isActive }) { vendor in
                             VendorInventoryView(vendor: vendor, store: store.scope(state: \.vendorViewState, action: GameAction.vendorViewAction))

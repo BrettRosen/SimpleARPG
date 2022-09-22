@@ -161,12 +161,18 @@ enum WeaponBase: Equatable, Codable {
     static let all: [WeaponBase] = [
         .oneHandedAxe(.rustedHatchet),
         .oneHandedAxe(.stoneAxe),
+        .oneHandedSword(.rustedSword),
+        .oneHandedSword(.copperSword),
+        .oneHandedMace(.driftwoodClub),
+        .oneHandedMace(.tribalClub),
         .bow(.crudeBow),
         .dagger(.glassShank),
         .dagger(.skinningKnife),
     ]
 
     case oneHandedAxe(OneHandedAxe)
+    case oneHandedSword(OneHandedSword)
+    case oneHandedMace(OneHandedMace)
     case bow(Bow)
     case dagger(Dagger)
 
@@ -181,6 +187,8 @@ enum WeaponBase: Equatable, Codable {
         copy[keyPath: writableKeyPath] = value
         switch self {
         case .oneHandedAxe: return .oneHandedAxe(copy as! OneHandedAxe)
+        case .oneHandedSword: return .oneHandedSword(copy as! OneHandedSword)
+        case .oneHandedMace: return .oneHandedMace(copy as! OneHandedMace)
         case .bow: return .bow(copy as! Bow)
         case .dagger: return .dagger(copy as! Dagger)
         }
@@ -189,6 +197,8 @@ enum WeaponBase: Equatable, Codable {
     var identifiableWeaponBase: any WeaponBaseIdentifiable {
         switch self {
         case let .oneHandedAxe(axe): return axe
+        case let .oneHandedSword(sword): return sword
+        case let .oneHandedMace(mace): return mace
         case let .bow(bow): return bow
         case let .dagger(dagger): return dagger
         }
@@ -196,6 +206,8 @@ enum WeaponBase: Equatable, Codable {
     var identifiableEquipmentBase: any EquipmentBaseIdentifiable {
         switch self {
         case let .oneHandedAxe(axe): return axe
+        case let .oneHandedSword(sword): return sword
+        case let .oneHandedMace(mace): return mace
         case let .bow(bow): return bow
         case let .dagger(dagger): return dagger
         }

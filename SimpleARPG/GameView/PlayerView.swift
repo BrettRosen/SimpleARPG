@@ -31,20 +31,6 @@ struct PlayerView: View {
                     }
 
                     ZStack {
-                        ZStack(alignment: .bottom) {
-                            Circle()
-                                .frame(width: idling ? 20 : 30, height: 40)
-                                .foregroundColor(.black.opacity(0.8))
-                                .blur(radius: idling ? 5 : 20)
-                                .rotation3DEffect(.degrees(80), axis: (x: 1, y: 0, z: 0))
-                                .offset(y: 20)
-
-                            Text(player.icon.asset).font(.system(size: 42))
-                                .scaleEffect(x: player.icon.xScale)
-                                .offset(y: idling ? 6 : 0)
-                        }
-                        .animation(Animation.linear(duration: 1).repeatForever(autoreverses: true), value: idling)
-
                         if let weapon = player.weapon {
 
                             if let special = weapon.identifiableWeaponBase.special, player.combatDetails.isSpecialAttacking {
@@ -71,6 +57,20 @@ struct PlayerView: View {
                                     .animation(Animation.linear(duration: 1).repeatForever(autoreverses: true), value: idling)
                             }
                         }
+
+                        ZStack(alignment: .bottom) {
+                            Circle()
+                                .frame(width: idling ? 20 : 30, height: 40)
+                                .foregroundColor(.black.opacity(0.8))
+                                .blur(radius: idling ? 5 : 20)
+                                .rotation3DEffect(.degrees(80), axis: (x: 1, y: 0, z: 0))
+                                .offset(y: 20)
+
+                            Text(player.icon.asset).font(.system(size: 42))
+                                .scaleEffect(x: player.icon.xScale)
+                                .offset(y: idling ? 6 : 0)
+                        }
+                        .animation(Animation.linear(duration: 1).repeatForever(autoreverses: true), value: idling)
 
                         Text(verbatim: {
                             if case let .eating(food) = player.combatDetails.animation { return food.icon }

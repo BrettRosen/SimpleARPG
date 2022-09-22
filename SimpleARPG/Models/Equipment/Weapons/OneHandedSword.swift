@@ -1,17 +1,17 @@
 //
-//  OneHandedAxe.swift
+//  OneHandedSword.swift
 //  SimpleARPG
 //
-//  Created by Brett Rosen on 8/2/22.
+//  Created by Brett Rosen on 9/21/22.
 //
 
 import Foundation
 
-struct OneHandedAxe: Equatable, Codable, WeaponBaseIdentifiable, EquipmentBaseIdentifiable {
+struct OneHandedSword: Equatable, Codable, WeaponBaseIdentifiable, EquipmentBaseIdentifiable {
     var special: SpecialAttack? = nil
     var damageType: DamageType = .melee
     var presentationDetails: EquipmentPresentationDetails = .init(xScale: -1, degreeRotation: 0, offSet: .init(width: 20, height: 0))
-    var icon: String = "🪓"
+    var icon: String = "🗡"
     var name: String = ""
     var slot: EquipmentSlot = .weapon
     var handidness: Handidness = .oneHand
@@ -29,6 +29,6 @@ struct OneHandedAxe: Equatable, Codable, WeaponBaseIdentifiable, EquipmentBaseId
 
     var stats: [Stat.Key : Double] = [:]
 
-    static let rustedHatchet: Self = .init(name: "Rusted Hatchet", levelRequirement: 1, damage: 6.0...11.0, critChance: 0.05)
-    static let stoneAxe: Self = .init(name: "Stone Axe", handidness: .twoHand, levelRequirement: 1, damage: 12.0...20.0, ticksPerAttack: 5, critChance: 0.05)
+    static let rustedSword: Self = .init(name: "Rusted Sword", levelRequirement: 1, damage: 4.0...10.0, critChance: 0.05)
+    static let copperSword: Self = .init(name: "Copper Sword", levelRequirement: 5, strengthRequirement: 14, dexterityRequirement: 14, damage: 7.0...15.0, critChance: 0.05)
 }

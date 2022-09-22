@@ -11,7 +11,7 @@ struct Dagger: Equatable, Codable, WeaponBaseIdentifiable, EquipmentBaseIdentifi
     var special: SpecialAttack? = nil
     var damageType: DamageType = .melee
     var presentationDetails: EquipmentPresentationDetails = .init(xScale: -1, degreeRotation: -45, offSet: .init(width: 25, height: 0))
-    var icon: String = "🗡"
+    var icon: String = "🖊"
     var name: String = ""
     var slot: EquipmentSlot = .weapon
     var handidness: Handidness = .oneHand
@@ -29,6 +29,6 @@ struct Dagger: Equatable, Codable, WeaponBaseIdentifiable, EquipmentBaseIdentifi
 
     var stats: [Stat.Key : Double] = [:]
 
-    static let glassShank: Self = .init(name: "Glass Shank", levelRequirement: 1, damage: 6.0...10.0, critChance: 0.06)
-    static let skinningKnife: Self = .init(name: "Skinning Knife", levelRequirement: 5, dexterityRequirement: 16, intelligenceRequirement: 11, damage: 5.0...19.0, critChance: 0.06)
+    static let glassShank: Self = .init(name: "Glass Shank", levelRequirement: 1, damage: 3.0...7.0, critChance: 0.06)
+    static let skinningKnife: Self = .init(name: "Skinning Knife", levelRequirement: 5, dexterityRequirement: 16, intelligenceRequirement: 11, damage: 5.0...13.0, critChance: 0.06)
 }

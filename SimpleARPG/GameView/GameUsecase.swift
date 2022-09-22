@@ -433,13 +433,13 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
 
             state.vendors = .init([
                 .init(
-                    name: "Juandale",
+                    name: "Items",
                     icon: "🥸",
                     level: state.player.level,
                     tabTypes: [.weapons, .armor, .foodAndMisc]
                 ),
                 .init(
-                    name: "Kevin",
+                    name: "Encounters",
                     icon: "🤠",
                     level: state.player.level,
                     tabTypes: [.encounters(state.pastEncounters.filter { $0.encounter.winLossState == .win }.map(\.encounter), state.player)]
@@ -456,13 +456,13 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
             if !state.didSetup {
                 state.vendors = .init([
                     .init(
-                        name: "Juandale",
+                        name: "Items",
                         icon: "🥸",
                         level: state.player.level,
                         tabTypes: [.weapons, .armor, .foodAndMisc]
                     ),
                     .init(
-                        name: "Kevin",
+                        name: "Encounters",
                         icon: "🤠",
                         level: state.player.level,
                         tabTypes: [.encounters(state.pastEncounters.filter { $0.encounter.winLossState == .win }.map(\.encounter), state.player)]

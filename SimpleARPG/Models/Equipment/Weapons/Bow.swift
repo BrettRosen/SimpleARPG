@@ -10,7 +10,7 @@ import Foundation
 struct Bow: Equatable, Codable, WeaponBaseIdentifiable, EquipmentBaseIdentifiable {
     var special: SpecialAttack? = nil
     var damageType: DamageType = .ranged
-    var presentationDetails: EquipmentPresentationDetails = .init()
+    var presentationDetails: EquipmentPresentationDetails = .init(xScale: 1, degreeRotation: 15, offSet: .init(width: 20, height: 0))
     var icon: String = "🏹"
     var name: String = ""
     var slot: EquipmentSlot = .weapon
@@ -29,5 +29,5 @@ struct Bow: Equatable, Codable, WeaponBaseIdentifiable, EquipmentBaseIdentifiabl
 
     var stats: [Stat.Key : Double] = [:]
 
-    static let crudeBow: Self = .init(special: .darkBow, presentationDetails: .init(xScale: 1, degreeRotation: 15, offSet: .init(width: 20, height: 0)), name: "Crude Bow", levelRequirement: 1, damage: 5.0...13.0, critChance: 0.05)
+    static let crudeBow: Self = .init(special: .darkBow, name: "Crude Bow", levelRequirement: 1, damage: 5.0...13.0, critChance: 0.05)
 }

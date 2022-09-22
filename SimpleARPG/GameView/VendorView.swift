@@ -95,42 +95,45 @@ struct VendorView: View {
             EmptyView()
         } else {
             WithViewStore(store) { viewStore in
-                Button(action: {
-                    viewStore.send(.vendorTapped(vendor))
-                }) {
-                    VStack(spacing: 4) {
+                ZStack(alignment: .bottom) {
+                    Text("🛖").font(.system(size: 80)).opacity(0.8)
+                    Button(action: {
+                        viewStore.send(.vendorTapped(vendor))
+                    }) {
+                        VStack(spacing: 4) {
 
-                        VStack(spacing: 2) {
-                            Text("🪙")
-                                .font(.system(size: 22))
+                            VStack(spacing: 2) {
+                                Text("🪙")
+                                    .font(.system(size: 22))
 
-                            Text(vendor.name)
-                                .font(.appCaption)
-                                .foregroundColor(.white)
-                                .padding(4)
-                                .background(Color.uiBackground, in: RoundedRectangle(cornerRadius: 4))
+                                Text(vendor.name)
+                                    .font(.appCaption)
+                                    .foregroundColor(.white)
+                                    .padding(4)
+                                    .background(Color.uiDarkBackground, in: RoundedRectangle(cornerRadius: 4))
+                            }
+                            .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 5)
+                            .offset(y: animating ? -5 : 10)
+                            .animation(.easeInOut(duration: 1).repeatForever(autoreverses: true), value: animating)
+
+                            ZStack(alignment: .bottom) {
+                                Circle()
+                                    .frame(width: animating ? 20 : 40, height: 40)
+                                    .foregroundColor(.black.opacity(0.8))
+                                    .blur(radius: animating ? 5 : 20)
+                                    .rotation3DEffect(.degrees(80), axis: (x: 1, y: 0, z: 0))
+                                    .offset(y: 20)
+                                    //.animation(Animation.linear(duration: 1).repeatForever(autoreverses: true), value: animating)
+
+                                Text(vendor.icon).font(.system(size: 42))
+                                    .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 5)
+                                    .offset(y: animating ? 6 : 0)
+                                    //.animation(Animation.linear(duration: 1).repeatForever(autoreverses: true), value: animating)
+                            }
                         }
-                        .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 5)
-                        .offset(y: animating ? -5 : 10)
-                        .animation(.easeInOut(duration: 1).repeatForever(autoreverses: true), value: animating)
-
-                        ZStack(alignment: .bottom) {
-                            Circle()
-                                .frame(width: animating ? 20 : 40, height: 40)
-                                .foregroundColor(.black.opacity(0.8))
-                                .blur(radius: animating ? 5 : 20)
-                                .rotation3DEffect(.degrees(80), axis: (x: 1, y: 0, z: 0))
-                                .offset(y: 20)
-                                //.animation(Animation.linear(duration: 1).repeatForever(autoreverses: true), value: animating)
-
-                            Text(vendor.icon).font(.system(size: 42))
-                                .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 5)
-                                .offset(y: animating ? 6 : 0)
-                                //.animation(Animation.linear(duration: 1).repeatForever(autoreverses: true), value: animating)
+                        .onAppear {
+                            animating = true
                         }
-                    }
-                    .onAppear {
-                        animating = true
                     }
                 }
             }

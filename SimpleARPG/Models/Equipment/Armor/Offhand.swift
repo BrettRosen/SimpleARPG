@@ -9,7 +9,7 @@ import Foundation
 
 struct Offhand: Equatable, Codable, EquipmentBaseIdentifiable {
     var presentationDetails: EquipmentPresentationDetails = .init()
-    var icon: String = "🩹"
+    var icon: String = "🛡"
     var name: String = ""
     var slot: EquipmentSlot = .offhand
     var levelRequirement: Int = 1
