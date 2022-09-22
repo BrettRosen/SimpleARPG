@@ -5,6 +5,7 @@
 //  Created by Brett Rosen on 7/27/22.
 //
 
+import Foundation
 import ComposableArchitecture
 import BetterCodable
 
