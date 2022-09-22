@@ -96,21 +96,27 @@ struct VendorView: View {
         } else {
             WithViewStore(store) { viewStore in
                 ZStack(alignment: .bottom) {
-                    Text("🛖").font(.system(size: 80)).opacity(0.8)
+                    Text("🛖").font(.system(size: 80)).opacity(0.75)
                     Button(action: {
                         viewStore.send(.vendorTapped(vendor))
                     }) {
                         VStack(spacing: 4) {
 
-                            VStack(spacing: 2) {
+                            VStack(spacing: 4) {
                                 Text("🪙")
                                     .font(.system(size: 22))
 
-                                Text(vendor.name)
-                                    .font(.appCaption)
-                                    .foregroundColor(.white)
-                                    .padding(4)
-                                    .background(Color.uiDarkBackground, in: RoundedRectangle(cornerRadius: 4))
+                                VStack(spacing: 2) {
+                                    Text(vendor.type.name)
+                                        .font(.appCaption)
+                                        .foregroundColor(.white)
+                                    Text(vendor.type.title)
+                                        .font(.appCaption)
+                                        .foregroundColor(.white.opacity(0.6))
+                                }
+                                .padding(5)
+                                .background(Color.uiBackground, in: RoundedRectangle(cornerRadius: 4))
+
                             }
                             .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 5)
                             .offset(y: animating ? -5 : 10)
@@ -125,7 +131,7 @@ struct VendorView: View {
                                     .offset(y: 20)
                                     //.animation(Animation.linear(duration: 1).repeatForever(autoreverses: true), value: animating)
 
-                                Text(vendor.icon).font(.system(size: 42))
+                                Text(vendor.type.icon).font(.system(size: 46))
                                     .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 5)
                                     .offset(y: animating ? 6 : 0)
                                     //.animation(Animation.linear(duration: 1).repeatForever(autoreverses: true), value: animating)

@@ -433,16 +433,14 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
 
             state.vendors = .init([
                 .init(
-                    name: "Items",
-                    icon: "🥸",
+                    type: .items,
                     level: state.player.level,
-                    tabTypes: [.weapons, .armor, .foodAndMisc]
+                    player: state.player
                 ),
                 .init(
-                    name: "Encounters",
-                    icon: "🤠",
+                    type: .encounters(state.pastEncounters.filter { $0.encounter.winLossState == .win }.map(\.encounter)),
                     level: state.player.level,
-                    tabTypes: [.encounters(state.pastEncounters.filter { $0.encounter.winLossState == .win }.map(\.encounter), state.player)]
+                    player: state.player
                 )
             ])
 
@@ -456,16 +454,14 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment>.combine(
             if !state.didSetup {
                 state.vendors = .init([
                     .init(
-                        name: "Items",
-                        icon: "🥸",
+                        type: .items,
                         level: state.player.level,
-                        tabTypes: [.weapons, .armor, .foodAndMisc]
+                        player: state.player
                     ),
                     .init(
-                        name: "Encounters",
-                        icon: "🤠",
+                        type: .encounters(state.pastEncounters.filter { $0.encounter.winLossState == .win }.map(\.encounter)),
                         level: state.player.level,
-                        tabTypes: [.encounters(state.pastEncounters.filter { $0.encounter.winLossState == .win }.map(\.encounter), state.player)]
+                        player: state.player
                     )
                 ])
 

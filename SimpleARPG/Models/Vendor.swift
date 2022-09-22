@@ -15,11 +15,44 @@ struct Vendor: Equatable, Codable, Identifiable, Hashable {
         hasher.combine(id)
     }
 
+    enum VendorType: Equatable, Codable {
+        case items
+        case encounters([Encounter])
+
+        var name: String {
+            switch self {
+            case .items: return "Anya"
+            case.encounters: return "Daryl"
+            }
+        }
+
+        var title: String {
+            switch self {
+            case .items: return "Items"
+            case.encounters: return "Encounters"
+            }
+        }
+
+        var icon: String {
+            switch self {
+            case .items: return "👩🏼‍🌾"
+            case .encounters: return "👨🏽‍🚒"
+            }
+        }
+
+        var tabTypes: [TabType] {
+            switch self {
+            case .items: return [.weapons, .armor, .foodAndMisc]
+            case let .encounters(encounters): return [.encounters(encounters)]
+            }
+        }
+    }
+
     enum TabType: Equatable, Codable, TabIdentifiable, Hashable {
         case weapons
         case armor
         case foodAndMisc
-        case encounters([Encounter], Player)
+        case encounters([Encounter])
 
         var name: String {
             switch self {
@@ -46,24 +79,22 @@ struct Vendor: Equatable, Codable, Identifiable, Hashable {
         }
     }
 
-    let name: String
-    let icon: String
-
+    var type: VendorType = .items
     var selectedTab: TabType = .weapons
     var tabs: [TabType: [InventorySlot]] = [:]
     var isActive: Bool = false
 
+    init() { }
+
     /// Level is used to to determine the items that the vendor has for sale
     init(
-        name: String = "",
-        icon: String = "🥸",
+        type: VendorType,
         level: Int = 1,
-        tabTypes: [TabType] = []
+        player: Player
     ) {
-        self.name = name
-        self.icon = icon
+        self.type = type
 
-        for tabType in tabTypes {
+        for tabType in type.tabTypes {
             switch tabType {
             case .weapons:
                 tabs[tabType] = (0..<10).map { _ in
@@ -77,7 +108,7 @@ struct Vendor: Equatable, Codable, Identifiable, Hashable {
                 tabs[tabType] = (0..<10).map { _ in
                     InventorySlot.init(item: .food(Food.generate(level: level)))
                 }
-            case let .encounters(encounters, player):
+            case let .encounters(encounters):
                 tabs[tabType] = encounters
                     .filter { $0.monster.base != nil }
                     .map {
@@ -86,7 +117,7 @@ struct Vendor: Equatable, Codable, Identifiable, Hashable {
             }
         }
 
-        if let firstTab = tabTypes.first {
+        if let firstTab = type.tabTypes.first {
             selectedTab = firstTab
         }
     }
