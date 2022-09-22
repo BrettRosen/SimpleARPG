@@ -204,7 +204,7 @@ struct VendorInventoryView: View {
                         )
                     }
 
-                    VStack(alignment: .leading, spacing: 8) {
+                    VStack(alignment: .leading, spacing: 6) {
                         Text("Tap to inspect. Tap and hold to purchase.")
                             .font(.appCaption)
                             .foregroundColor(.white.opacity(0.6))

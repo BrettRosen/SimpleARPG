@@ -65,10 +65,10 @@ struct MessageButton: View {
         }) {
             HStack {
                 Text("💬")
-                    .font(.appSubheadline)
+                    .font(.appFootnote)
 
                 Text(message)
-                    .font(.appFootnote)
+                    .font(.appCaption)
             }
             .foregroundColor(.black)
             .padding(8)

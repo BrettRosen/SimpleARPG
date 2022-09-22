@@ -59,7 +59,7 @@ struct Vendor: Equatable, Codable, Identifiable, Hashable {
             case .weapons: return "Weapons"
             case .armor: return "Armor"
             case .foodAndMisc: return "Food & More"
-            case .encounters: return "Encounter"
+            case .encounters: return "Encounters"
             }
         }
 
