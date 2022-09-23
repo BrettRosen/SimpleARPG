@@ -26,73 +26,85 @@ struct GameView: View {
                 Color.white.edgesIgnoringSafeArea(.all)
                     .zIndex(1)
 
-                VStack(spacing: 12) {
-                    Spacer()
+                VStack(spacing: 0) {
 
-                    ZStack {
-                        VStack {
-                            if let encounter = viewStore.encounter {
-                                if viewStore.player.isDead {
-                                    YouDiedView(didTapRevive: { viewStore.send(.reviveTapped) }, playerDamageLog: viewStore.player.damageLog, monsterDamageLog: encounter.monster.damageLog)
-                                        .transition(.opacity)
-                                } else if encounter.monster.isDead {
-                                    YouWonView(didTapExit: { viewStore.send(.exitEncounterTapped) })
-                                        .transition(.opacity)
-                                } else {
-                                    HStack {
-                                        EncounterModifierPreview(encounter: encounter)
-                                            .padding([.leading, .top], 12)
-                                        Spacer()
-                                    }
-                                }
+                    GeometryReader { geometry in
+                        ZStack {
+                            Color.black.ignoresSafeArea()
 
-                                if encounter.combatBeginTimerCount >= 0 {
-                                    VStack {
-                                        Spacer()
-                                        Text(encounter.combatBeginTimerCount > 0 ? "\(encounter.combatBeginTimerCount)" : "⚔️FIGHT⚔️")
-                                            .font(.appSubheadline)
-                                            .foregroundColor(encounter.combatBeginTimerCount > 0 ? .black : .uiRed)
-                                        Spacer()
-                                    }
-                                }
-                            }
+                            Image("town")
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: geometry.size.width, height: geometry.size.height)
+                                .opacity(0.75)
 
                             VStack {
-                                Button(action: {
-                                    viewStore.send(.addRandomEncounter)
-                                }) {
-                                    Text("Add random encounter")
-                                        .font(.appCaption)
-                                }
-                            }
-
-                            Spacer()
-
-                            ZStack(alignment: .bottom) {
-
-                                HStack(alignment: .bottom) {
-                                    PlayerView(store: store, player: viewStore.player)
-                                    Spacer()
-                                    if let monster = viewStore.encounter?.monster {
-                                        VStack {
-                                            Text(monster.name)
-                                                .font(.appFootnote)
-                                                .foregroundColor(.black)
-                                            ResourceBar(current: monster.currentLife, total: monster.maxLife, frontColor: .uiGreen, backColor: .uiRed, icon: "", showTotal: false, width: 80, height: 20)
-                                            PlayerView(store: store, player: monster, xScale: -1)
-                                        }
+                                if let encounter = viewStore.encounter {
+                                    if viewStore.player.isDead {
+                                        YouDiedView(didTapRevive: { viewStore.send(.reviveTapped) }, playerDamageLog: viewStore.player.damageLog, monsterDamageLog: encounter.monster.damageLog)
+                                            .transition(.opacity)
+                                    } else if encounter.monster.isDead {
+                                        YouWonView(didTapExit: { viewStore.send(.exitEncounterTapped) })
+                                            .transition(.opacity)
                                     } else {
-                                        ForEach(viewStore.vendors) { vendor in
-                                            VendorView(vendor: vendor, store: store.scope(state: \.vendorViewState, action: GameAction.vendorViewAction))
+                                        HStack {
+                                            EncounterModifierPreview(encounter: encounter)
+                                                .padding([.leading, .top], 12)
+                                            Spacer()
+                                        }
+                                    }
+
+                                    if encounter.combatBeginTimerCount >= 0 {
+                                        VStack {
+                                            Spacer()
+                                            Text(encounter.combatBeginTimerCount > 0 ? "\(encounter.combatBeginTimerCount)" : "⚔️FIGHT⚔️")
+                                                .font(.appSubheadline)
+                                                .foregroundColor(encounter.combatBeginTimerCount > 0 ? .black : .uiRed)
+                                            Spacer()
                                         }
                                     }
                                 }
-                            }
-                            .padding(.horizontal, 24)
-                        }
 
-                        ForEach(viewStore.vendors.filter { $0.isActive }) { vendor in
-                            VendorInventoryView(vendor: vendor, store: store.scope(state: \.vendorViewState, action: GameAction.vendorViewAction))
+                                VStack {
+                                    Button(action: {
+                                        viewStore.send(.addRandomEncounter)
+                                    }) {
+                                        Text("Add random encounter")
+                                            .font(.appCaption)
+                                            .foregroundColor(.white)
+                                    }
+                                }
+                                .padding(.top, 12)
+
+                                Spacer()
+
+                                ZStack(alignment: .bottom) {
+
+                                    HStack(alignment: .bottom) {
+                                        PlayerView(store: store, player: viewStore.player)
+                                        Spacer()
+                                        if let monster = viewStore.encounter?.monster {
+                                            VStack {
+                                                Text(monster.name)
+                                                    .font(.appFootnote)
+                                                    .foregroundColor(.white)
+                                                ResourceBar(current: monster.currentLife, total: monster.maxLife, frontColor: .uiGreen, backColor: .uiRed, icon: "", showTotal: false, width: 80, height: 20)
+                                                PlayerView(store: store, player: monster, xScale: -1)
+                                            }
+                                        } else {
+                                            ForEach(viewStore.vendors) { vendor in
+                                                VendorView(vendor: vendor, store: store.scope(state: \.vendorViewState, action: GameAction.vendorViewAction))
+                                            }
+                                        }
+                                    }
+                                }
+                                .padding(.horizontal, 24)
+                            }
+                            .padding(.bottom, 6)
+
+                            ForEach(viewStore.vendors.filter { $0.isActive }) { vendor in
+                                VendorInventoryView(vendor: vendor, store: store.scope(state: \.vendorViewState, action: GameAction.vendorViewAction))
+                            }
                         }
                     }
 
